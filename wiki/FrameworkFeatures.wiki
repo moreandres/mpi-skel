@@ -25,3 +25,5 @@ This page lists the features of the framework.
   * gprof profiling information
   * resource usage information
   * source code static analysis
+
+More details on FrameworkAnalysisReport.
