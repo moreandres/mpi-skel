@@ -13,6 +13,8 @@ This page lists the features of the framework.
   * regression test suite on the framework
   * valgrind is used for memory debugging and profiling
 
+More details on FrameworkDevelopmentEnvironment.
+
 = Framework Optional Components =
 
   * logging support
