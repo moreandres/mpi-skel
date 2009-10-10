@@ -1,0 +1,6 @@
+EXTRA_DIST =
+INCLUDES = 
+
+AM_CFLAGS = -Wall
+
+bin_PROGRAMS =
