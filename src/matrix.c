@@ -1,3 +1,1 @@
-int function() {
-  return 0;
-}
+#include <mpiskel.h>

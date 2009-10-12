@@ -1,3 +1,4 @@
 #! /bin/bash
 
-sparse ../inc/*.h ../src/*.c
+sparse ../inc/*.h ../src/*.c ../lib/*.c
+
