@@ -26,7 +26,27 @@
  * will be incomplete because not all documentation has been converted yet.
  */
 
-  
-  
+#define MAX_STAGES 32
+
+/**
+ * struct mpiskel_ops - application-specific callbacks from mpiskel
+ *
+ * This structure contains various callbacks that mpiskel uses to implement
+ * applications.
+ *
+ * @method: method description.
+ */  
+
+struct mpiskel_ops {
+  int (*pre)(void);
+  int (*stage[MAX_STAGES])(void);
+  int stages;
+  int (*post)(void);  
+};
+
+struct mpiskel 
+{
+  int id;
+};
 
 #endif /* MPISKEL_H */
