@@ -1,4 +1,3 @@
 #! /bin/bash
 
-sparse ../inc/*.h ../src/*.c ../lib/*.c
-
+sparse -werror -I ../inc ../inc/*.h ../src/*.c ../lib/*.c || exit 77
