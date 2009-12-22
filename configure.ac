@@ -18,13 +18,14 @@ AC_PROG_RANLIB
 
 # Checks for header files.
 AC_HEADER_TIME
-AC_CHECK_HEADERS([sys/time.h])
+AC_CHECK_HEADERS([fcntl.h] [sys/time.h] [syslog.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
 # Checks for library functions.
 AC_FUNC_STRFTIME
+AC_FUNC_MALLOC
 AC_CHECK_FUNCS([gettimeofday])
 
 # Makefiles
