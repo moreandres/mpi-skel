@@ -14,7 +14,7 @@
 /**
  * DOC: Introduction
  *
- * mpi-skel is a skeleton for MPI applications. This document implementes 
+ * mpi-skel is a skeleton for MPI applications. This document implementes
  * the framework and defines the callbacks to be implemented.
  *
  */
@@ -35,18 +35,17 @@
  * applications.
  *
  * @method: method description.
- */  
+ */
 
 struct mpiskel_ops {
-  int (*pre)(void);
-  int (*stage[MAX_STAGES])(void);
-  int stages;
-  int (*post)(void);  
+	int (*pre) (void);
+	int (*stage[MAX_STAGES]) (void);
+	int stages;
+	int (*post) (void);
 };
 
-struct mpiskel 
-{
-  int id;
+struct mpiskel {
+	int id;
 };
 
 #endif /* MPISKEL_H */

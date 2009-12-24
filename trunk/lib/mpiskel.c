@@ -6,232 +6,247 @@
 
 #include <argp.h>
 
-static const char * string = PACKAGE_STRING;
-static const char * report = PACKAGE_BUGREPORT;
+static const char *string = PACKAGE_STRING;
+static const char *report = PACKAGE_BUGREPORT;
 
-static const char description[] = 
-  "mpiskel -- a framework for MPI applications using callbacks";
+static const char description[] =
+    "mpiskel -- a framework for MPI applications using callbacks";
 
-static struct argp_option options[] = 
-  {
-    {"verbose", 'v', NULL, 0, "Produce verbose output" },
-    {"output", 'o', "FILE", 0,
-     "Output to FILE instead of standard output" },
-    { NULL }
-  };
-
-struct arguments
-{
-  char * args[2];
-  int verbose;
-  char * file;
+static struct argp_option options[] = {
+	{"verbose", 'v', NULL, 0, "Produce verbose output"},
+	{"output", 'o', "FILE", 0,
+	 "Output to FILE instead of standard output"},
+	{NULL}
 };
 
-static error_t parse_opt(int key, char * arg, struct argp_state * state)
+struct arguments {
+	char *args[2];
+	int verbose;
+	char *file;
+};
+
+static error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
-  struct arguments * arguments = state->input;
-  
-  switch (key)
-    {
-    case 'v':
-      arguments->verbose++;
-      break;
-    case 'o':
-      arguments->file = arg;
-      break;
-    case ARGP_KEY_END:
-      if (state->arg_num > 0)
-	argp_usage(state);
-      break;
-      
-    default:
-      return ARGP_ERR_UNKNOWN;
-    }
-  return 0;
+	struct arguments *arguments = state->input;
+
+	switch (key) {
+	case 'v':
+		arguments->verbose++;
+		break;
+	case 'o':
+		arguments->file = arg;
+		break;
+	case ARGP_KEY_END:
+		if (state->arg_num > 0)
+			argp_usage(state);
+		break;
+
+	default:
+		return ARGP_ERR_UNKNOWN;
+	}
+	return 0;
 }
 
 static struct argp argp = { options, parse_opt, NULL, description };
 
-int main(int argc, char * argv[]) 
+int main(int argc, char *argv[])
 {
-  struct arguments arguments;
-  
-  /* argp handler? */
-  arguments.verbose = 0;
-  arguments.file = "-";
-  
-  argp_parse(&argp, argc, argv,  0, NULL, &arguments);
+	struct arguments arguments;
 
-  /* signal handler? */
+	/* argp handler? */
+	arguments.verbose = 0;
+	arguments.file = "-";
 
-  /* mpi initialization? */
-  
-  return 0;
+	argp_parse(&argp, argc, argv, 0, NULL, &arguments);
+
+	/* signal handler? */
+
+	/* mpi initialization? */
+
+	return 0;
 }
 
 typedef struct pipeline_s {
 } pipeline_t;
 
-typedef void * (* fn_t) (void * args);
+typedef void *(*fn_t) (void *args);
 
 typedef struct stage_s {
-  fn_t fn;
-  int options;
+	fn_t fn;
+	int options;
 } stage_t;
 
-static void setup_signal_handler(void) {
-  
-  return;
+static void setup_signal_handler(void)
+{
+
+	return;
 }
 
-static void setup_argp(void) {
-  
-  return;
+static void setup_argp(void)
+{
+
+	return;
 }
 
-static void setup_mpi(void) {
-  
-  return;
+static void setup_mpi(void)
+{
+
+	return;
 }
 
-static void setup_driver(void) {
-  
-  return;
+static void setup_driver(void)
+{
+
+	return;
 }
 
-static stage_t * stage_create(fn_t fn, int options) {
-  
-  stage_t * stage = NULL;
+static stage_t *stage_create(fn_t fn, int options)
+{
 
-  assert(fn != NULL);
-  assert(options > 0);
+	stage_t *stage = NULL;
 
-  stage = calloc(1, sizeof(stage_t));
-  
-  stage->fn = fn;
-  stage->options = options;
+	assert(fn != NULL);
+	assert(options > 0);
 
-  return stage;
+	stage = calloc(1, sizeof(stage_t));
+
+	stage->fn = fn;
+	stage->options = options;
+
+	return stage;
 }
 
-static int stage_destroy(stage_t * stage, int options) {
-  
-  int result;
-  
-  assert(stage != NULL);
-  assert(options >= 0);
-  
-  free(stage);
-  stage = NULL;
-  
-  return result;
+static int stage_destroy(stage_t *stage, int options)
+{
+
+	int result;
+
+	assert(stage != NULL);
+	assert(options >= 0);
+
+	free(stage);
+	stage = NULL;
+
+	return result;
 }
 
-static int stage_execute(stage_t * stage, int options) {
-  
-  int result = 1;
+static int stage_execute(stage_t *stage, int options)
+{
 
-  assert(stage != NULL);
-  assert(options >= 0);
+	int result = 1;
 
-  return result;
+	assert(stage != NULL);
+	assert(options >= 0);
+
+	return result;
 }
 
-static void stage_show(stage_t * stage) {
+static void stage_show(stage_t *stage)
+{
 
-  assert(stage != NULL);
+	assert(stage != NULL);
 
-  return;
+	return;
 }
 
-static pipeline_t * pipeline_create(stage_t ** stages, int count, int options) {
-  
-  pipeline_t * pipeline = NULL;
-  int i = 0;
-  
-  assert(stages != NULL);
-  assert(count > 0);
-  assert(options >= 0);
-  
-  i = 1;
-  
-  pipeline = calloc(1, sizeof(pipeline_t));
-  
-  return pipeline;
+static pipeline_t *pipeline_create(stage_t **stages, int count, int options)
+{
+
+	pipeline_t *pipeline = NULL;
+	int i = 0;
+
+	assert(stages != NULL);
+	assert(count > 0);
+	assert(options >= 0);
+
+	i = 1;
+
+	pipeline = calloc(1, sizeof(pipeline_t));
+
+	return pipeline;
 }
 
-static int pipeline_destroy(pipeline_t * pipeline, int options) {
-  
-  int result = -1;
-  
-  assert(pipeline != NULL);
-  assert(options >= 0);
+static int pipeline_destroy(pipeline_t *pipeline, int options)
+{
 
-  return result;
+	int result = -1;
+
+	assert(pipeline != NULL);
+	assert(options >= 0);
+
+	return result;
 }
 
-static int pipeline_start(pipeline_t * pipeline, int options) {
-  
-  int result = -1;
-  
-  assert(pipeline != NULL);
-  assert(options >= 0);
+static int pipeline_start(pipeline_t *pipeline, int options)
+{
 
-  return result;
+	int result = -1;
+
+	assert(pipeline != NULL);
+	assert(options >= 0);
+
+	return result;
 }
 
-static int pipeline_stop(pipeline_t * pipeline, int options) {
-  
-  int result = -1;
-  
-  assert(pipeline != NULL);
-  assert(options >= 0);
+static int pipeline_stop(pipeline_t *pipeline, int options)
+{
 
-  return result;
+	int result = -1;
+
+	assert(pipeline != NULL);
+	assert(options >= 0);
+
+	return result;
 }
 
 extern int debug;
 
-#define printd(fmt, args...) do { if (debug) { printf("%s:%d:%s() ", __FILE__, __LINE__, __FUNCTION__); printf(fmt, ## args); } } while (0)
+#define printd(fmt, args...) do { if (debug) { \
+			printf("%s:%d:%s() ", __FILE__, __LINE__, __func__); \
+			printf(fmt, ## args); } } while (0)
 
-static void pipeline_show(pipeline_t * pipeline, int options) {
+static void pipeline_show(pipeline_t *pipeline, int options)
+{
 
-  printd("%p, %d", pipeline, options);
-  
-  assert(pipeline != NULL);
-  assert(options >= 0);
-  
-  return;
+	printd("%p, %d", pipeline, options);
+
+	assert(pipeline != NULL);
+	assert(options >= 0);
+
+	return;
 }
 
 extern int verbosity;
 
-#define printv(level, fmt, args...) do { if (verbosity >= level) { printf(fmt, ## args); } } while (0)
+#define printv(level, fmt, args...) do { if (verbosity >= level) { \
+			printf(fmt, ## args); }			   \
+	} while (0)
 
 #include <sys/time.h>
 #include <time.h>
 
-static int timestamp(char * buffer, int size) {
-  
-  int result = -1;
-  
-  assert(buffer != NULL);
-  assert(size >= 0);
+static int timestamp(char *buffer, int size)
+{
 
-  struct timeval tv;
-  time_t time;
+	int result = -1;
 
-  gettimeofday(&tv, NULL);
-  time = tv.tv_sec;
-  
-  strftime(buffer, size, "%m%d%y", localtime(&time));
+	assert(buffer != NULL);
+	assert(size >= 0);
 
-  return result;
+	struct timeval tv;
+	time_t time;
+
+	gettimeofday(&tv, NULL);
+	time = tv.tv_sec;
+
+	strftime(buffer, size, "%m%d%y", localtime(&time));
+
+	return result;
 }
 
 typedef struct log_s {
-  int fd;
-  char * name;
+	int fd;
+	char *name;
 } log_t;
 
 #include <sys/types.h>
@@ -240,69 +255,73 @@ typedef struct log_s {
 
 #define FILENAME_SIZE 64
 
-static log_t * log_create(int options) {
-  
-  log_t * log = NULL;
+static log_t *log_create(int options)
+{
 
-  assert(options >= 0);
-  
-  log = calloc(1, sizeof(log_t));
-  
-  log->name = calloc(FILENAME_SIZE, sizeof(char));
-  log->fd = open(log->name, 0);
+	log_t *log = NULL;
 
-  return log;
+	assert(options >= 0);
+
+	log = calloc(1, sizeof(log_t));
+
+	log->name = calloc(FILENAME_SIZE, sizeof(char));
+	log->fd = open(log->name, 0);
+
+	return log;
 }
 
 #include <unistd.h>
 
-static int log_destroy(log_t * log) {
+static int log_destroy(log_t *log)
+{
 
-  int result = -1;
+	int result = -1;
 
-  assert(log != NULL);
+	assert(log != NULL);
 
-  free(log);
-  log = NULL;
+	free(log);
+	log = NULL;
 
-  result = close(log->fd);
+	result = close(log->fd);
 
-  return result;
+	return result;
 }
 
 typedef struct mpi_s {
-  int rank;
-  int size;
-  char * name;
-  int length;
+	int rank;
+	int size;
+	char *name;
+	int length;
 } mpi_t;
 
 #include "/usr/lib/openmpi/1.3.2-gcc/include/mpi.h"
 
-static mpi_t * mpi_init(int * argc, char ** argv[], int options) {
-  
-  int result = -1;
-  mpi_t * mpi = NULL;
-  
-  assert(options >= 0);
+static mpi_t *mpi_init(int *argc, char **argv[], int options)
+{
 
-  result = MPI_Init(argc, argv);
-  
-  result = MPI_Comm_rank(MPI_COMM_WORLD, &mpi->rank);
-  result = MPI_Comm_size(MPI_COMM_WORLD, &mpi->size);
-  result = MPI_Get_processor_name(mpi->name, &mpi->length);
-  
-  return mpi;
+	int result = -1;
+	mpi_t *mpi = NULL;
+
+	assert(options >= 0);
+
+	result = MPI_Init(argc, argv);
+
+	result = MPI_Comm_rank(MPI_COMM_WORLD, &mpi->rank);
+	result = MPI_Comm_size(MPI_COMM_WORLD, &mpi->size);
+	result = MPI_Get_processor_name(mpi->name, &mpi->length);
+
+	return mpi;
 }
 
-static int mpi_finalize(mpi_t * mpi, int options) {
-  
-  int result = -1;
-  
-  assert(mpi != NULL);
-  assert(options >= 0);
-  
-  result = MPI_Finalize();
-  
-  return result;
+static int mpi_finalize(mpi_t *mpi, int options)
+{
+
+	int result = -1;
+
+	assert(mpi != NULL);
+	assert(options >= 0);
+
+	result = MPI_Finalize();
+
+	return result;
 }
