@@ -4,52 +4,8 @@
 #include <config.h>
 #include <mpiskel.h>
 
-#include <argp.h>
-
 #include "utils.h"
-
-static const char *string = PACKAGE_STRING;
-static const char *report = PACKAGE_BUGREPORT;
-
-static const char description[] =
-    "mpiskel -- a framework for MPI applications using callbacks";
-
-static struct argp_option options[] = {
-	{"verbose", 'v', NULL, 0, "Produce verbose output"},
-	{"output", 'o', "FILE", 0,
-	 "Output to FILE instead of standard output"},
-	{NULL}
-};
-
-struct arguments {
-	char *args[2];
-	int verbose;
-	char *file;
-};
-
-static error_t parse_opt(int key, char *arg, struct argp_state *state)
-{
-	struct arguments *arguments = state->input;
-
-	switch (key) {
-	case 'v':
-		arguments->verbose++;
-		break;
-	case 'o':
-		arguments->file = arg;
-		break;
-	case ARGP_KEY_END:
-		if (state->arg_num > 0)
-			argp_usage(state);
-		break;
-
-	default:
-		return ARGP_ERR_UNKNOWN;
-	}
-	return 0;
-}
-
-static struct argp argp = { options, parse_opt, NULL, description };
+#include "args.h"
 
 int main(int argc, char *argv[])
 {
@@ -79,12 +35,6 @@ typedef struct stage_s {
 } stage_t;
 
 static void setup_signal_handler(void)
-{
-
-	return;
-}
-
-static void setup_argp(void)
 {
 
 	return;
