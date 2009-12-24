@@ -23,10 +23,10 @@ struct arguments {
 	char *file;
 };
 
-static error_t parse_opt(int key, char *arg, struct argp_state *state);
+error_t parse_opt(int key, char *arg, struct argp_state *state);
 
 static struct argp argp = { options, parse_opt, NULL, description };
 
-static void setup_argp(void);
+void setup_argp(void);
 
 #endif /* ARGP_H */
