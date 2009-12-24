@@ -6,6 +6,8 @@
 
 #include <argp.h>
 
+#include "utils.h"
+
 static const char *string = PACKAGE_STRING;
 static const char *report = PACKAGE_BUGREPORT;
 
@@ -199,12 +201,6 @@ static int pipeline_stop(pipeline_t *pipeline, int options)
 	return result;
 }
 
-extern int debug;
-
-#define printd(fmt, args...) do { if (debug) { \
-			printf("%s:%d:%s() ", __FILE__, __LINE__, __func__); \
-			printf(fmt, ## args); } } while (0)
-
 static void pipeline_show(pipeline_t *pipeline, int options)
 {
 
@@ -214,34 +210,6 @@ static void pipeline_show(pipeline_t *pipeline, int options)
 	assert(options >= 0);
 
 	return;
-}
-
-extern int verbosity;
-
-#define printv(level, fmt, args...) do { if (verbosity >= level) { \
-			printf(fmt, ## args); }			   \
-	} while (0)
-
-#include <sys/time.h>
-#include <time.h>
-
-static int timestamp(char *buffer, int size)
-{
-
-	int result = -1;
-
-	assert(buffer != NULL);
-	assert(size >= 0);
-
-	struct timeval tv;
-	time_t time;
-
-	gettimeofday(&tv, NULL);
-	time = tv.tv_sec;
-
-	strftime(buffer, size, "%m%d%y", localtime(&time));
-
-	return result;
 }
 
 typedef struct log_s {

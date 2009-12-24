@@ -8,6 +8,8 @@
 #include <math.h>
 #include <sys/time.h>
 
+#include "utils.h"
+
 static double *mm_init(int n)
 {
 	assert(n > 0);
@@ -39,17 +41,8 @@ static int mm_simple(double *a, double *b, double *c, int n)
 	return 0;
 }
 
-double wtime(void)
-{
-	double sec;
-	struct timeval tv;
 
-	gettimeofday(&tv, NULL);
-	sec = tv.tv_sec + tv.tv_usec / 1000000.0;
-	return sec;
-}
-
-int mm_check(double *a, double *b, int n)
+static int mm_check(double *a, double *b, int n)
 {
 	assert(a != NULL && b != NULL && n > 0);
 
