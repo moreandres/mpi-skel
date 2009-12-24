@@ -1,6 +1,6 @@
 #include "args.h"
 
-static error_t parse_opt(int key, char *arg, struct argp_state *state)
+error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
 	struct arguments *arguments = state->input;
 
@@ -22,7 +22,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 	return 0;
 }
 
-static void setup_argp(void)
+void setup_argp(void)
 {
 
 	return;
