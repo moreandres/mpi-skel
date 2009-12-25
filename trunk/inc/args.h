@@ -17,16 +17,19 @@ static struct argp_option options[] = {
 	{NULL}
 };
 
-struct arguments {
-	char *args[2];
+typedef struct args_s {
 	int verbose;
 	char *file;
-};
+} args_t;
+
+extern args_t *args;
 
 error_t parse_opt(int key, char *arg, struct argp_state *state);
 
 static struct argp argp = { options, parse_opt, NULL, description };
 
-void setup_argp(void);
+args_t *setup_argp(int argc, char *argv[]);
+
+void print_args(args_t *args);
 
 #endif /* ARGP_H */

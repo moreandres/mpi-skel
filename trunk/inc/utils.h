@@ -6,17 +6,13 @@
 
 #include <config.h>
 
-extern int verbosity;
-
-#define printv(level, fmt, args...) do { if (verbosity >= level) { \
+#define printv(level, fmt, args...) do { if (arguments.verbosity >= level) { \
 			printf(fmt, ## args); }			   \
 	} while (0)
 
-extern int debug;
-
-#define printd(fmt, args...) do { if (debug) { \
+#define printd(fmt, args...) do { \
 			printf("%s:%d:%s() ", __FILE__, __LINE__, __func__); \
-			printf(fmt, ## args); } } while (0)
+			printf(fmt, ## args); printf("\n"); } while (0)
 
 int timestamp(char *buffer, int size);
 double wtime(void);
