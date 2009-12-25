@@ -3,6 +3,9 @@
 
 args_t *args;
 
+const char *argp_program_version = PACKAGE_STRING;
+const char *argp_program_bug_address = PACKAGE_BUGREPORT;
+
 error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
 	args_t *arguments = state->input;

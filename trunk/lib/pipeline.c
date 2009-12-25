@@ -1,3 +1,5 @@
+#include <assert.h>
+#include "utils.h"
 #include "pipeline.h"
 
 stage_t *stage_create(fn_t fn, int options)
