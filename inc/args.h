@@ -4,9 +4,6 @@
 #include <argp.h>
 #include "config.h"
 
-static const char *string = PACKAGE_STRING;
-static const char *report = PACKAGE_BUGREPORT;
-
 static const char description[] =
     "mpiskel -- a framework for MPI applications using C callbacks";
 
