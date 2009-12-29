@@ -26,7 +26,7 @@ AC_C_CONST
 # Checks for library functions.
 AC_FUNC_STRFTIME
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([gettimeofday])
+AC_CHECK_FUNCS([gettimeofday] [strtol])
 
 # Makefiles
 AC_CONFIG_FILES([Makefile
