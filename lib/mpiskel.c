@@ -6,6 +6,7 @@
 
 #include "utils.h"
 #include "args.h"
+#include "log.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +18,8 @@ int main(int argc, char *argv[])
 	args = setup_argp(argc, argv);
 
 	print_args(args);
+
+	log = log_create(0);
 
 	return 0;
 }
@@ -42,53 +45,6 @@ static void setup_driver(void)
 	printd("()");
 
 	return;
-}
-
-typedef struct log_s {
-	int fd;
-	char *name;
-} log_t;
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#define FILENAME_SIZE 64
-
-static log_t *log_create(int options)
-{
-
-	log_t *log = NULL;
-
-	printd("%d", options);
-
-	assert(options >= 0);
-
-	log = calloc(1, sizeof(log_t));
-
-	log->name = calloc(FILENAME_SIZE, sizeof(char));
-	log->fd = open(log->name, 0);
-
-	return log;
-}
-
-#include <unistd.h>
-
-static int log_destroy(log_t *log)
-{
-
-	int result = -1;
-
-	printd("%p", log);
-
-	assert(log != NULL);
-
-	free(log);
-	log = NULL;
-
-	result = close(log->fd);
-
-	return result;
 }
 
 typedef struct mpi_s {
