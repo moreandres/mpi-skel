@@ -1,30 +1,35 @@
+#include <stdio.h>
+
+#include "utils.h"
 #include "log.h"
 
-static log_t *log_create(int options)
+log_t *_log;
+
+log_t *log_create(int options)
 {
 
 	log_t *log = NULL;
 
-	printd("%d", options);
+	printd("(%d)", options);
 
 	assert(options >= 0);
 
-	log = calloc(1, sizeof(log_t));
+	_log = calloc(1, sizeof(log_t));
 
-	log->name = calloc(FILENAME_SIZE, sizeof(char));
-	log->fd = open(log->name, 0);
+	_log->name = calloc(FILENAME_SIZE, sizeof(char));
+	_log->fd = open(log->name, 0);
 
-	return log;
+	return _log;
 }
 
 #include <unistd.h>
 
-static int log_destroy(log_t *log)
+int log_destroy(log_t *log)
 {
 
 	int result = -1;
 
-	printd("%p", log);
+	printd("(%p)", log);
 
 	assert(log != NULL);
 

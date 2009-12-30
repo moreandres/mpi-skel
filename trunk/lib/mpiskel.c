@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
 	print_args(args);
 
-	log = log_create(0);
+	_log = log_create(0);
 
 	return 0;
 }
