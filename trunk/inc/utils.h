@@ -21,7 +21,7 @@
 
 #define free(x) do { free(x); x = NULL; } while (0)
 
-int timestamp(char *buffer, int size);
+char *timestamp(int size);
 double wtime(void);
 
 #endif /* UTILS_H */

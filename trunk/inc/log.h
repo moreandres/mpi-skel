@@ -19,7 +19,7 @@ extern log_t *_log;
 
 #define FILENAME_SIZE 64
 
-log_t *log_create(int options);
+log_t *log_create(char *prefix, int options);
 
 #include <unistd.h>
 
