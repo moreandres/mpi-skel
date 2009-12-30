@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 
 #include "config.h"
@@ -12,11 +13,13 @@
 
 #ifdef DEBUG
 #define printd(fmt, args...) do { \
-			printf("%s:%d:%s", __FILE__, __LINE__, __func__); \
+			printf("%s:%d:%s ", __FILE__, __LINE__, __func__); \
 			printf(fmt, ## args); printf("\n"); } while (0)
 #else
 #define printd(fmt, args...) /* empty */
 #endif
+
+#define free(x) do { free(x); x = NULL; } while (0)
 
 int timestamp(char *buffer, int size);
 double wtime(void);

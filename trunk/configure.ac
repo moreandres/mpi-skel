@@ -21,6 +21,7 @@ AC_HEADER_TIME
 AC_CHECK_HEADERS([fcntl.h] [sys/time.h] [syslog.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_SIGNAL
 AC_C_CONST
 
 # Checks for library functions.

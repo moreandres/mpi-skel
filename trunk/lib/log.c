@@ -14,12 +14,21 @@ log_t *log_create(int options)
 
 	assert(options >= 0);
 
-	_log = calloc(1, sizeof(log_t));
+	log = calloc(1, sizeof(log_t));
 
-	_log->name = calloc(FILENAME_SIZE, sizeof(char));
-	_log->fd = open(log->name, 0);
+	if (log) {
+		log->name = calloc(FILENAME_SIZE, sizeof(char));
+		timestamp(log->name, FILENAME_SIZE);
 
-	return _log;
+		printd("%s", log->name);
+
+		log->fd = open(log->name, O_CREAT | O_APPEND);
+
+		printd("%d", log->fd);
+		perror("Error");
+	}
+
+	return log;
 }
 
 #include <unistd.h>
@@ -33,10 +42,9 @@ int log_destroy(log_t *log)
 
 	assert(log != NULL);
 
-	free(log);
-	log = NULL;
-
 	result = close(log->fd);
+
+	free(log);
 
 	return result;
 }
