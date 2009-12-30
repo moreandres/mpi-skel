@@ -2,9 +2,9 @@
 #include <time.h>
 #include "utils.h"
 
-int timestamp(char *buffer, int size)
+char *timestamp(int size)
 {
-
+	char *buffer = calloc(size, sizeof(char));
 	int result = -1;
 
 	printd("(%p, %d)", buffer, size);
@@ -18,12 +18,12 @@ int timestamp(char *buffer, int size)
 	gettimeofday(&tv, NULL);
 	time = tv.tv_sec;
 
-	result = strftime(buffer, size, "%m%d%Y-%H%M%S", localtime(&time));
+	result = strftime(buffer, size, "-%m%d%Y-%H%M%S", localtime(&time));
 
 	printd("%d", result);
 	printd("%s", buffer);
 
-	return result;
+	return buffer;
 }
 
 double wtime(void)

@@ -5,12 +5,15 @@
 
 log_t *_log;
 
-log_t *log_create(int options)
+log_t *log_create(char *prefix, int options)
 {
 
 	log_t *log = NULL;
 
-	printd("(%d)", options);
+	char *stamp = NULL;
+	char *suffix = ".log";
+
+	printd("(%s, %d)", prefix, options);
 
 	assert(options >= 0);
 
@@ -18,7 +21,15 @@ log_t *log_create(int options)
 
 	if (log) {
 		log->name = calloc(FILENAME_SIZE, sizeof(char));
-		timestamp(log->name, FILENAME_SIZE);
+
+		strncat(log->name, prefix, strlen(prefix));
+
+		stamp = timestamp(FILENAME_SIZE
+				  - strlen(log->name)
+				  - strlen(suffix));
+
+		strncat(log->name, stamp, strlen(stamp));
+		strncat(log->name, suffix, strlen(suffix));
 
 		printd("%s", log->name);
 

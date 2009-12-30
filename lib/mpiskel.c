@@ -32,6 +32,8 @@ static void setup_handler(void)
 
 int main(int argc, char *argv[])
 {
+	char *name = NULL;
+
 	printd("(%d, %p)", argc, argv);
 
 	assert(argc >= 0);
@@ -43,7 +45,16 @@ int main(int argc, char *argv[])
 
 	print_args(args);
 
-	_log = log_create(0);
+#include <strings.h>
+
+	name = rindex(argv[0], '/');
+	if (name == NULL) {
+		name = argv[0];
+	} else {
+		name++;
+	}
+
+	_log = log_create(name, 0);
 
 	return 0;
 }
