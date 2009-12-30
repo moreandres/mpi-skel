@@ -28,6 +28,11 @@ AC_FUNC_STRFTIME
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([gettimeofday] [strtol])
 
+# Extra arguments
+AC_ARG_ENABLE(debug,
+              AC_HELP_STRING([--enable-debug], [Turn on debugging]),
+	      AC_DEFINE([DEBUG], [1], [Turn on debugging]))
+
 # Makefiles
 AC_CONFIG_FILES([Makefile
                  lib/Makefile

@@ -11,7 +11,7 @@ typedef struct log_s {
 	char *name;
 } log_t;
 
-extern log_t * log;
+extern log_t *_log;
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -19,9 +19,10 @@ extern log_t * log;
 
 #define FILENAME_SIZE 64
 
-static log_t *log_create(int options);
+log_t *log_create(int options);
+
 #include <unistd.h>
 
-static int log_destroy(log_t *log);
+int log_destroy(log_t *log);
 
 #endif /* LOG_H */
