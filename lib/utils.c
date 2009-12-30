@@ -7,6 +7,8 @@ int timestamp(char *buffer, int size)
 
 	int result = -1;
 
+	printd("(%p, %d)", buffer, size);
+
 	assert(buffer != NULL);
 	assert(size >= 0);
 
@@ -16,7 +18,10 @@ int timestamp(char *buffer, int size)
 	gettimeofday(&tv, NULL);
 	time = tv.tv_sec;
 
-	strftime(buffer, size, "%m%d%y", localtime(&time));
+	result = strftime(buffer, size, "%m%d%Y-%H%M%S", localtime(&time));
+
+	printd("%d", result);
+	printd("%s", buffer);
 
 	return result;
 }

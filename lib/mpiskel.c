@@ -8,12 +8,36 @@
 #include "args.h"
 #include "log.h"
 
+#include <signal.h>
+
+static void handler(int signum)
+{
+	int result;
+
+	if (_log)
+		result = log_destroy(_log);
+
+	return;
+}
+
+static void setup_handler(void)
+{
+
+	printd("()");
+
+	signal(SIGINT, handler);
+
+	return;
+}
+
 int main(int argc, char *argv[])
 {
-	printd("%d, %p", argc, argv);
+	printd("(%d, %p)", argc, argv);
 
 	assert(argc >= 0);
 	assert(argv != NULL);
+
+	setup_handler();
 
 	args = setup_argp(argc, argv);
 
@@ -22,14 +46,6 @@ int main(int argc, char *argv[])
 	_log = log_create(0);
 
 	return 0;
-}
-
-static void setup_signal_handler(void)
-{
-
-	printd("()");
-
-	return;
 }
 
 static void setup_mpi(void)
@@ -62,7 +78,7 @@ static mpi_t *mpi_init(int *argc, char **argv[], int options)
 	int result = -1;
 	mpi_t *mpi = NULL;
 
-	printd("%p, %p, %d", argc, argv, options);
+	printd("(%p, %p, %d)", argc, argv, options);
 
 	assert(argc != NULL);
 	assert(argv != NULL);
@@ -82,7 +98,7 @@ static int mpi_finalize(mpi_t *mpi, int options)
 
 	int result = -1;
 
-	printd("%p, %d", mpi, options);
+	printd("(%p, %d)", mpi, options);
 
 	assert(mpi != NULL);
 	assert(options >= 0);
