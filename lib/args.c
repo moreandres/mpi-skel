@@ -1,10 +1,15 @@
 #include "args.h"
 #include "utils.h"
 
-args_t *args;
+static args_t *_args;
 
 const char *argp_program_version = PACKAGE_STRING;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
+
+args_t *get_args(void)
+{
+	return _args;
+}
 
 error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
@@ -14,7 +19,7 @@ error_t parse_opt(int key, char *arg, struct argp_state *state)
 	case 'v':
 		arguments->verbose++;
 		break;
-	case 'o':
+	case 'l':
 		arguments->file = arg;
 		break;
 	case ARGP_KEY_END:
@@ -30,20 +35,19 @@ error_t parse_opt(int key, char *arg, struct argp_state *state)
 
 #include <string.h>
 
-args_t *setup_argp(int argc, char *argv[])
+void setup_argp(int argc, char *argv[])
 {
-	args_t *result;
 
-	printd("%d, %p", argc, argv);
+	printd("(%d, %p)", argc, argv);
 
 	assert(argc >= 0);
 	assert(argv != NULL);
 
-	result = calloc(1, sizeof(args_t));
+	_args = calloc(1, sizeof(args_t));
 
-	argp_parse(&argp, argc, argv, 0, NULL, result);
+	argp_parse(&argp, argc, argv, 0, NULL, _args);
 
-	return result;
+	return;
 }
 
 void print_args(args_t *args)
