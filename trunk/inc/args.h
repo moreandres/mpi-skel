@@ -9,8 +9,8 @@ static const char description[] =
 
 static struct argp_option options[] = {
 	{"verbose", 'v', NULL, 0, "Produce verbose output"},
-	{"output", 'o', "FILE", 0,
-	 "Output to FILE instead of standard output"},
+	{"log", 'l', "FILE", 0,
+	 "Log to FILE instead of timestamped file"},
 	{NULL}
 };
 
@@ -19,13 +19,13 @@ typedef struct args_s {
 	char *file;
 } args_t;
 
-extern args_t *args;
-
 error_t parse_opt(int key, char *arg, struct argp_state *state);
 
 static struct argp argp = { options, parse_opt, NULL, description };
 
-args_t *setup_argp(int argc, char *argv[]);
+void setup_argp(int argc, char *argv[]);
+
+args_t *get_args();
 
 void print_args(args_t *args);
 

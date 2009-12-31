@@ -7,7 +7,7 @@
 
 #include "config.h"
 
-#define printv(level, fmt, args...) do { if (arguments.verbosity >= level) { \
+#define printv(level, fmt, args...) do { if (get_args()->verbose >= level) { \
 			printf(fmt, ## args); }			             \
 	} while (0)
 
