@@ -1,62 +1,89 @@
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 
 #include "utils.h"
 #include "log.h"
 
-log_t *_log;
+#include <unistd.h>
+#include <stdlib.h>
 
-log_t *log_create(char *prefix, int options)
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#include <assert.h>
+
+#include "config.h"
+
+struct log_data_s {
+	int fd;
+	char *name;
+};
+
+static log_t *_log;
+
+log_t *get_log(void)
 {
+	return _log;
+}
 
+int log_create(char *prefix)
+{
 	log_t *log = NULL;
 
+	char *name = NULL;
+	char *tmp = NULL;
 	char *stamp = NULL;
 	char *suffix = ".log";
 
-	printd("(%s, %d)", prefix, options);
+	printd("(%s)", prefix);
 
-	assert(options >= 0);
+	assert(prefix != NULL);
 
 	log = calloc(1, sizeof(log_t));
 
 	if (log) {
-		log->name = calloc(FILENAME_SIZE, sizeof(char));
+		log->data->name = calloc(FILENAME_SIZE, sizeof(char));
 
-		strncat(log->name, prefix, strlen(prefix));
+		tmp = rindex(name, '/');
+		if (tmp == NULL) {
+			tmp = name;
+		} else {
+			name++;
+		}
+
+		strncat(name, prefix, strlen(prefix));
 
 		stamp = timestamp(FILENAME_SIZE
-				  - strlen(log->name)
+				  - strlen(log->data->name)
 				  - strlen(suffix));
 
-		strncat(log->name, stamp, strlen(stamp));
-		strncat(log->name, suffix, strlen(suffix));
+		strncat(log->data->name, stamp, strlen(stamp));
+		strncat(log->data->name, suffix, strlen(suffix));
 
-		printd("%s", log->name);
+		printd("%s", log->data->name);
 
-		log->fd = open(log->name, O_CREAT | O_APPEND);
+		log->data->fd = open(log->data->name, O_CREAT | O_APPEND);
 
-		printd("%d", log->fd);
+		printd("%d", log->data->fd);
 		perror("Error");
 	}
 
-	return log;
+	return 0;
 }
 
 #include <unistd.h>
 
-int log_destroy(log_t *log)
+int log_destroy(void)
 {
-
 	int result = -1;
 
-	printd("(%p)", log);
+	printd("()");
 
-	assert(log != NULL);
+	result = close(_log->data->fd);
 
-	result = close(log->fd);
-
-	free(log);
+	free(_log);
 
 	return result;
 }

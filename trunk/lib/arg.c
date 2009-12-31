@@ -1,26 +1,31 @@
-#include "args.h"
+#include "arg.h"
 #include "utils.h"
 
-static args_t *_args;
+static arg_t *_arg;
 
 const char *argp_program_version = PACKAGE_STRING;
 const char *argp_program_bug_address = PACKAGE_BUGREPORT;
 
-args_t *get_args(void)
+struct arg_data_s {
+	int verbose;
+	char *file;
+};
+
+arg_t *get_arg(void)
 {
-	return _args;
+	return _arg;
 }
 
 error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
-	args_t *arguments = state->input;
+	arg_t *arguments = state->input;
 
 	switch (key) {
 	case 'v':
-		arguments->verbose++;
+		arguments->data->verbose++;
 		break;
 	case 'l':
-		arguments->file = arg;
+		arguments->data->file = arg;
 		break;
 	case ARGP_KEY_END:
 		if (state->arg_num > 0)
@@ -43,18 +48,18 @@ void setup_argp(int argc, char *argv[])
 	assert(argc >= 0);
 	assert(argv != NULL);
 
-	_args = calloc(1, sizeof(args_t));
+	_arg = calloc(1, sizeof(arg_t));
 
-	argp_parse(&argp, argc, argv, 0, NULL, _args);
+	argp_parse(&argp, argc, argv, 0, NULL, _arg);
 
 	return;
 }
 
-void print_args(args_t *args)
+void print_arg(arg_t *arg)
 {
-	assert(args != NULL);
+	assert(arg != NULL);
 
-	printf("%d %s\n", args->verbose, args->file);
+	printf("%d %s\n", arg->data->verbose, arg->data->file);
 
 	return;
 }
