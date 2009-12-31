@@ -14,10 +14,12 @@ static struct argp_option options[] = {
 	{NULL}
 };
 
-typedef struct args_s {
-	int verbose;
-	char *file;
-} args_t;
+typedef struct arg_data_s *arg_data_t;
+typedef struct arg_s {
+	arg_data_t data;
+	int (*create) (int argc, char *argv[]);
+	int (*destroy) (void);
+} arg_t;
 
 error_t parse_opt(int key, char *arg, struct argp_state *state);
 
@@ -25,8 +27,8 @@ static struct argp argp = { options, parse_opt, NULL, description };
 
 void setup_argp(int argc, char *argv[]);
 
-args_t *get_args();
+arg_t *get_arg(void);
 
-void print_args(args_t *args);
+void print_arg(arg_t *arg);
 
 #endif /* ARGP_H */

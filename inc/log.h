@@ -1,28 +1,18 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <stdlib.h>
-#include <assert.h>
-
-#include "config.h"
-
-typedef struct log_s {
-	int fd;
-	char *name;
-} log_t;
-
-extern log_t *_log;
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
 #define FILENAME_SIZE 64
 
-log_t *log_create(char *prefix, int options);
+typedef struct log_data_s *log_data_t;
+typedef struct log_s {
+	log_data_t data;
+	int (*create) (char *prefix);
+	int (*destroy) (void);
+} log_t;
 
-#include <unistd.h>
+log_t *get_log(void);
 
-int log_destroy(log_t *log);
+int log_create(char *prefix);
+int log_destroy(void);
 
 #endif /* LOG_H */
