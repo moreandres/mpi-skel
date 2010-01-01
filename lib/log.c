@@ -67,6 +67,7 @@ static int log_destroy(void)
 
 	result = close(_log->data->fd);
 
+	free(_log->data);
 	free(_log);
 
 	return result;

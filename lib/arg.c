@@ -14,6 +14,8 @@ struct arg_data_s {
 
 error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
+	printd("(%d, %s, %p)", key, arg, state);
+
 	arg_t *arguments = state->input;
 
 	switch (key) {
@@ -31,24 +33,27 @@ error_t parse_opt(int key, char *arg, struct argp_state *state)
 	default:
 		return ARGP_ERR_UNKNOWN;
 	}
+
 	return 0;
 }
 
 static int arg_create(int argc, char *argv[])
 {
-
 	printd("(%d, %p)", argc, argv);
 
 	assert(argc >= 0);
 	assert(argv != NULL);
 
-	argp_parse(&argp, argc, argv, 0, NULL, get_arg());
-
-	return 0;
+	return argp_parse(&argp, argc, argv, 0, NULL, get_arg());
 }
 
 static int arg_destroy(void)
 {
+	printd("()");
+
+	free(_arg->data);
+	free(_arg);
+
 	return 0;
 }
 
@@ -56,6 +61,8 @@ static int arg_destroy(void)
 
 static char *arg_print(void)
 {
+	printd("()");
+
 	char *line = calloc(LINE_SIZE, sizeof(char));
 
 	snprintf(line, LINE_SIZE, "ARG: %d, %s\n",
@@ -74,8 +81,6 @@ arg_t *get_arg(void)
 		_arg->destroy = arg_destroy;
 		_arg->print = arg_print;
 		_arg->data = calloc(1, sizeof(struct arg_data_s));
-
-		printv(1, "%s", _arg->print());
 	}
 
 	return _arg;
