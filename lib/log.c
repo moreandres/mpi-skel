@@ -25,7 +25,6 @@ static log_t *_log;
 
 static int log_create(char *prefix)
 {
-	char *name = NULL;
 	char *tmp = NULL;
 	char *stamp = NULL;
 	char *suffix = ".log";

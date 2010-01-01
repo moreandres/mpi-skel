@@ -1,5 +1,6 @@
 #include "arg.h"
 #include "utils.h"
+#include "config.h"
 
 static arg_t *_arg;
 
@@ -33,8 +34,6 @@ error_t parse_opt(int key, char *arg, struct argp_state *state)
 	return 0;
 }
 
-#include <string.h>
-
 static int arg_create(int argc, char *argv[])
 {
 
@@ -43,9 +42,7 @@ static int arg_create(int argc, char *argv[])
 	assert(argc >= 0);
 	assert(argv != NULL);
 
-	_arg = calloc(1, sizeof(arg_t));
-
-	argp_parse(&argp, argc, argv, 0, NULL, _arg);
+	argp_parse(&argp, argc, argv, 0, NULL, get_arg());
 
 	return 0;
 }
@@ -55,13 +52,16 @@ static int arg_destroy(void)
 	return 0;
 }
 
-static void print_arg(arg_t *arg)
+#define LINE_SIZE 64
+
+static char *arg_print(void)
 {
-	assert(arg != NULL);
+	char *line = calloc(LINE_SIZE, sizeof(char));
 
-	printf("%d %s\n", arg->data->verbose, arg->data->file);
+	snprintf(line, LINE_SIZE, "ARG: %d, %s\n",
+		 get_arg()->data->verbose, get_arg()->data->file);
 
-	return;
+	return line;
 }
 
 arg_t *get_arg(void)
@@ -72,7 +72,10 @@ arg_t *get_arg(void)
 		_arg = calloc(1, sizeof(arg_t));
 		_arg->create = arg_create;
 		_arg->destroy = arg_destroy;
+		_arg->print = arg_print;
 		_arg->data = calloc(1, sizeof(struct arg_data_s));
+
+		printv(1, "%s", _arg->print());
 	}
 
 	return _arg;
