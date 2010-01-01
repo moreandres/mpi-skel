@@ -23,15 +23,8 @@ struct log_data_s {
 
 static log_t *_log;
 
-log_t *get_log(void)
+static int log_create(char *prefix)
 {
-	return _log;
-}
-
-int log_create(char *prefix)
-{
-	log_t *log = NULL;
-
 	char *name = NULL;
 	char *tmp = NULL;
 	char *stamp = NULL;
@@ -41,41 +34,33 @@ int log_create(char *prefix)
 
 	assert(prefix != NULL);
 
-	log = calloc(1, sizeof(log_t));
+	get_log()->data->name = calloc(FILENAME_SIZE, sizeof(char));
 
-	if (log) {
-		log->data->name = calloc(FILENAME_SIZE, sizeof(char));
-
-		tmp = rindex(name, '/');
-		if (tmp == NULL) {
-			tmp = name;
-		} else {
-			name++;
-		}
-
-		strncat(name, prefix, strlen(prefix));
-
-		stamp = timestamp(FILENAME_SIZE
-				  - strlen(log->data->name)
-				  - strlen(suffix));
-
-		strncat(log->data->name, stamp, strlen(stamp));
-		strncat(log->data->name, suffix, strlen(suffix));
-
-		printd("%s", log->data->name);
-
-		log->data->fd = open(log->data->name, O_CREAT | O_APPEND);
-
-		printd("%d", log->data->fd);
-		perror("Error");
+	tmp = rindex(prefix, '/');
+	if (tmp == NULL) {
+		tmp = prefix;
+	} else {
+		prefix++;
 	}
+
+	strncat(get_log()->data->name, prefix, strlen(prefix));
+
+	stamp = timestamp(FILENAME_SIZE
+			  - strlen(get_log()->data->name)
+			  - strlen(suffix));
+
+	strncat(get_log()->data->name, stamp, strlen(stamp));
+	strncat(get_log()->data->name, suffix, strlen(suffix));
+
+	get_log()->data->fd = open(get_log()->data->name,
+				   O_CREAT | O_APPEND);
 
 	return 0;
 }
 
 #include <unistd.h>
 
-int log_destroy(void)
+static int log_destroy(void)
 {
 	int result = -1;
 
@@ -86,4 +71,18 @@ int log_destroy(void)
 	free(_log);
 
 	return result;
+}
+
+log_t *get_log(void)
+{
+	printd("()");
+
+	if (_log == NULL) {
+		_log = calloc(1, sizeof(log_t));
+		_log->create = log_create;
+		_log->destroy = log_destroy;
+		_log->data = calloc(1, sizeof(struct log_data_s));
+	}
+
+	return _log;
 }

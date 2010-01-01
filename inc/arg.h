@@ -25,10 +25,6 @@ error_t parse_opt(int key, char *arg, struct argp_state *state);
 
 static struct argp argp = { options, parse_opt, NULL, description };
 
-void setup_argp(int argc, char *argv[]);
-
 arg_t *get_arg(void);
-
-void print_arg(arg_t *arg);
 
 #endif /* ARGP_H */

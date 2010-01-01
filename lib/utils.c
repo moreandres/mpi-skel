@@ -4,13 +4,12 @@
 
 char *timestamp(int size)
 {
+	printd("(%d)", size);
+
+	assert(size >= 0);
+
 	char *buffer = calloc(size, sizeof(char));
 	int result = -1;
-
-	printd("(%p, %d)", buffer, size);
-
-	assert(buffer != NULL);
-	assert(size >= 0);
 
 	struct timeval tv;
 	time_t time;
@@ -20,14 +19,13 @@ char *timestamp(int size)
 
 	result = strftime(buffer, size, "-%m%d%y-%H%M%S", localtime(&time));
 
-	printd("%d", result);
-	printd("%s", buffer);
-
 	return buffer;
 }
 
 double wtime(void)
 {
+	printd("()");
+
 	double sec;
 	struct timeval tv;
 

@@ -7,13 +7,13 @@
 
 #include "config.h"
 
-#define printv(level, fmt, args...) do { if (1 >= level) { \
+#define printv(level, fmt, args...) do { if (1 >= level) {                   \
 			printf(fmt, ## args); }			             \
 	} while (0)
 
 #ifdef DEBUG
 #define printd(fmt, args...) do { \
-			printf("%s:%d:%s ", __FILE__, __LINE__, __func__); \
+			printf("%s:%d:%s", __FILE__, __LINE__, __func__);    \
 			printf(fmt, ## args); printf("\n"); } while (0)
 #else
 #define printd(fmt, args...) /* empty */
