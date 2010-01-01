@@ -12,7 +12,4 @@ typedef struct log_s {
 
 log_t *get_log(void);
 
-int log_create(char *prefix);
-int log_destroy(void);
-
 #endif /* LOG_H */

@@ -11,11 +11,6 @@ struct arg_data_s {
 	char *file;
 };
 
-arg_t *get_arg(void)
-{
-	return _arg;
-}
-
 error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
 	arg_t *arguments = state->input;
@@ -40,7 +35,7 @@ error_t parse_opt(int key, char *arg, struct argp_state *state)
 
 #include <string.h>
 
-void setup_argp(int argc, char *argv[])
+static int arg_create(int argc, char *argv[])
 {
 
 	printd("(%d, %p)", argc, argv);
@@ -52,14 +47,33 @@ void setup_argp(int argc, char *argv[])
 
 	argp_parse(&argp, argc, argv, 0, NULL, _arg);
 
-	return;
+	return 0;
 }
 
-void print_arg(arg_t *arg)
+static int arg_destroy(void)
+{
+	return 0;
+}
+
+static void print_arg(arg_t *arg)
 {
 	assert(arg != NULL);
 
 	printf("%d %s\n", arg->data->verbose, arg->data->file);
 
 	return;
+}
+
+arg_t *get_arg(void)
+{
+	printd("()");
+
+	if (_arg == NULL) {
+		_arg = calloc(1, sizeof(arg_t));
+		_arg->create = arg_create;
+		_arg->destroy = arg_destroy;
+		_arg->data = calloc(1, sizeof(struct arg_data_s));
+	}
+
+	return _arg;
 }
