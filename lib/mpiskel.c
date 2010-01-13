@@ -7,6 +7,8 @@
 #include "utils.h"
 #include "arg.h"
 #include "log.h"
+#include "pipe.h"
+
 #include "mpi.h"
 
 #include <signal.h>
@@ -15,10 +17,14 @@ static void handler(int signum)
 {
 	printd("(%d)", signum);
 
-	printv(1, "Handling signal %d", signum);
+	assert(signum > 0);
+	assert(signum < NSIG);
 
-	get_mpi()->destroy();
+	printv(1, "Handling signal %d\n", signum);
+
+	get_pipe()->destroy();
 	get_log()->destroy();
+	get_arg()->destroy();
 
 	return;
 }
@@ -34,6 +40,9 @@ int main(int argc, char *argv[])
 
 	get_arg()->create(argc, argv);
 	get_log()->create(argv[0]);
+	get_pipe()->create();
+
+	raise(SIGINT);
 
 	return 0;
 }
