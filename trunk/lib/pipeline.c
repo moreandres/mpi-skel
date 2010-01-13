@@ -2,6 +2,16 @@
 #include "utils.h"
 #include "pipeline.h"
 
+/*
+ * load();
+ * process();
+ * store();
+ *
+ * STAGES(load,
+ *        process,
+ *        store);
+ */
+
 stage_t *stage_create(fn_t fn, int options)
 {
 
