@@ -19,9 +19,9 @@
 /* Debugging macro */
 
 #if 0
-#define DBG(fmt, args...) do {                             \
-    printf("%s:%d:%s(", __FILE__, __LINE__, __FUNCTION__); \
-    printf(fmt, ##args); printf(")\n"); } while (0)
+#define DBG(fmt, args...) do {						\
+		printf("%s:%d:%s(", __FILE__, __LINE__, __FUNCTION__);	\
+		printf(fmt, ##args); printf(")\n"); } while (0)
 #else
 #define DBG(fmt, args...)	/* empty */
 #endif
@@ -33,7 +33,7 @@
  */
 
 static void parse_arguments(const int argc, char *argv[],
-		     int *length, int *x, int *y, int *heat, int *error)
+			    int *length, int *x, int *y, int *heat, int *error)
 {
 
 	/* ./heat-omp <length> <x> <y> <heat> <error> */
@@ -112,15 +112,15 @@ static int main2(int argc, char *argv[])
 
 					/* Update grid using neighbours average */
 					grid[at(i, j)] =
-					    0.25 * (tmp[at(i, j - 1)] +
-						    tmp[at(i, j + 1)]
-						    + tmp[at(i - 1, j)] +
-						    tmp[at(i + 1, j)]);
+						0.25 * (tmp[at(i, j - 1)] +
+							tmp[at(i, j + 1)]
+							+ tmp[at(i - 1, j)] +
+							tmp[at(i + 1, j)]);
 
 					/* Update max heat difference */
 					gap =
-					    fabs(grid[at(i, j)] -
-						 tmp[at(i, j)]);
+						fabs(grid[at(i, j)] -
+						     tmp[at(i, j)]);
 					if (diff < gap) {
 						diff = gap;
 					}
@@ -139,4 +139,44 @@ static int main2(int argc, char *argv[])
 	}
 
 	return 0;
+}
+
+#include <mpiskel.h>
+#include "pipe.h"
+#include "utils.h"
+
+static void *setup(void * params)
+{
+	printd("()");
+
+	return NULL;
+}
+
+static void *work(void * params)
+{
+	printd("()");
+
+	return NULL;
+}
+
+static void *reduce(void * params)
+{
+	printd("()");
+
+	return NULL;
+}
+
+static pipe_t heat = {
+	.name = "heat",
+	.options = 0,
+	.stages = {
+		{ "setup", setup, 0, NULL, NULL },
+		{ "work", work, 0, NULL, NULL },
+		{ "reduce", reduce, 0, NULL, NULL },
+	},
+};
+
+pipe_t *get(void)
+{
+	return &heat;
 }
