@@ -56,3 +56,43 @@ static int mm_check(double *a, double *b, int n)
 
 	return 0;
 }
+
+#include <mpiskel.h>
+#include "pipe.h"
+#include "utils.h"
+
+static void *setup(void * params)
+{
+	printd("()");
+
+	return NULL;
+}
+
+static void *work(void * params)
+{
+	printd("()");
+
+	return NULL;
+}
+
+static void *reduce(void * params)
+{
+	printd("()");
+
+	return NULL;
+}
+
+static pipe_t matrix = {
+	.name = "matrix",
+	.options = 0,
+	.stages = {
+		{ "setup", setup, 0, NULL, NULL },
+		{ "work", work, 0, NULL, NULL },
+		{ "reduce", reduce, 0, NULL, NULL },
+	},
+};
+
+pipe_t *get(void)
+{
+	return &matrix;
+}
