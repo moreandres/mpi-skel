@@ -3,21 +3,14 @@
 
 #include <mpiskel.h>
 
+#include "utils.h"
+#include "pipe.h"
+
 static int q[20];
 static int count = 1;
 static int cc = 1;
 
-static void print(int n)
-{
-	int i;
-	count++;
-	for (i = 1; i <= n; i++)
-		printf("(%d,%d)", i, q[i]);
-
-	printf("\n");
-}
-
-static int Place(int i, int k)
+static int place(int i, int k)
 {
 	int j = 1;
 	while (j < k) {
@@ -27,40 +20,31 @@ static int Place(int i, int k)
 	}
 	return 1;
 }
-static void Queens(int k, int n)
+
+static void set_queens(int k, int n)
 {
 	int i;
 	if (k > n)
-		print(n);
+		;
 	else {
 		for (i = 1; i <= n; i++)
-			if (Place(i, k) == 1) {
+			if (place(i, k) == 1) {
 				q[k] = i;
-				Queens(k + 1, n);
+				set_queens(k + 1, n);
 			}
 	}
 }
-static int main2(int argc, char *argv[])
-{
-	int n;
-	scanf("%d", &n);
-	Queens(1, n);
-	printf("\n%d", cc);
-	return 0;
-}
 
-#include <mpiskel.h>
-#include "pipe.h"
-#include "utils.h"
-
-static void *setup(void * params)
+static void *work(void * params)
 {
 	printd("()");
+
+	set_queens(1, 13);
 
 	return NULL;
 }
 
-static void *work(void * params)
+static void *setup(void * params)
 {
 	printd("()");
 
@@ -82,6 +66,8 @@ static pipe_t queens = {
 		{ "work", work, 0, NULL, NULL },
 		{ "reduce", reduce, 0, NULL, NULL },
 	},
+	.count = 3,
+
 };
 
 pipe_t *get(void)

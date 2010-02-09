@@ -7,9 +7,12 @@
 
 #include "config.h"
 
-#define printv(level, fmt, args...) do { if (1 >= level) {                   \
-			printf(fmt, ## args); }			             \
-	} while (0)
+#define printv(level, fmt, args...) do { if (1 >= level) { \
+      char *stamp = timestamp(32);			   \
+      printf("%s: ", stamp);				   \
+      printf(fmt, ## args);				   \
+      free(stamp); }					   \
+  } while (0)
 
 #ifdef DEBUG
 #define printd(fmt, args...) do { \
