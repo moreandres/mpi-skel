@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
 	get_log()->create(argv[0]);
 	get_pipe()->create();
 
+	get_pipe()->execute();
+
 	raise(SIGINT);
 
 	return 0;

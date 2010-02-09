@@ -17,7 +17,7 @@ char *timestamp(int size)
 	gettimeofday(&tv, NULL);
 	time = tv.tv_sec;
 
-	result = strftime(buffer, size, "-%m%d%y-%H%M%S", localtime(&time));
+	result = strftime(buffer, size, "%m%d%y-%H%M%S", localtime(&time));
 
 	return buffer;
 }

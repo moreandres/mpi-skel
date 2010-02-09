@@ -18,8 +18,10 @@ typedef struct pipe_s {
 	char *name;
 	int options;
 	stage_t stages[STAGE_MAX];
+	int count;
 	pipe_data_t data;
 	int (*create) (void);
+	int (*execute) (void);
 	int (*destroy) (void);
 } pipe_t;
 

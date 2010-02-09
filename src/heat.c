@@ -16,69 +16,22 @@
 #define BASE 10			/* strtol */
 #define MAX_ITER 50000		/* upper bound */
 
-/* Debugging macro */
-
-#if 0
-#define DBG(fmt, args...) do {						\
-		printf("%s:%d:%s(", __FILE__, __LINE__, __FUNCTION__);	\
-		printf(fmt, ##args); printf(")\n"); } while (0)
-#else
-#define DBG(fmt, args...)	/* empty */
-#endif
-
 #define at(x, y) ((x) * length + (y))
 
-/*
- * Parse arguments from command line.
- */
+#include <mpiskel.h>
+#include "pipe.h"
+#include "utils.h"
 
-static void parse_arguments(const int argc, char *argv[],
-			    int *length, int *x, int *y, int *heat, int *error)
+static void *work(void * params)
 {
+	printd("(%p)", params);
 
-	/* ./heat-omp <length> <x> <y> <heat> <error> */
-	assert(argc == 6);
-
-	char *tail = NULL;
-
-	/* grid length */
-	*length = strtol(argv[1], &tail, BASE);
-	assert(*tail == 0);
-	assert(*length > 0);
-
-	/* heat X position */
-	*x = strtol(argv[2], &tail, BASE);
-	assert(*tail == 0);
-	assert(*x > 0);
-	assert(*x < *length);
-
-	/* heat Y position */
-	*y = strtol(argv[3], &tail, BASE);
-	assert(*tail == 0);
-	assert(*y > 0);
-	assert(*y < *length);
-
-	/* heat value */
-	*heat = strtol(argv[4], &tail, BASE);
-	assert(*tail == 0);
-	assert(*heat > 0);
-
-	/* error */
-	*error = strtol(argv[5], &tail, BASE);
-	assert(*tail == 0);
-	assert(*error > 0);
-}
-
-static int main2(int argc, char *argv[])
-{
-
-	/* Get command line arguments */
-	int length = -1;
-	int error = -1;
-	int x = -1;
-	int y = -1;
-	int heat = -1;
-	parse_arguments(argc, argv, &length, &x, &y, &heat, &error);
+	/* problem details */
+	int length = 100;
+	int error = 10;
+	int x = 5;
+	int y = 5;
+	int heat = 50;
 
 	/* Allocate grid and helper */
 	int bytes = sizeof(double) * length * length;
@@ -131,28 +84,20 @@ static int main2(int argc, char *argv[])
 
 	grid[at(x, y)] = heat;
 
-	for (i = 0; i < length; i++) {
-		for (j = 0; j < length; j++) {
-			printf("%d %d %f\n", i, j, grid[at(i, j)]);
-		}
-		printf("\n");
-	}
-
-	return 0;
-}
-
-#include <mpiskel.h>
-#include "pipe.h"
-#include "utils.h"
-
-static void *setup(void * params)
-{
-	printd("()");
+/*
+  for (i = 0; i < length; i++) {
+  for (j = 0; j < length; j++) {
+  printf("%d %d %f\n", i, j, grid[at(i, j)]);
+  }
+  printf("\n");
+  }
+*/
 
 	return NULL;
 }
 
-static void *work(void * params)
+
+static void *setup(void * params)
 {
 	printd("()");
 
@@ -174,6 +119,7 @@ static pipe_t heat = {
 		{ "work", work, 0, NULL, NULL },
 		{ "reduce", reduce, 0, NULL, NULL },
 	},
+	.count = 3,
 };
 
 pipe_t *get(void)

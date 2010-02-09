@@ -90,6 +90,7 @@ static pipe_t matrix = {
 		{ "work", work, 0, NULL, NULL },
 		{ "reduce", reduce, 0, NULL, NULL },
 	},
+	.count = 3,
 };
 
 pipe_t *get(void)
