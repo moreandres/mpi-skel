@@ -19,6 +19,8 @@ and some analysis information.
    * valgrind output: memory debugging information
    * process scaling: timings when process number is increased
    * input scaling: timings when input is increased
+   * resource usage: %CPU, %MEM
+   * MPI profiling 
 
 = Generation =
 
