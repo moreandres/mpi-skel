@@ -20,6 +20,8 @@ typedef struct arg_s {
 	int (*create) (int argc, char *argv[]);
 	int (*destroy) (void);
 	char *(*print) (void);
+	int *argc;
+	char ***argv;
 } arg_t;
 
 error_t parse_opt(int key, char *arg, struct argp_state *state);

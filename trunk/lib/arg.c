@@ -37,12 +37,15 @@ error_t parse_opt(int key, char *arg, struct argp_state *state)
 	return 0;
 }
 
-static int arg_create(int argc, char *argv[])
+static int arg_create(int argc, char **argv)
 {
 	printd("(%d, %p)", argc, argv);
 
 	assert(argc >= 0);
 	assert(argv != NULL);
+
+	_arg->argc = &argc;
+	_arg->argv = &argv;
 
 	return argp_parse(&argp, argc, argv, 0, NULL, get_arg());
 }
