@@ -10,7 +10,7 @@ typedef struct mpi_s {
 	int (*destroy) (void);
 } mpi_t;
 
-#include "/usr/lib/openmpi/1.3.2-gcc/include/mpi.h"
+#include <mpi.h>
 
 mpi_t *get_mpi(void);
 

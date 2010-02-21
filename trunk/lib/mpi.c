@@ -3,6 +3,8 @@
 #include "utils.h"
 #include "mpi.h"
 
+#include </usr/include/mpi.h>
+
 static mpi_t *_mpi;
 
 mpi_t *get_mpi(void)

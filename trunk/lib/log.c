@@ -52,7 +52,8 @@ static int log_create(char *prefix)
 	strncat(get_log()->data->name, suffix, strlen(suffix));
 
 	get_log()->data->fd = open(get_log()->data->name,
-				   O_CREAT | O_APPEND);
+				   O_CREAT | O_APPEND,
+				   S_IRUSR | S_IWUSR);
 
 	return 0;
 }
