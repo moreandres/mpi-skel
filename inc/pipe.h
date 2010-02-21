@@ -23,6 +23,7 @@ typedef struct pipe_s {
 	int (*create) (void);
 	int (*execute) (void);
 	int (*destroy) (void);
+	int (*print) (void);
 } pipe_t;
 
 pipe_t *get_pipe(void);

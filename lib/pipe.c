@@ -27,12 +27,8 @@ static int pipe_execute(void)
 
 	printd("()");
 
-	printf("%s\n", _pipe->name);
-
 	int i = 0;
 	while (i < _pipe->count) {
-
-		printf("\t%s\n", _pipe->stages[i].name);
 
 		if (_pipe->stages[i].options & 0x1 == 0x1) {
 			error = get_mpi()->init(get_arg()->argc,
@@ -68,6 +64,20 @@ static int pipe_destroy(void)
 	return 0;
 }
 
+static int pipe_print(void)
+{
+	printd("()");
+
+	printf("%s\n", _pipe->name);
+
+	int i = 0;
+	while (i++ < _pipe->count) {
+		printf("\t%s\n", _pipe->stages[i].name);
+	}
+
+	return 0;
+}
+
 pipe_t *get_pipe(void)
 {
 	if (_pipe == NULL) {
@@ -81,6 +91,8 @@ pipe_t *get_pipe(void)
 		_pipe->create = pipe_create;
 		_pipe->execute = pipe_execute;
 		_pipe->destroy = pipe_destroy;
+		_pipe->print = pipe_print;
+
 		_pipe->data = calloc(1, sizeof(pipe_data_t));
 	}
 

@@ -60,18 +60,13 @@ static int arg_destroy(void)
 	return 0;
 }
 
-#define LINE_SIZE 64
-
-static char *arg_print(void)
+static int arg_print(void)
 {
 	printd("()");
 
-	char *line = calloc(LINE_SIZE, sizeof(char));
+	printf("%d, %s\n", _arg->data->verbose, _arg->data->file);
 
-	snprintf(line, LINE_SIZE, "ARG: %d, %s\n",
-		 get_arg()->data->verbose, get_arg()->data->file);
-
-	return line;
+	return 0;
 }
 
 arg_t *get_arg(void)
@@ -80,9 +75,11 @@ arg_t *get_arg(void)
 
 	if (_arg == NULL) {
 		_arg = calloc(1, sizeof(arg_t));
+
 		_arg->create = arg_create;
 		_arg->destroy = arg_destroy;
 		_arg->print = arg_print;
+
 		_arg->data = calloc(1, sizeof(struct arg_data_s));
 	}
 
