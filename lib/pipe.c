@@ -23,6 +23,8 @@ static int pipe_create(void)
 
 static int pipe_execute(void)
 {
+	int error = 0;
+
 	printd("()");
 
 	printf("%s\n", _pipe->name);
@@ -32,7 +34,10 @@ static int pipe_execute(void)
 
 		printf("\t%s\n", _pipe->stages[i].name);
 
-		get_mpi()->init(get_arg()->argc, get_arg()->argv);
+		if (_pipe->stages[i].options & 0x1 == 0x1) {
+			error = get_mpi()->init(get_arg()->argc,
+						get_arg()->argv);
+		}
 
 		if (_pipe->stages[i].pre != NULL) {
 			_pipe->stages[i].pre(NULL);
@@ -46,12 +51,14 @@ static int pipe_execute(void)
 			_pipe->stages[i].post(NULL);
 		}
 
-		get_mpi()->finalize();
+		if (_pipe->stages[i].options & 0x1 == 0x1) {
+			error = get_mpi()->finalize();
+		}
 
 		i++;
 	}
 
-	return 0;
+	return error;
 }
 
 static int pipe_destroy(void)
