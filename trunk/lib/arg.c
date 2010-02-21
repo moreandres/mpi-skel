@@ -64,7 +64,9 @@ static int arg_print(void)
 {
 	printd("()");
 
-	printf("%d, %s\n", _arg->data->verbose, _arg->data->file);
+	printf("%d, %s\n",
+	       _arg->data->verbose,
+	       _arg->data->file);
 
 	return 0;
 }

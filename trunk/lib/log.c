@@ -74,14 +74,28 @@ static int log_destroy(void)
 	return result;
 }
 
+static int log_print(void)
+{
+	printd("()");
+
+	printf("%d, %s\n",
+	       _log->data->fd,
+	       _log->data->name);
+
+	return 0;
+}
+
 log_t *get_log(void)
 {
 	printd("()");
 
 	if (_log == NULL) {
 		_log = calloc(1, sizeof(log_t));
+
 		_log->create = log_create;
 		_log->destroy = log_destroy;
+		_log->print = log_print;
+
 		_log->data = calloc(1, sizeof(struct log_data_s));
 	}
 

@@ -44,29 +44,12 @@ static void *work(void * params)
 	return NULL;
 }
 
-static void *setup(void * params)
-{
-	printd("()");
-
-	return NULL;
-}
-
-static void *reduce(void * params)
-{
-	printd("()");
-
-	return NULL;
-}
-
 static pipe_t queens = {
 	.name = "queens",
-	.options = 0,
 	.stages = {
-		{ "setup", setup, 0, NULL, NULL },
 		{ "work", work, 0, NULL, NULL },
-		{ "reduce", reduce, 0, NULL, NULL },
 	},
-	.count = 3,
+	.count = 2,
 
 };
 
