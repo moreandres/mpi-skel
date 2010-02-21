@@ -19,7 +19,7 @@ typedef struct arg_s {
 	arg_data_t data;
 	int (*create) (int argc, char *argv[]);
 	int (*destroy) (void);
-	char *(*print) (void);
+	int (*print) (void);
 	int *argc;
 	char ***argv;
 } arg_t;

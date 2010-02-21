@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
 	get_arg()->print();
 
 	get_log()->create(argv[0]);
+	get_log()->print();
 
 	get_pipe()->create();
 	get_pipe()->print();

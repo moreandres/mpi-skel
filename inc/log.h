@@ -8,6 +8,7 @@ typedef struct log_s {
 	log_data_t data;
 	int (*create) (char *prefix);
 	int (*destroy) (void);
+	int (*print) (void);
 } log_t;
 
 log_t *get_log(void);

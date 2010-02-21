@@ -27,6 +27,8 @@ static int pipe_execute(void)
 
 	printd("()");
 
+	void *data = NULL;
+
 	int i = 0;
 	while (i < _pipe->count) {
 
@@ -36,15 +38,15 @@ static int pipe_execute(void)
 		}
 
 		if (_pipe->stages[i].pre != NULL) {
-			_pipe->stages[i].pre(NULL);
+			_pipe->stages[i].pre(data);
 		}
 
 		if (_pipe->stages[i].work != NULL) {
-			_pipe->stages[i].work(NULL);
+			_pipe->stages[i].work(data);
 		}
 
 		if (_pipe->stages[i].post != NULL) {
-			_pipe->stages[i].post(NULL);
+			_pipe->stages[i].post(data);
 		}
 
 		if (_pipe->stages[i].options & 0x1 == 0x1) {
@@ -68,12 +70,14 @@ static int pipe_print(void)
 {
 	printd("()");
 
-	printf("%s\n", _pipe->name);
+	printf("%s: ", _pipe->name);
 
 	int i = 0;
 	while (i++ < _pipe->count) {
-		printf("\t%s\n", _pipe->stages[i].name);
+		printf("%s, ", _pipe->stages[i].name);
 	}
+
+	printf("\n");
 
 	return 0;
 }
