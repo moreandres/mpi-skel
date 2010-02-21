@@ -39,9 +39,12 @@ int main(int argc, char *argv[])
 	signal(SIGINT, handler);
 
 	get_arg()->create(argc, argv);
-	get_log()->create(argv[0]);
-	get_pipe()->create();
+	get_arg()->print();
 
+	get_log()->create(argv[0]);
+
+	get_pipe()->create();
+	get_pipe()->print();
 	get_pipe()->execute();
 
 	raise(SIGINT);
