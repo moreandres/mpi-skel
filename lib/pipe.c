@@ -6,6 +6,8 @@
 
 #include "utils.h"
 #include "pipe.h"
+#include "mpi.h"
+#include "arg.h"
 
 static pipe_t *_pipe;
 
@@ -30,6 +32,8 @@ static int pipe_execute(void)
 
 		printf("\t%s\n", _pipe->stages[i].name);
 
+		get_mpi()->init(get_arg()->argc, get_arg()->argv);
+
 		if (_pipe->stages[i].pre != NULL) {
 			_pipe->stages[i].pre(NULL);
 		}
@@ -42,6 +46,7 @@ static int pipe_execute(void)
 			_pipe->stages[i].post(NULL);
 		}
 
+		get_mpi()->finalize();
 
 		i++;
 	}
