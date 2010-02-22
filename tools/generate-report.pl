@@ -1,6 +1,6 @@
 #! /usr/bin/perl
 
-# $Id$
+# $Id: $
 
 package main;
 
