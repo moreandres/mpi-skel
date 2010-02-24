@@ -10,36 +10,72 @@
 #include <string.h>		/* memcpy, memset */
 #include <assert.h>
 #include <math.h>
+#include <mpiskel.h>
+#include "pipe.h"
+#include "utils.h"
 
 /* Constants */
 
 #define BASE 10			/* strtol */
 #define MAX_ITER 50000		/* upper bound */
+#define LENGTH 100              /* square grid size */
 
-#define at(x, y) ((x) * length + (y))
+#define at(x, y) ((x) * LENGTH + (y))
 
-#include <mpiskel.h>
-#include "pipe.h"
-#include "utils.h"
+typedef struct data_s {
+	double *grid;
+	double *tmp;
+	int bytes;
+} data_t;
+
+static int setup(void * params)
+{
+	printd("(%p)", params);
+
+	data_t * data = (data_t *) params;
+
+	data->bytes = sizeof(double) * LENGTH * LENGTH;
+	assert(data->bytes > 0);
+
+	/* Allocate grid and helper */
+	data->grid = calloc(1, data->bytes);
+	assert(data->grid != NULL);
+
+	data->tmp = calloc(1, data->bytes);
+	assert(data->tmp != NULL);
+
+	return 0;
+}
+
+static inline double update(double *tmp, int i, int j)
+{
+	return (0.25 * 
+		(tmp[at(i, j - 1)] 
+		 + tmp[at(i, j + 1)]
+		 + tmp[at(i - 1, j)] 
+		 + tmp[at(i + 1, j)]));
+}
+
+static inline double difference(double *grid, double *tmp, int i, int j)
+{
+	return (fabs(grid[at(i, j)] - tmp[at(i, j)]));
+}
 
 static void *work(void * params)
 {
 	printd("(%p)", params);
 
+	data_t * data = (data_t *) params;
+	
+	double * grid = data->grid;
+	double * tmp = data->tmp;
+	int bytes = data->bytes;
+
 	/* problem details */
-	int length = 100;
 	int error = 10;
 	int x = 5;
 	int y = 5;
 	int heat = 50;
-
-	/* Allocate grid and helper */
-	int bytes = sizeof(double) * length * length;
-	assert(bytes > 0);
-	double *grid = calloc(1, bytes);
-	assert(grid != NULL);
-	double *tmp = calloc(1, bytes);
-	assert(tmp != NULL);
 
 	double diff = RAND_MAX;
 
@@ -60,20 +96,14 @@ static void *work(void * params)
 			double gap = -1;
 
 			/* Parallel heat distribution */
-			for (i = 1; i < length; i++) {
-				for (j = 1; j < length; j++) {
+			for (i = 1; i < LENGTH; i++) {
+				for (j = 1; j < LENGTH; j++) {
 
-					/* Update grid using neighbours average */
-					grid[at(i, j)] =
-						0.25 * (tmp[at(i, j - 1)] +
-							tmp[at(i, j + 1)]
-							+ tmp[at(i - 1, j)] +
-							tmp[at(i + 1, j)]);
+					/* Update using neighbours average */
+					grid[at(i, j)] = update(tmp, i, j);
 
 					/* Update max heat difference */
-					gap =
-						fabs(grid[at(i, j)] -
-						     tmp[at(i, j)]);
+					gap = difference(grid, tmp, i, j);
 					if (diff < gap) {
 						diff = gap;
 					}
@@ -92,14 +122,6 @@ static void *work(void * params)
   printf("\n");
   }
 */
-
-	return NULL;
-}
-
-
-static void *setup(void * params)
-{
-	printd("()");
 
 	return NULL;
 }

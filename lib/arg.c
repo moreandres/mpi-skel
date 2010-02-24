@@ -14,8 +14,6 @@ struct arg_data_s {
 
 error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
-	printd("(%d, %s, %p)", key, arg, state);
-
 	arg_t *arguments = state->input;
 
 	switch (key) {
@@ -62,26 +60,36 @@ static int arg_destroy(void)
 
 static int arg_print(void)
 {
-	printd("()");
-
-	printf("%d, %s\n",
-	       _arg->data->verbose,
-	       _arg->data->file);
+	printf("ARG %d, %s\n", _arg->data->verbose, _arg->data->file);
 
 	return 0;
 }
 
+/**
+ * get_arg - returns a pointer to the arg singleton object
+ *
+ * The function returns a reference which should be destroyed using the 
+ * destroy method. 
+ *
+ * This function is used to access the object which handles argument parsing
+ * and handling. During its first call, it will allocate the object memory
+ * and it will assign the object methods.
+ */
+
 arg_t *get_arg(void)
 {
-	printd("()");
-
+	/* if not already done, then assing memory and methods */
 	if (_arg == NULL) {
+		
+		/* create main object */
 		_arg = calloc(1, sizeof(arg_t));
 
+		/* assign object methods */
 		_arg->create = arg_create;
 		_arg->destroy = arg_destroy;
 		_arg->print = arg_print;
 
+		/* create object private data */
 		_arg->data = calloc(1, sizeof(struct arg_data_s));
 	}
 
