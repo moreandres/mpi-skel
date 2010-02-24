@@ -76,19 +76,13 @@ static int log_destroy(void)
 
 static int log_print(void)
 {
-	printd("()");
-
-	printf("%d, %s\n",
-	       _log->data->fd,
-	       _log->data->name);
+	printf("LOG %d, %s\n", _log->data->fd, _log->data->name);
 
 	return 0;
 }
 
 log_t *get_log(void)
 {
-	printd("()");
-
 	if (_log == NULL) {
 		_log = calloc(1, sizeof(log_t));
 
