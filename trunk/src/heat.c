@@ -11,7 +11,7 @@
 #include <assert.h>
 #include <math.h>
 #include <mpiskel.h>
-#include "pipe.h"
+
 #include "utils.h"
 
 /* Constants */
@@ -61,7 +61,7 @@ static inline double difference(double *grid, double *tmp, int i, int j)
 	return (fabs(grid[at(i, j)] - tmp[at(i, j)]));
 }
 
-static void *work(void * params)
+static int work(void * params)
 {
 	printd("(%p)", params);
 
@@ -114,32 +114,31 @@ static void *work(void * params)
 
 	grid[at(x, y)] = heat;
 
-/*
-  for (i = 0; i < length; i++) {
-  for (j = 0; j < length; j++) {
-  printf("%d %d %f\n", i, j, grid[at(i, j)]);
-  }
-  printf("\n");
-  }
-*/
-
-	return NULL;
+	return 0;
 }
 
-static void *reduce(void * params)
+static int save(void * params)
 {
 	printd("()");
 
-	return NULL;
+	/*
+	  for (i = 0; i < length; i++) {
+	  for (j = 0; j < length; j++) {
+	  printf("%d %d %f\n", i, j, grid[at(i, j)]);
+	  }
+	  printf("\n");
+	  }
+	*/
+
+	return 0;
 }
 
 static pipe_t heat = {
 	.name = "heat",
-	.options = 0,
 	.stages = {
 		{ "setup", setup, 0, NULL, NULL },
 		{ "work", work, 0, NULL, NULL },
-		{ "reduce", reduce, 0, NULL, NULL },
+		{ "save", save, 0, NULL, NULL },
 	},
 	.count = 3,
 };

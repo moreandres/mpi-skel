@@ -4,7 +4,6 @@
 #include <mpiskel.h>
 
 #include "utils.h"
-#include "pipe.h"
 
 static int q[20];
 static int count = 1;
@@ -35,7 +34,7 @@ static void set_queens(int k, int n)
 	}
 }
 
-static void *work(void * params)
+static int work(void * params)
 {
 	printd("()");
 

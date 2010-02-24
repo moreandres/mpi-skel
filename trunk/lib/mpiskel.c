@@ -7,7 +7,6 @@
 #include "utils.h"
 #include "arg.h"
 #include "log.h"
-#include "pipe.h"
 
 #include "mpi.h"
 
@@ -20,7 +19,6 @@
 #include <mpiskel.h>
 
 #include "utils.h"
-#include "pipe.h"
 #include "mpi.h"
 #include "arg.h"
 
