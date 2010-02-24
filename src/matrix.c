@@ -9,7 +9,6 @@
 
 #include <mpiskel.h>
 
-#include "pipe.h"
 #include "utils.h"
 
 #define SIZE 100
@@ -21,7 +20,7 @@ typedef struct data_s {
 	int n;
 } data_t;
 
-static void *setup(void *data)
+static int setup(void *data)
 {
 	printd("()");
 
@@ -46,10 +45,10 @@ static void *setup(void *data)
 		for (j = 0; j < data2->n; j++)
 			data2->b[i * SIZE + j] = 1.0 * random() / RAND_MAX;
 
-	return NULL;
+	return 0;
 }
 
-static void *work(void *data)
+static int work(void *data)
 {
 	printd("()");
 
@@ -62,12 +61,11 @@ static void *work(void *data)
 				data2->c[i * SIZE + j] += data2->a[i * SIZE + k]
 				    * data2->b[k * SIZE + j];
 
-	return NULL;
+	return 0;
 }
 
 static pipe_t matrix = {
 	.name = "matrix",
-	.options = 0,
 	.stages = {
 		   {"setup", setup, 0, NULL, NULL},
 		   {"work", work, 0, NULL, NULL},
