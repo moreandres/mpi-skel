@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "mpi.h"
 
-#include </usr/include/mpi.h>
+#include <mpi.h>
 
 struct mpi_data_s {
 	int i;
