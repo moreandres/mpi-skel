@@ -28,7 +28,7 @@ typedef struct data_s {
 	int bytes;
 } data_t;
 
-static int setup(void * params)
+static int setup(void *params)
 {
 	printd("(%p)", params);
 
@@ -49,26 +49,26 @@ static int setup(void * params)
 
 static inline double update(double *tmp, int i, int j)
 {
-	return (0.25 * 
-		(tmp[at(i, j - 1)] 
+	return 0.25 *
+		(tmp[at(i, j - 1)]
 		 + tmp[at(i, j + 1)]
-		 + tmp[at(i - 1, j)] 
-		 + tmp[at(i + 1, j)]));
+		 + tmp[at(i - 1, j)]
+		 + tmp[at(i + 1, j)]);
 }
 
 static inline double difference(double *grid, double *tmp, int i, int j)
 {
-	return (fabs(grid[at(i, j)] - tmp[at(i, j)]));
+	return fabs(grid[at(i, j)] - tmp[at(i, j)]);
 }
 
-static int work(void * params)
+static int work(void *params)
 {
 	printd("(%p)", params);
 
-	data_t * data = (data_t *) params;
-	
-	double * grid = data->grid;
-	double * tmp = data->tmp;
+	data_t *data = (data_t *) params;
+	double *grid = data->grid;
+	double *tmp = data->tmp;
+
 	int bytes = data->bytes;
 
 	/* problem details */
@@ -117,7 +117,7 @@ static int work(void * params)
 	return 0;
 }
 
-static int save(void * params)
+static int save(void *params)
 {
 	printd("()");
 

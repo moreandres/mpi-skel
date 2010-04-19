@@ -18,7 +18,7 @@ AC_PROG_RANLIB
 
 # Checks for header files.
 AC_HEADER_TIME
-AC_CHECK_HEADERS([fcntl.h] [sys/time.h] [syslog.h])
+AC_CHECK_HEADERS([fcntl.h] [sys/time.h] [syslog.h] [mpi.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIGNAL
@@ -34,7 +34,7 @@ AC_CHECK_FUNCS([gettimeofday] [strtol])
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug], [Turn on debugging]),
 	      AC_DEFINE([DEBUG], [1], [Turn on debugging]))
-
+	      
 # Makefiles
 AC_CONFIG_FILES([Makefile
                  lib/Makefile

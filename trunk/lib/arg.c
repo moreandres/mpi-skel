@@ -12,7 +12,7 @@ struct arg_data_s {
 	char *file;
 };
 
-error_t parse_opt(int key, char *arg, struct argp_state *state)
+static error_t parse_opt(int key, char *arg, struct argp_state *state)
 {
 	arg_t *arguments = state->input;
 
@@ -34,6 +34,18 @@ error_t parse_opt(int key, char *arg, struct argp_state *state)
 
 	return 0;
 }
+
+static const char description[] =
+    "mpiskel -- a framework for MPI applications using C callbacks";
+
+static struct argp_option options[] = {
+	{"verbose", 'v', NULL, 0, "Produce verbose output"},
+	{"log", 'l', "FILE", 0,
+	 "Log to FILE instead of timestamped file"},
+	{NULL}
+};
+
+static struct argp argp = { options, parse_opt, NULL, description };
 
 static int arg_create(int argc, char **argv)
 {
@@ -68,8 +80,8 @@ static int arg_print(void)
 /**
  * get_arg - returns a pointer to the arg singleton object
  *
- * The function returns a reference which should be destroyed using the 
- * destroy method. 
+ * The function returns a reference which should be destroyed using the
+ * destroy method.
  *
  * This function is used to access the object which handles argument parsing
  * and handling. During its first call, it will allocate the object memory
@@ -80,7 +92,7 @@ arg_t *get_arg(void)
 {
 	/* if not already done, then assing memory and methods */
 	if (_arg == NULL) {
-		
+
 		/* create main object */
 		_arg = calloc(1, sizeof(arg_t));
 

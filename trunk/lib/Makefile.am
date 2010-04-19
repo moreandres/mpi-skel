@@ -1,7 +1,7 @@
 EXTRA_DIST =
 INCLUDES =
 
-AM_CFLAGS = -Wall
+AM_CFLAGS = -Werror -Wall
 AM_LDFLAGS = -lmpi
 
 lib_LTLIBRARIES = libmpiskel.la
