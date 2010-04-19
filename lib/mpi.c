@@ -3,7 +3,11 @@
 #include "utils.h"
 #include "mpi.h"
 
-#include <mpi.h>
+#ifdef HAVE_MPI_H
+
+#include "/usr/include/mpi.h"
+
+#endif /* HAVE_MPI_H */
 
 struct mpi_data_s {
 	int i;
@@ -20,6 +24,8 @@ static int mpi_init(int *argc, char **argv[])
 	assert(argc != NULL);
 	assert(argv != NULL);
 
+#ifdef HAVE_MPI_H
+
 	error = MPI_Init(argc, argv);
 
 	if (!error) {
@@ -32,6 +38,7 @@ static int mpi_init(int *argc, char **argv[])
 
 		error = MPI_Get_processor_name(_mpi->name, &_mpi->length);
 	}
+#endif /* HAVE_MPI_H */
 
 	return error;
 }

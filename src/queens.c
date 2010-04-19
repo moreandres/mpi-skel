@@ -6,8 +6,6 @@
 #include "utils.h"
 
 static int q[20];
-static int count = 1;
-static int cc = 1;
 
 static int place(int i, int k)
 {
@@ -34,13 +32,13 @@ static void set_queens(int k, int n)
 	}
 }
 
-static int work(void * params)
+static int work(void *params)
 {
 	printd("()");
 
 	set_queens(1, 13);
 
-	return NULL;
+	return 0;
 }
 
 static pipe_t queens = {
