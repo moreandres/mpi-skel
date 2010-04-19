@@ -72,7 +72,6 @@ typedef struct pipe_s {
 	char *name;
 	int options;
 	stage_t stages[STAGE_MAX];
-	int count;
 	int (*create) (void);
 	int (*execute) (void);
 	int (*destroy) (void);

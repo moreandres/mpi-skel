@@ -139,8 +139,8 @@ static pipe_t heat = {
 		{ "setup", setup, 0, NULL, NULL },
 		{ "work", work, 0, NULL, NULL },
 		{ "save", save, 0, NULL, NULL },
+		{},
 	},
-	.count = 3,
 };
 
 pipe_t *get(void)
