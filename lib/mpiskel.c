@@ -43,7 +43,7 @@ static int pipe_execute(void)
 	void *data = NULL;
 
 	int i = 0;
-	while (i < _pipe->count - 1) {
+	while (_pipe->stages[i].work != NULL) {
 
 	  if ((_pipe->stages[i].options & 0x1) == 0x1) {
 			error = get_mpi()->init(get_arg()->argc,
@@ -54,9 +54,7 @@ static int pipe_execute(void)
 			_pipe->stages[i].pre(data);
 		}
 
-		if (_pipe->stages[i].work != NULL) {
-			_pipe->stages[i].work(data);
-		}
+		_pipe->stages[i].work(data);
 
 		if (_pipe->stages[i].post != NULL) {
 			_pipe->stages[i].post(data);
@@ -84,8 +82,9 @@ static int pipe_print(void)
 	printf("%s: ", _pipe->name);
 
 	int i = 0;
-	while (i++ < _pipe->count - 1) {
+	while (_pipe->stages[i].work != NULL) {
 		printf("%s, ", _pipe->stages[i].name);
+		i++;
 	}
 
 	printf("\n");
@@ -101,7 +100,6 @@ pipe_t *get_pipe(void)
 
 		assert(_pipe != NULL);
 		assert(_pipe->name != NULL);
-		assert(_pipe->count > 0);
 
 		_pipe->create = pipe_create;
 		_pipe->execute = pipe_execute;

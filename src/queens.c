@@ -46,8 +46,6 @@ static pipe_t queens = {
 	.stages = {
 		{ "work", work, 0, NULL, NULL },
 	},
-	.count = 2,
-
 };
 
 pipe_t *get(void)
