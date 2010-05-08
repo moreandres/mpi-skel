@@ -42,13 +42,18 @@ static int pipe_execute(void)
 
 	void *data = NULL;
 
+	printf("AM1: %p\n", &data);
+
 	int i = 0;
 	while (_pipe->stages[i].work != NULL) {
 
-	  if ((_pipe->stages[i].options & 0x1) == 0x1) {
+
+#ifdef HAVE_MPI_H
+		if ((_pipe->stages[i].options & 0x1) == 0x1) {
 			error = get_mpi()->init(get_arg()->argc,
 						get_arg()->argv);
 		}
+#endif /* HAVE_MPI_H */
 
 		if (_pipe->stages[i].pre != NULL) {
 			_pipe->stages[i].pre(data);
@@ -60,9 +65,11 @@ static int pipe_execute(void)
 			_pipe->stages[i].post(data);
 		}
 
+#ifdef HAVE_MPI_H
 		if ((_pipe->stages[i].options & 0x1) == 0x1) {
 			error = get_mpi()->finalize();
 		}
+#endif /* HAVE_MPI_H */
 
 		i++;
 	}

@@ -26,7 +26,9 @@ static int setup(void *data)
 
 	data = calloc(1, sizeof(data_t));
 
-	data_t *data2 = (data_t *) data;
+	data_t *data2 = (data_t *) &data;
+
+	printf("AM2: %p\n", data2);
 
 	data2->a = calloc(SIZE * SIZE, sizeof(double));
 	data2->b = calloc(SIZE * SIZE, sizeof(double));
@@ -53,6 +55,7 @@ static int work(void *data)
 	printd("()");
 
 	data_t *data2 = (data_t *) data;
+	printf("AM3: %p\n", data2);
 
 	int i, j, k;
 	for (i = 0; i < data2->n; i++)
@@ -67,10 +70,10 @@ static int work(void *data)
 static pipe_t matrix = {
 	.name = "matrix",
 	.stages = {
-		   {"setup", setup, 0, NULL, NULL},
-		   {"work", work, 0, NULL, NULL},
-		   {},
-		   },
+		{"setup", setup, 0, NULL, NULL},
+		{"work", work, 0, NULL, NULL},
+		{},
+	},
 };
 
 pipe_t *get(void)

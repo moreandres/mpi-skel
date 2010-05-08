@@ -1,3 +1,3 @@
 #! /bin/bash
 
-../src/heat
+../src/heat > /dev/null
