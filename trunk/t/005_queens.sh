@@ -1,3 +1,3 @@
 #! /bin/bash
 
-../src/queens
+../src/queens > /dev/null

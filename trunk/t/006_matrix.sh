@@ -1,3 +1,3 @@
 #! /bin/bash
 
-../src/matrix
+../src/matrix > /dev/null

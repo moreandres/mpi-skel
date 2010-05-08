@@ -45,6 +45,7 @@ static pipe_t queens = {
 	.name = "queens",
 	.stages = {
 		{ "work", work, 0, NULL, NULL },
+		{},
 	},
 };
 
