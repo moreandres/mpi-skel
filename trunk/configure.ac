@@ -5,6 +5,7 @@ AC_INIT([mpi-skel], [0.1], [more.andres@gmail.com])
 
 AC_CONFIG_SRCDIR([lib/mpiskel.c])
 AC_CONFIG_HEADERS([inc/config.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE
 
