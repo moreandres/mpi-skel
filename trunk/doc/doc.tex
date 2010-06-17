@@ -7,17 +7,18 @@
 
 \begin{document}
 
-\title{Facultad de Informatica - Universidad Nacional de La Plata\\Especializaci\'on en C\'omputo de Altas Prestaciones\\Propuesta de Trabajo Final\\Herramientas para el Soporte de Analisis de Rendimiento}
-\author{Alumno: Andr\'es More - {\tt amore@hal.famaf.unc.edu.ar}\\Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
-\date{Mayo 2009}
+\title{Universidad Nacional de La Plata - Facultad de Inform\'atica\\Especializaci\'on en C\'omputo de Altas Prestaciones\\ \bigskip Propuesta de Trabajo Final\\Herramientas para el Soporte de Analisis de Rendimiento}
+\author{ Alumno: Andr\'es More - {\tt amore@hal.famaf.unc.edu.ar}\\Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
+\date{Julio 2009}
 
 \twocolumn[
   \begin{@twocolumnfalse}
     \maketitle
     \begin{abstract}
-      Este documento describe una propuesta de trabajo final para la especializaci\'on en c\'omputo de altas prestaciones.
-      Idea. Beneficios. Ejemplo.
-      
+      Este documento describe una propuesta de trabajo final para la especializaci\'on en c\'omputo de altas prestaciones dictada en la facultad nacional de la plata.
+      La propuesta consiste en el estudio de los metodos existentes para evaluacion y optimizacion del rendimiento de programas.
+      A manera de ejemplificacion, se analizan diversos casos integradores de aplicaciones representativas, representando un nucleo especifico de calculo. De este modo se repite un
+      procedimiento de analisis de rendimiento utilizando diferentes herramientas y metodologias.
     \end{abstract}
   \end{@twocolumnfalse}
 ]
@@ -60,19 +61,27 @@ La gran mayor\'ia de las referencias son a su vez material a utilizar durante la
 
 \appendix
 
-\section{Ejemplo Integrador}
+\section{Ejemplos Integradores}
 
 \subsection{matrix}
 
-Multiplicaci\'on de matrices.
+La aplicacion matrix realizara una multiplicacion de dos matrices densas.
+operaciones de punto flotante en forma secuencial.
 
 \subsection{queens}
 
-Reinas de ajedrez.
+La aplicacion queens realizara la colocacion de 8 reinas en un tablero de ajedrez sin que las mismas se amenacen mutuamente.
+arreglos de enteros.
 
-\subsection{heat2}
+\subsection{heat2d}
 
 Distribuci\'on de calor en dos dimensiones.
+operaciones simples en iteraciones.
+
+\subsection{fft}
+
+Utilizacion de transformadas de fourier.
+operaciones altamente complejas de punto flotante.
 
 \begin{thebibliography}{9}
   
@@ -92,6 +101,26 @@ Distribuci\'on de calor en dos dimensiones.
   Fernando Tinetti,
   \emph{Computo Paralelo en Redes Locales de Computadoras},
   2004.
+
+\bibitem{gprof}
+Susan L. Graham,  Peter B. Kessler,  Marshall K. McKusick,
+\emph{gprof: A Call Graph Execution Profiler},
+1982.
+
+\bibitem{hennessy-patterson}
+John. L. Hennesy, David A. Patterson,
+\emph{Computer Architecture: A Quantitative Approach, 3rd Edition},
+2002.
+
+\bibitem{intel}
+Intel Press,
+\emph{Intel64 and IA-32 Architectures Software Developer's Manual - Volume 3B: System Programming Guide, Part 2},
+March 2010.
+
+\bibitem{what}
+Ulrich Deeper,
+What Every Programmer Should Know Abot Memory,
+Novermber 2007.
 
 \end{thebibliography}
 
