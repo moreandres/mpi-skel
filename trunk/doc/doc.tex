@@ -7,80 +7,129 @@
 
 \begin{document}
 
-\title{Universidad Nacional de La Plata - Facultad de Inform\'atica\\Especializaci\'on en C\'omputo de Altas Prestaciones\\ \bigskip Propuesta de Trabajo Final\\Herramientas para el Soporte de Analisis de Rendimiento}
-\author{ Alumno: Andr\'es More - {\tt amore@hal.famaf.unc.edu.ar}\\Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
-\date{Julio 2009}
+\title{Universidad Nacional de La Plata - Facultad de Inform\'atica\\Especializaci\'on en C\'omputo de Altas Prestaciones\\ \bigskip Propuesta de Trabajo Final\\Herramientas para el Soporte de An\'alisis de Rendimiento}
+\author{Alumno: Andr\'es More - {\tt amore@hal.famaf.unc.edu.ar}\\Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
+\date{Junio 2009}
 
 \twocolumn[
   \begin{@twocolumnfalse}
     \maketitle
     \begin{abstract}
-      Este documento describe una propuesta de trabajo final para la especializaci\'on en c\'omputo de altas prestaciones dictada en la facultad nacional de la plata.
-      La propuesta consiste en el estudio de los metodos existentes para evaluacion y optimizacion del rendimiento de programas.
-      A manera de ejemplificacion, se analizan diversos casos integradores de aplicaciones representativas, representando un nucleo especifico de calculo. De este modo se repite un
-      procedimiento de analisis de rendimiento utilizando diferentes herramientas y metodologias.
+      Este documento describe una propuesta de Trabajo Final para la Especializaci\'on en C\'omputo de Altas Prestaciones, dictada en la Facultad de Inform\'atica de la Universidad Nacional de La 
+      Plata. La propuesta consiste en el estudio de los m\'etodos existentes para evaluaci\'on y optimizaci\'on del rendimiento de programas. M\'ultiples objetivos inter-relacionados son
+      establecidos para este trabajo, incluyendo la documentaci\'on de las requerimientos comunes en este tipo de aplicaciones, la generaci\'on de una taxonom\'ia de las tecnolog\'ias disponibles,
+      su ejercitaci\'on, y una propuesta de un procedimiento generalizado para an\'alisis de rendimiento, entre otros.  Luego de cumplir los objetivos iniciales se plantea analizar varios n\'ucleos 
+      espec\'ificos de c\'alculo como casos integradores. De este modo se podr\'a demostrar el procedimiento de an\'alisis de rendimiento utilizando las herramientas y metodolog\'ias estudiadas.
     \end{abstract}
   \end{@twocolumnfalse}
 ]
 
 \tableofcontents
 
+\section{Motivaci\'on}
+
+El desarrollo de aplicaciones que utilizan c\'omputo de alto rendimiento es frecuentemente hecho por especialistas en el dominio de los problemas a resolver, fuera del \'area de la inform\'atica.
+Estos cient\'ificos no poseen todos los conocimientos, experiencia o recursos necesarios para una implementaci\'on adecuada, implicando una reducci\'on del tiempo disponible para el an\'alisis de
+los resultados de los c\'alculos o simulaciones.
+
+Al mismo tiempo, el desarrollo de estas aplicaciones suele ser para un uso espec\'ifico y limitado, por lo que no existe un m\'etodo general para el an\'alisis de su rendimiento. Forzando a los desarrolladores de tales aplicaciones al uso de m\'etodos artesanales o a una optimizaci\'on sin tener las bases cuantitativas suficientes.
+
+\section{Estado del Arte}
+
+Actualmente existen diversos m\'etodos y tecnolog\'ias para el an\'alisis de rendimiento.
+
+Lo mas simple es utilizar el tiempo total de ejecucion. O medir el uso de recursos del sistema durante la ejecucion de la aplicacion.
+
+Instrumentacion.
+Espacio de Usuario.
+Sistema Operativo.
+Contadores de Hardware. Registros de CPUs.
+
 \section{Objetivos}
 
 Generar una taxonomia de m\'etodos de analisis de rendimiento.
+
 Realizar una comparaci\'on de los mismos.
+
 Ejercitar estas herramientas, documentando pasos y problemas comunes.
+
 Proponer un proceso de analisis para aplicaciones de alto rendimiento.
-Generar infrastructura que soporte automaticamente el analisis de performance.
-Generar una librer\'ia que facilite el desarollo de aplicaciones de altas prestaciones.
+
 Documentar requerimientos generales de aplicacioness de altas prestaciones.
-Generalizar las aplicaciones utilizando un pipeline.
-
-\section{Motivacion y Estado del Arte}
-
-MPI.
-Expertos en Dominio.
-Analisis de Rendimiento es artesanal.
 
 \section{Temas a Investigar}
 
 Analisis de Rendimiento.
+Scaling
+Pipeline.
+
 Herramientas.
 
-\section{Material Bibliografico}
+oprofile \cite{oprofile}
 
-La gran mayor\'ia de las referencias son a su vez material a utilizar durante la investigaci\'on.
+gprof \cite{gprof}
 
-\begin{enumerate}
-\item{Linux Device Drivers}. Detalles de implementaci\'on de subsistemas utilizando patrones de reuso.
-\item{Design Patterns}. Base de todo estudio de patrones de dise\~no
-\item{G. Mattson, B.A. Sanders and B.L. Massingill, Patterns for Parallel Programming, Addison-Wesley, 2004}.
-\end{enumerate}
+mpi profiling interface, traces. \cite{mpi}
+
+Comunicaci\'on: Balance, Comunicaci\'on.
+
+Mejora potencial seg\'un configuraci\'on de hardware.
 
 \section{Plan de Actividades}
+
+\begin{figure}[H]
+  \begin{center}
+    \begin{tabular}{|c|c|}\hline
+      {\bf Actividad} & {\bf Duraci\'on} \\ \hline
+      Recoleccion de Material & Julio \\ \hline
+      Tecnologias & Agosto \\ \hline
+      Procedimiento Generalizado & Septiembre \\ \hline
+      Desarrollo/Analisis de Ejemplos & Octubre \\ \hline
+      Resultados y Conclusiones & Noviembre \\ \hline
+    \end{tabular}
+    \caption{Detalle de Actividades}
+  \end{center}
+  \label{schedule}
+\end{figure}
+
+\section{Trabajo Futuro}
+
+Esqueleto, patr\'on de dise\~no.
+
+Pipeline Generalizaci\'on.
+
+Automatizaci\'on.
+
+Callbacks LDD.
+
+Generalizar las aplicaciones utilizando un pipeline.
+
+Generar infrastructura que soporte automaticamente el analisis de performance.
+
+Generar una librer\'ia que facilite el desarollo de aplicaciones de altas prestaciones.
+
+\section{Material de Referencia}
+
+Citaciones de Libros, Articulos en las referencias.
+
+Existe mucho material sobre el tema.
+Articulos sobre aplicaciones especificas para mdir rendimiento.
+Articulos sobre 
 
 \appendix
 
 \section{Ejemplos Integradores}
 
-\subsection{matrix}
-
-La aplicacion matrix realizara una multiplicacion de dos matrices densas.
+La aplicacion \emph{matrix} realizara una multiplicacion de dos matrices densas.
 operaciones de punto flotante en forma secuencial.
 
-\subsection{queens}
-
-La aplicacion queens realizara la colocacion de 8 reinas en un tablero de ajedrez sin que las mismas se amenacen mutuamente.
+La aplicacion \emph{queens} realizara la colocacion de 8 reinas en un tablero de ajedrez sin que las mismas se amenacen mutuamente.
 arreglos de enteros.
 
-\subsection{heat2d}
-
-Distribuci\'on de calor en dos dimensiones.
+\emph{heat2d} Distribuci\'on de calor en dos dimensiones.
 operaciones simples en iteraciones.
 
-\subsection{fft}
-
-Utilizacion de transformadas de fourier.
+\emph{fft} Utilizacion de transformadas de fourier.
 operaciones altamente complejas de punto flotante.
 
 \begin{thebibliography}{9}
@@ -103,24 +152,38 @@ operaciones altamente complejas de punto flotante.
   2004.
 
 \bibitem{gprof}
-Susan L. Graham,  Peter B. Kessler,  Marshall K. McKusick,
-\emph{gprof: A Call Graph Execution Profiler},
-1982.
+ Susan L. Graham,  Peter B. Kessler,  Marshall K. McKusick,
+ \emph{gprof: A Call Graph Execution Profiler},
+ 1982.
+
+\bibitem{oprofile}
+J. Levon,
+\emph{oprofile: hardware profiler for Linux systems},
+{\tt http://oprofile.sourceforge.net}.
 
 \bibitem{hennessy-patterson}
-John. L. Hennesy, David A. Patterson,
-\emph{Computer Architecture: A Quantitative Approach, 3rd Edition},
-2002.
+ John. L. Hennesy, David A. Patterson,
+ \emph{Computer Architecture: A Quantitative Approach, 3rd Edition},
+ 2002.
 
 \bibitem{intel}
-Intel Press,
-\emph{Intel64 and IA-32 Architectures Software Developer's Manual - Volume 3B: System Programming Guide, Part 2},
-March 2010.
+ Intel Press,
+ \emph{Intel64 and IA-32 Architectures Software Developer's Manual - Volume 3B: System Programming Guide, Part 2},
+ March 2010.
 
 \bibitem{what}
-Ulrich Deeper,
-What Every Programmer Should Know Abot Memory,
-Novermber 2007.
+ Ulrich Deeper,
+ \emph{What Every Programmer Should Know About Memory},
+ Novermber 2007.
+
+\bibitem{patterns}
+ G. Mattson, B.A. Sanders and B.L. Massingill, 
+ \emph{Patterns for Parallel Programming, Addison-Wesley},
+ 2004.
+
+7 dwards of performance analysis
+
+M\'as?
 
 \end{thebibliography}
 
