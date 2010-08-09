@@ -7,19 +7,35 @@
 
 \begin{document}
 
-\title{Universidad Nacional de La Plata - Facultad de Inform\'atica\\Especializaci\'on en C\'omputo de Altas Prestaciones\\ \bigskip Propuesta de Trabajo Final\\Herramientas para el Soporte de An\'alisis de Rendimiento}
-\author{Alumno: Andr\'es More - {\tt amore@hal.famaf.unc.edu.ar}\\Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
-\date{Junio 2009}
+\title{Universidad Nacional de La Plata - Facultad de Inform\'atica\\
+Especializaci\'on en C\'omputo de Altas Prestaciones\\
+\bigskip
+Propuesta de Trabajo Final\\
+Herramientas para el Soporte de An\'alisis de Rendimiento}
+
+\author{Alumno: Andr\'es More - {\tt amore@hal.famaf.unc.edu.ar}\\
+Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
+
+\date{Agosto 2010}
 
 \twocolumn[
   \begin{@twocolumnfalse}
     \maketitle
     \begin{abstract}
-      Este documento describe una propuesta de Trabajo Final para la Especializaci\'on en C\'omputo de Altas Prestaciones, dictada en la Facultad de Inform\'atica de la Universidad Nacional de La 
-      Plata. La propuesta consiste en el estudio de los m\'etodos existentes para evaluaci\'on y optimizaci\'on del rendimiento de programas. M\'ultiples objetivos inter-relacionados son
-      establecidos para este trabajo, incluyendo la documentaci\'on de las requerimientos comunes en este tipo de aplicaciones, la generaci\'on de una taxonom\'ia de las tecnolog\'ias disponibles,
-      su ejercitaci\'on, y una propuesta de un procedimiento generalizado para an\'alisis de rendimiento, entre otros.  Luego de cumplir los objetivos iniciales se plantea analizar varios n\'ucleos 
-      espec\'ificos de c\'alculo como casos integradores. De este modo se podr\'a demostrar el procedimiento de an\'alisis de rendimiento utilizando las herramientas y metodolog\'ias estudiadas.
+      Este documento describe una propuesta de Trabajo Final para la
+      Especializaci\'on en C\'omputo de Altas Prestaciones, dictada en la Facultad
+      de Inform\'atica de la Universidad Nacional de La Plata. La propuesta
+      consiste en el estudio de los m\'etodos existentes para evaluaci\'on y
+      optimizaci\'on del rendimiento de programas. M\'ultiples objetivos
+      inter-relacionados son establecidos para este trabajo, incluyendo la
+      documentaci\'on de las requerimientos comunes en este tipo de aplicaciones,
+      la generaci\'on de una taxonom\'ia de las tecnolog\'ias disponibles,
+      su ejercitaci\'on, y una propuesta de un procedimiento generalizado para
+      an\'alisis de rendimiento, entre otros.  Luego de cumplir los objetivos
+      iniciales se plantea analizar varios n\'ucleos espec\'ificos de c\'alculo
+      como casos integradores. De este modo se podr\'a demostrar el procedimiento
+      de an\'alisis de rendimiento utilizando las herramientas y metodolog\'ias
+      estudiadas.
     \end{abstract}
   \end{@twocolumnfalse}
 ]
@@ -28,17 +44,28 @@
 
 \section{Motivaci\'on}
 
-El desarrollo de aplicaciones que utilizan c\'omputo de alto rendimiento es frecuentemente hecho por especialistas en el dominio de los problemas a resolver, fuera del \'area de la inform\'atica.
-Estos cient\'ificos no poseen todos los conocimientos, experiencia o recursos necesarios para una implementaci\'on adecuada, implicando una reducci\'on del tiempo disponible para el an\'alisis de
-los resultados de los c\'alculos o simulaciones.
+El desarrollo de aplicaciones que utilizan c\'omputo de alto rendimiento es
+frecuentemente hecho por especialistas en el dominio de los problemas a resolver,
+fuera del \'area de la inform\'atica.
 
-Al mismo tiempo, el desarrollo de estas aplicaciones suele ser para un uso espec\'ifico y limitado, por lo que no existe un m\'etodo general para el an\'alisis de su rendimiento. Forzando a los desarrolladores de tales aplicaciones al uso de m\'etodos artesanales o a una optimizaci\'on sin tener las bases cuantitativas suficientes.
+Estos cient\'ificos no poseen todos los conocimientos, experiencia o recursos
+necesarios para una implementaci\'on adecuada, implicando una reducci\'on del
+tiempo disponible para el an\'alisis de los resultados de los c\'alculos o
+simulaciones.
+
+Al mismo tiempo, el desarrollo de estas aplicaciones suele ser para un uso
+espec\'ifico y limitado, por lo que no existe un m\'etodo general para el
+an\'alisis de su rendimiento. Forzando a los desarrolladores de tales aplicaciones
+al uso de m\'etodos artesanales o a una optimizaci\'on sin tener las bases
+cuantitativas suficientes.
 
 \section{Estado del Arte}
 
-Actualmente existen diversos m\'etodos y tecnolog\'ias para el an\'alisis de rendimiento.
+Actualmente existen diversos m\'etodos y tecnolog\'ias para el an\'alisis de
+rendimiento.
 
-Lo m\'as simple es utilizar el tiempo total de ejecuci\'on. O medir el uso de recursos del sistema durante la ejecuci\'on de la aplicaci\'on.
+Lo m\'as simple es utilizar el tiempo total de ejecuci\'on. O medir el uso de
+recursos del sistema durante la ejecuci\'on de la aplicaci\'on.
 
 Existen multiples conceptos a considerar.
 An\'alisis est\'atico o din\'amico.
@@ -50,13 +77,9 @@ Registros Contadores de Hardware. Registros de CPUs.
 \section{Objetivos}
 
 Generar una taxonom\'ia de m\'etodos de analisis de rendimiento.
-
 Realizar una comparaci\'on de los mismos.
-
 Ejercitar estas herramientas, documentando pasos y problemas comunes.
-
 Proponer un proceso de analisis para aplicaciones de alto rendimiento.
-
 Documentar requerimientos generales de aplicacioness de altas prestaciones.
 
 \section{Temas a Investigar}
@@ -83,10 +106,10 @@ Mejora potencial seg\'un configuraci\'on de hardware.
   \begin{center}
     \begin{tabular}{|c|c|}\hline
       {\bf Actividad} & {\bf Duraci\'on} \\ \hline
-      Recoleccion de Material & Julio \\ \hline
-      Tecnologias & Agosto \\ \hline
+      Recolecci\'on de Material & Julio \\ \hline
+      Tecnolog\'ias & Agosto \\ \hline
       Procedimiento Generalizado & Septiembre \\ \hline
-      Desarrollo/Analisis de Ejemplos & Octubre \\ \hline
+      Desarrollo/An\'alisis de Ejemplos & Octubre \\ \hline
       Resultados y Conclusiones & Noviembre \\ \hline
     \end{tabular}
     \caption{Detalle de Actividades}
@@ -122,11 +145,11 @@ Articulos sobre
 
 \section{Ejemplos Integradores}
 
-La aplicacion \emph{matrix} realizara una multiplicacion de dos matrices densas.
+La aplicaci\'on \emph{matrix} realizara una multiplicacion de dos matrices densas.
 operaciones de punto flotante en forma secuencial.
 
-La aplicacion \emph{queens} realizara la colocacion de 8 reinas en un tablero de ajedrez sin que las mismas se amenacen mutuamente.
-arreglos de enteros.
+La aplicaci\'on \emph{queens} realizara la colocacion de 8 reinas en un tablero de
+ajedrez sin que las mismas se amenacen mutuamente. arreglos de enteros.
 
 \emph{heat2d} Distribuci\'on de calor en dos dimensiones.
 operaciones simples en iteraciones.
