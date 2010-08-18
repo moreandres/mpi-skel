@@ -25,92 +25,120 @@ Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
       Este documento describe una propuesta de Trabajo Final para la
       Especializaci\'on en C\'omputo de Altas Prestaciones, dictada en la Facultad
       de Inform\'atica de la Universidad Nacional de La Plata. La propuesta
-      consiste en el estudio de los m\'etodos existentes para evaluaci\'on y
-      optimizaci\'on del rendimiento de programas. M\'ultiples objetivos
-      inter-relacionados son establecidos para este trabajo, incluyendo la
-      documentaci\'on de las requerimientos comunes en este tipo de aplicaciones,
-      la generaci\'on de una taxonom\'ia de las tecnolog\'ias disponibles,
-      su ejercitaci\'on, y una propuesta de un procedimiento generalizado para
-      an\'alisis de rendimiento, entre otros.  Luego de cumplir los objetivos
-      iniciales se plantea analizar varios n\'ucleos espec\'ificos de c\'alculo
-      como casos integradores. De este modo se podr\'a demostrar el procedimiento
+      principal consiste en el estudio de los m\'etodos existentes para
+      evaluaci\'on y optimizaci\'on del rendimiento de aplicaciones de c\'omputo de
+      altas prestaciones.
+
+      \smallskip
+
+      Se establecen m\'ultiples objetivos espec\'ificos para
+      este trabajo, incluyendo la documentaci\'on de requerimientos en este tipo de
+      aplicaciones, la generaci\'on de una taxonom\'ia de las tecnolog\'ias
+      disponibles para an\'alisis, su posterior estudio y ejercitaci\'on, y 
+      finalmente el desarrollo de un m\'etodo generalizado para an\'alisis de
+      rendimiento, entre otros.
+
+      \smallskip
+
+      Luego de cumplir estos objetivos iniciales se plantea como cierre analizar
+      varios n\'ucleos espec\'ificos de c\'alculo tom\'andolos como casos
+      integradores . De este modo se podr\'a demostrar el procedimiento
       de an\'alisis de rendimiento utilizando las herramientas y metodolog\'ias
-      estudiadas.
+      estudiadas previamente.
+
+      \smallskip
+
     \end{abstract}
   \end{@twocolumnfalse}
 ]
 
-\tableofcontents
+% \tableofcontents
 
 \section{Motivaci\'on}
 
 El desarrollo de aplicaciones que utilizan c\'omputo de alto rendimiento es
-frecuentemente hecho por especialistas en el dominio de los problemas a resolver,
-fuera del \'area de la inform\'atica.
+usualmente realizado por especialistas en el dominio especifico de los problemas
+a simular o resolver, frecuentemente fuera del \'area de la inform\'atica.
+
+\smallskip
 
 Estos cient\'ificos no poseen todos los conocimientos, experiencia o recursos
 necesarios para una implementaci\'on adecuada, implicando una reducci\'on del
-tiempo disponible para el an\'alisis de los resultados de los c\'alculos o
-simulaciones.
+tiempo disponible para el an\'alisis de los resultados obtenidos y su publicaci\'on.
 
-Al mismo tiempo, el desarrollo de estas aplicaciones suele ser para un uso
-espec\'ifico y limitado, por lo que no existe un m\'etodo general para el
-an\'alisis de su rendimiento. Forzando a los desarrolladores de tales aplicaciones
-al uso de m\'etodos artesanales o a una optimizaci\'on sin tener las bases
-cuantitativas suficientes.
+\smallskip
+
+Al no existir un m\'etodo general para el an\'alisis de rendimiento los
+desarrolladores suelen utilizar m\'etodos de optimizaci\'on artesanales, raramente
+teniendo las bases cuantitativas suficientes a la hora de realizar optimizaciones.
 
 \section{Estado del Arte}
 
-Actualmente existen diversos m\'etodos y tecnolog\'ias para el an\'alisis de
-rendimiento.
+Actualmente existen diversas tecnolog\'ias para el an\'alisis de rendimiento,
+ofreciendo diferentes niveles de portabilidad, aplicaci\'on o granularidad de la
+informaci\'on obtenida.
 
-Lo m\'as simple es utilizar el tiempo total de ejecuci\'on. O medir el uso de
-recursos del sistema durante la ejecuci\'on de la aplicaci\'on.
+\smallskip
 
-Existen multiples conceptos a considerar.
-An\'alisis est\'atico o din\'amico.
-Instrumentacion de c\'odigo.
-Analisis desde Espacio de Usuario.
-Rendimiento del Sistema Operativo.
-Registros Contadores de Hardware. Registros de CPUs.
+La idea m\'as simple es utilizar el tiempo total de ejecuci\'on como medida de cuan
+r\'apido se realiza una tarea, aunque no se obtiene informaci\'on sobre el lugar o
+las consecuencias de potenciales optimizaciones.
+
+\smallskip
+
+Otra posibilidad es implementar en la aplicacion misma un sistema interno de
+administracion de tiempo y recursos; en el caso de estar disponibles, tambi\'en se
+pueden invocar a los mecanismos de an\'alisis de rendimiento en las librer\'ias de
+terceros utilizadas dentro de la aplicaci\'on.
+
+\smallskip
+
+Una posibilidad mas interesante es utilizar un perfil de ejecucion extraido
+dinamicamente para entender que partes del programa son utilizadas y cuales son
+las que demandan mayor tiempo de ejecucion.
+
+\smallskip
+
+En el otro extremo, el hardware en que consiste una unidad de computo puede exportar
+registros contadores de eventos que pueden ser accedidos para comprobar la
+eficiencia de la ejecucion de un programa.
 
 \section{Objetivos}
 
-Generar una taxonom\'ia de m\'etodos de analisis de rendimiento.
-Realizar una comparaci\'on de los mismos.
-Ejercitar estas herramientas, documentando pasos y problemas comunes.
-Proponer un proceso de analisis para aplicaciones de alto rendimiento.
-Documentar requerimientos generales de aplicacioness de altas prestaciones.
+Ademas del estudio general del analisis de rendimiento, este trabajo tiene como
+objetivos especificos:
+
+\begin{enumerate}
+\item Generar una taxonom\'ia de m\'etodos de analisis de rendimiento
+\item Realizar una comparaci\'on de los mismos
+\item Ejercitar estas herramientas, documentando pasos y problemas comunes
+\item Proponer un proceso de analisis para aplicaciones de alto rendimiento
+\item Documentar requerimientos generales de aplicacioness de altas prestaciones
+\end{enumerate}
 
 \section{Temas a Investigar}
 
-Analisis de Rendimiento.
-Scaling
-Pipeline.
-
+Conceptos de An\'alisis de Rendimiento.
+Modelo de Pipeline.
 Herramientas.
-
 oprofile \cite{oprofile}
-
 gprof \cite{gprof}
-
 mpi profiling interface, traces. \cite{mpi}
-
 Comunicaci\'on: Balance, Comunicaci\'on.
-
-Mejora potencial seg\'un configuraci\'on de hardware.
 
 \section{Plan de Actividades}
 
+El siguiente cronograma muestra el plan de actividades tentativo.
+
 \begin{figure}[H]
   \begin{center}
-    \begin{tabular}{|c|c|}\hline
+    \begin{tabular}{|l|l|}\hline
       {\bf Actividad} & {\bf Duraci\'on} \\ \hline
-      Recolecci\'on de Material & Julio \\ \hline
-      Tecnolog\'ias & Agosto \\ \hline
-      Procedimiento Generalizado & Septiembre \\ \hline
-      Desarrollo/An\'alisis de Ejemplos & Octubre \\ \hline
-      Resultados y Conclusiones & Noviembre \\ \hline
+      Recolecci\'on de Material & Agosto \\ \hline
+      Tecnolog\'ias & Setiembre/Octubre \\ \hline
+      Procedimiento General & Noviembre \\ \hline
+      An\'alisis de Ejemplos & Diciembre/Enero \\ \hline
+      Resultados/Conclusiones & Febrero \\ \hline
     \end{tabular}
     \caption{Detalle de Actividades}
   \end{center}
@@ -119,43 +147,43 @@ Mejora potencial seg\'un configuraci\'on de hardware.
 
 \section{Trabajo Futuro}
 
-Esqueleto, patr\'on de dise\~no.
+Esta propuesta de trabajo es presentada como base de un desarrollo mayor a ser
+realizado para el grado de Magister consistente en la construcci\'on conjunta de
+una librer\'ia m\'as una infrastructura automatizada de an\'alisis de rendimiento.
 
-Pipeline Generalizaci\'on.
+\smallskip
 
-Automatizaci\'on.
-
-Callbacks LDD.
-
-Generalizar las aplicaciones utilizando un pipeline.
-
-Generar infrastructura que soporte automaticamente el analisis de performance.
-
-Generar una librer\'ia que facilite el desarollo de aplicaciones de altas prestaciones.
+Una vez entendidas las posibilidades tecnol\'ogicas y estudiado su aplicaci\'on en
+multiples casos de ejemplo se puede entonces emprender una generalizacion de los
+requerimientos de este tipo de aplicaciones y del proceso mismo de analsis.
 
 \section{Material de Referencia}
 
-Citaciones de Libros, Articulos en las referencias.
-
-Existe mucho material sobre el tema.
-Articulos sobre aplicaciones especificas para mdir rendimiento.
-Articulos sobre 
+Existe abundante material sobre el tema, desde textos base, tecnolog\'ias
+espec\'ificas o herramientas en particular.
 
 \appendix
 
 \section{Ejemplos Integradores}
 
-La aplicaci\'on \emph{matrix} realizara una multiplicacion de dos matrices densas.
-operaciones de punto flotante en forma secuencial.
+Utilizando las t\'ecnicas estudiadas, se propone implementar y luego analizar las
+siguientes aplicaciones:
 
-La aplicaci\'on \emph{queens} realizara la colocacion de 8 reinas en un tablero de
-ajedrez sin que las mismas se amenacen mutuamente. arreglos de enteros.
+\begin{itemize}
 
-\emph{heat2d} Distribuci\'on de calor en dos dimensiones.
-operaciones simples en iteraciones.
+\item \emph{matrix}: multiplicaci\'on de dos matrices densas, utilizando operaciones
+  de punto flotante en forma secuencial.
 
-\emph{fft} Utilizacion de transformadas de fourier.
-operaciones altamente complejas de punto flotante.
+\item \emph{heat2d}: distribuci\'on de calor en dos dimensiones, utilizando
+  iteraciones de operaciones simples que simulan el paso del tiempo.
+
+\item \emph{fft}: aplicaci\'on de transformadas de {\it Fourier}, utilizando
+  operaciones complejas de punto flotante.
+
+\item \emph{queens}: colocaci\'on de N reinas en un tablero de
+  ajedrez sin amenaza mutua, utilizando operaciones enteras sobre arreglos.
+
+\end{itemize}
 
 \begin{thebibliography}{9}
   
