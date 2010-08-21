@@ -1,4 +1,6 @@
-EXTRA_DIST = doc.tex
+EXTRA_DIST = doc.tex proposal.tex
+CLEANFILES = *.pdf *.toc *.log
 
 pdf:
-	pdflatex doc.tex
+	pdflatex proposal.tex; pdflatex proposal.tex
+	pdflatex report.tex; pdflatex report.tex
