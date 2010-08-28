@@ -16,19 +16,13 @@ Herramientas para el Soporte de An\'alisis de Rendimiento}
 Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
 
 \date{Abril 2011}
+\maketitle
 
-\twocolumn[
-  \begin{@twocolumnfalse}
-    \maketitle
-    \begin{abstract}
-
-      Este documento describe una investigaci\'on realizada como trabajo final para
-      la Especializaci\'on en C\'omputo de Altas Prestaciones dictada en la Facultad
-      de Inform\'atica de la Universidad Nacional de La Plata.
-
-    \end{abstract}
-  \end{@twocolumnfalse}
-]
+\begin{abstract}
+  Este documento describe una investigaci\'on realizada como trabajo final para
+  la Especializaci\'on en C\'omputo de Altas Prestaciones dictada en la Facultad
+  de Inform\'atica de la Universidad Nacional de La Plata.
+\end{abstract}
 
 \tableofcontents
 
@@ -73,6 +67,67 @@ Este cap\'itulo revisa.
 Este cap\'itulo revisa.
 
 \section{Taxonom\'ia}
+
+din\'amico versus est\'atico.
+
+tiempo de compilaci\'on.
+
+\section{gprof}
+
+profiling din\'amico.
+
+se necesita compilar la aplicaci\'on con una opci\'on espec\'ifica.
+
+se necesita ejecutar la aplicaci\'on con un conjunto de datos dado.
+
+datos del perfil de una aplicaci\'on.
+
+se necesita ejecutar un analizador sobre los datos acumulados.
+
+perfil plano. una lista de las funciones ejecutadas ordenadas por la cantidad
+acumulada de tiempo utilizado.
+
+el gr\'afico de llamadas. muestra el tiempo utilizado por las funciones y sus hijos.
+
+las funciones recursivas son manejadas de manera especial.
+
+\subsection{perfil de ejecuci\'on}
+
+time, cumulative seconds, self seconds, calls, self ms/call, total ms/call, name
+
+\subsection{gr\'afico de llamadas}
+
+index, \% time, self, children, called, name
+
+\subsection{comportamiento}
+
+precisi\'on estad\'istica. muestreo. incompatibilidades.
+
+\subsection{ejemplos}
+
+\section{oprofile}
+
+\subsection{introduccion}
+
+historia. resumen. caracter\'isticas. 
+
+\subsection{procedimiento}
+
+ejecutar el profiler. ejecutar la aplicaci\'on. generar el resumen.
+
+no se necesita el c\'odigo.
+
+c\'odigo anotado si hay s\'imbolos.
+
+componentes del sistema.
+
+contadores de performance.
+
+costo adicional. overhead.
+
+\subsection{contadores de rendimiento}
+
+\subsection{ejemplos}
 
 \chapter{Casos de Estudio}
 
