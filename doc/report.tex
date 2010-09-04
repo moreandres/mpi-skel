@@ -7,34 +7,64 @@
 
 \begin{document}
 
-\title{Universidad Nacional de La Plata - Facultad de Inform\'atica\\
-Especializaci\'on en C\'omputo de Altas Prestaciones\\
-\bigskip
-Herramientas para el Soporte de An\'alisis de Rendimiento}
+\title{
+  Universidad Nacional de La Plata\\Facultad de Inform\'atica\\
+  \bigskip
+  Especializaci\'on en C\'omputo de Altas Prestaciones\\
+  \bigskip
+  Herramientas para el Soporte de An\'alisis de Rendimiento
+}
 
-\author{Alumno: Andr\'es More - {\tt amore@hal.famaf.unc.edu.ar}\\
-Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
+\author{
+  Alumno: Andr\'es More - {\tt amore@hal.famaf.unc.edu.ar}\\
+  Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
+}
 
 \date{Abril 2011}
+
 \maketitle
 
 \begin{abstract}
+
   Este documento describe una investigaci\'on realizada como trabajo final para
   la Especializaci\'on en C\'omputo de Altas Prestaciones dictada en la Facultad
   de Inform\'atica de la Universidad Nacional de La Plata.
+
+  \bigskip
+
+  El tema de investigaci\'on consiste en m\'etodos y herramientas para el soporte
+  de an\'alisis de rendimiento en aplicaciones de alto rendimiento.
+
+  \bigskip
+
+  Luego de la introducion de terminologia y bases teoricas del analisis cuantitativo
+  de rendimiento, se discute un modelo en particular de aplicacion en etapas.
+
+  \bigskip
+
+  Se resume la experiencia de utilizar las herramientas {\it gprof} y {\it oprofile}
+  para localizar los puntos de las aplicaciones donde se deber\'ia localizar los
+  esfuerzos de optimizaci\'on.
+
 \end{abstract}
 
 \tableofcontents
 
 \chapter{Introducci\'on}
 
-Este cap\'itulo introduce.
+Este cap\'itulo introduce este trabajo. Luego de revisar la motivaci\'on del mismo,
+se resume el estado actual de la investigaci\'on y se detalla el contenido restante
+del informe.
 
 \section{Motivaci\'on}
 
 Los desarrolladores son especialistas del dominio.
 
+\bigskip
+
 Menos tiempo para resultados y publicaciones.
+
+\bigskip
 
 Optimizaci\'on artesanal.
 
@@ -42,23 +72,41 @@ Optimizaci\'on artesanal.
 
 Herramientas propietarias.
 
+\bigskip
+
+Patrones de dise\~no.
+
+\bigskip
+
+Soporte en lenguajes.
+
 \section{Organizaci\'on del Contenido}
 
-\chapter{Rendimiento}
-
-Este cap\'itulo resume.
-
-\section{Definici\'on}
+El resto del documento explica teor\'ia de an\'alisis de rendimiento y temas
+relacionados.
 
 \chapter{An\'alisis de Rendimiento}
 
 Este cap\'itulo describe.
 
+\section{Definici\'on}
+
+El rendimiento se caracteriza por la cantidad de trabajo de computo que se logra
+en comparacion con la cantidad de tiempo y el uso de los recursos.
+
+\section{M\'etricas}
+
+instrucciones por segundo. FLOPs. rendimiento por WATT. por d\'olar.
+latencia de interrupciones. Benchmarks, punto de referencia. aplicaci\'on
+sint\'etica utilizada para realizar mediciones cuantitativas.
+
+\bigskip
+
+$ t = N * C / f $
+
+\section{T\'ecnicas}
+
 \section{Modelos}
-
-\chapter{T\'ecnicas}
-
-Este cap\'itulo revisa.
 
 \section{Taxonom\'ia}
 
@@ -135,7 +183,25 @@ Este cap\'itulo aplica.
 
 \section{Multiplicaci\'on de Matrices}
 
-\section{Distribuci\'on de Calor 2D}
+La multiplicaci\'on de matrices es una operaci\'on fundamental en m\'ultiples campos
+de aplicaci\'on cient\'ifica como la resoluci\'on de ecuaciones lineales y la
+representaci\'on de grafos y espacios dimensionales. Por ello existe abundante
+ material sobre el tema.
+
+\bigskip
+
+A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se demuestra
+claramente con este ejercicio que la sofisticaci\'on de librer\'ias contra
+m\'etodos artesanales de optimizaci\'on.
+
+\bigskip
+
+El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en el
+ap\'endice. Al aplicar las herramientas vistas previamente se identifica claramente
+que la multiplicaci\'on de los elementos de la matriz consume el mayor tiempo de
+c\'omputo.
+
+\section{Distribuci\'on de Calor en Dos Dimensiones}
 
 \section{Reinas}
 
@@ -237,8 +303,6 @@ J. Levon,
   University of Tennessee,
   \emph{Performance Application Programming Interface},
   {\tt http://icl.cs.utk.edu/papi}.
-
-% http://en.wikipedia.org/wiki/Performance_tuning
 
 \end{thebibliography}
 
