@@ -97,8 +97,32 @@ en comparacion con la cantidad de tiempo y el uso de los recursos.
 \section{M\'etricas}
 
 instrucciones por segundo. FLOPs. rendimiento por WATT. por d\'olar.
-latencia de interrupciones. Benchmarks, punto de referencia. aplicaci\'on
-sint\'etica utilizada para realizar mediciones cuantitativas.
+latencia de interrupciones. 
+
+Benchmarks, punto de referencia. aplicaci\'on sint\'etica vs aplicaciones del mundo
+real. nucleos de computo. utilizada para realizar mediciones cuantitativas y
+comparaciones de optimizaciones.
+
+Buenas caracteristicas de un benchmark. estabilidad. reproduccion. tiempo de
+ejecucion. ajuste de tama\~no del problema.
+
+\subsubsection{STREAM}
+
+ancho de banda de acceso de escritura o lectura a la memoria principal.
+
+\subsubsection{HPL}
+
+multiplicacion de matrices.
+
+\subsubsection{HPCC}
+
+conjunto de m\'ultiple micro benchmarks.
+STREAM, HPL, ancho de banda y latencia, transformadas de {\it fourier}.
+
+\subsubsection{DEISA}
+
+un conjunto de aplicaciones de astrofisica, dinamica de fluidos, modelado climatico,
+bio-ciencia, ciencia de los materiales, fusion de energia y fisica de particulas.
 
 \bigskip
 
@@ -106,9 +130,31 @@ $ t = N * C / f $
 
 \section{T\'ecnicas}
 
+analisis de calidad de acuerdo a la ingenier\'ia del software.
+
+\bigskip
+
+el procedimiento usualmente consiste en medir, localizar, optimizar, comparar.
+disciplina en un cambio a la vez asegura resultados reproducibles.
+
+\bigskip
+
+la reproduccion de resultados es compleja, en el caso de no tener una configuracion
+de sistema estable en el tiempo, es recomendable siempre ejecutar una version
+optimizada contra una version de referencia en un sistema de computo.
+
+\bigskip
+
+cuellos de botella. overhead. problemas de balanceo, contencion o uso de recursos.
+
 \section{Modelos}
 
-\section{Taxonom\'ia}
+paralelizacion. niveles. bit/instruccion/datos/tareas.
+
+calculo de mejora. teorica versus real. leyes de amdalah \cite{amdahl}, gustafson
+\cite{gustafson} y karp-flatt \cite{karp-flatt}.
+
+pipeline. formulas. rangos de optimizacion posibles.
 
 \chapter{Herramientas}
 
@@ -117,8 +163,7 @@ Este cap\'itulo revisa.
 \section{Taxonom\'ia}
 
 din\'amico versus est\'atico.
-
-tiempo de compilaci\'on.
+tiempo de compilaci\'on versus tiempo de ejecucion.
 
 \section{gprof}
 
@@ -190,16 +235,16 @@ representaci\'on de grafos y espacios dimensionales. Por ello existe abundante
 
 \bigskip
 
-A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se demuestra
-claramente con este ejercicio que la sofisticaci\'on de librer\'ias contra
-m\'etodos artesanales de optimizaci\'on.
-
-\bigskip
-
 El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en el
 ap\'endice. Al aplicar las herramientas vistas previamente se identifica claramente
 que la multiplicaci\'on de los elementos de la matriz consume el mayor tiempo de
 c\'omputo.
+
+\bigskip
+
+A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se demuestra
+claramente con este ejercicio la sofisticaci\'on de librer\'ias contra m\'etodos
+artesanales de optimizaci\'on.
 
 \section{Distribuci\'on de Calor en Dos Dimensiones}
 
@@ -207,13 +252,31 @@ c\'omputo.
 
 \section{Transformadas de {\it Fourier}}
 
+El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en el
+ap\'endice. Al aplicar las herramientas vistas previamente se identifica claramente
+que la evaluacion de derivadas parciales consume el mayor tiempo de c\'omputo.
+
+\bigskip
+
+A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se demuestra
+claramente con este ejercicio la sofisticaci\'on de librer\'ias contra m\'etodos
+artesanales de optimizaci\'on.
+
 \chapter{Conclusiones}
 
-Este capitulo concluye.
+Este cap\'itulo concluye.
+
+Aportes: un m'\etodo, el an\'alisis de diferentes herramientas. resumen
+introductorio del tema. ejercicios que demuestran que la optimizaci\'on artesanal
+no es buena.
 
 \chapter{Trabajo Futuro}
 
-Este capitulo propone.
+Este cap\'itulo propone.
+
+una librer\'ia m\'as infrastructura para soporte de an\'alisis.
+generaci\'on de reporte de rendimiento autom\'atico para guiar optimizaciones.
+an\'alisis de mejora posible seg\'un formulas aplicadas a etapas.
 
 \begin{thebibliography}{9}
   
@@ -230,7 +293,7 @@ Este capitulo propone.
   2008.
 
 \bibitem{tinetti}
-  Fernando Tinetti,
+  Fernando G Tinetti,
   \emph{C\'omputo Paralelo en Redes Locales de Computadoras},
   2004.
 
@@ -303,6 +366,26 @@ J. Levon,
   University of Tennessee,
   \emph{Performance Application Programming Interface},
   {\tt http://icl.cs.utk.edu/papi}.
+
+\bibitem{amdahl}
+  G. M. Amdahl,
+  \emph{Validity of single-processor approach to achieving large-scale computing
+    capability},
+  Proceedings of AFIPS Conference, Reston, VA. 1967. pp. 483-485.
+
+\bibitem{twelve-ways}
+  D. Bailey, \emph{Twelve Ways to Fool the Masses When Giving Performance Results
+    on Parallel Computers},
+  RNR Technical Report, RNR-90-020, NASA Ames Research Center, 1991.
+
+\bibitem{gustafson}
+  J. L. Gustafson,
+  \emph{Reevaluating Amdahl's Law}, CACM, 31(5), 1988. pp. 532-533.
+
+\bibitem{karp-flatt}
+  A. H. Karp and H. P. Flatt,
+  \emph{Measuring Parallel Processor Performance},
+  Communication of the ACM Volume 33 Number 5, May 1990.
 
 \end{thebibliography}
 
