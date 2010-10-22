@@ -17,14 +17,16 @@
 
 \author{
   Alumno: Andr\'es More - {\tt amore@hal.famaf.unc.edu.ar}\\
-  Director: Fernando Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
+  Director: Dr Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
 }
 
-\date{Abril 2011}
+%\date{}
 
 \maketitle
 
 \begin{abstract}
+
+  \bigskip
 
   Este documento describe una investigaci\'on realizada como trabajo final para
   la Especializaci\'on en C\'omputo de Altas Prestaciones dictada en la Facultad
@@ -33,18 +35,17 @@
   \bigskip
 
   El tema de investigaci\'on consiste en m\'etodos y herramientas para el soporte
-  de an\'alisis de rendimiento en aplicaciones de alto rendimiento.
+  de an\'alisis de comportamiento en aplicaciones de alto rendimiento.
 
   \bigskip
 
-  Luego de la introducion de terminologia y bases teoricas del analisis cuantitativo
-  de rendimiento, se discute un modelo en particular de aplicacion en etapas.
+  Luego de la introducci\'on de terminolog\'ia y bases te\'oricas del an\'alisis cuantitativo
+  de rendimiento, se discute un modelo en particular de aplicaci\'on en etapas.
 
   \bigskip
 
-  Se resume la experiencia de utilizar las herramientas {\it gprof} y {\it oprofile}
-  para localizar los puntos de las aplicaciones donde se deber\'ia localizar los
-  esfuerzos de optimizaci\'on.
+  Se resume la experiencia de utilizar herramientas como {\it gprof} y {\it oprofile}
+  para conocer donde se deber\'ia localizar los esfuerzos de optimizaci\'on.
 
 \end{abstract}
 
@@ -58,61 +59,114 @@ del informe.
 
 \section{Motivaci\'on}
 
-Los desarrolladores son especialistas del dominio.
+En el \'area de c\'omputo de altas prestaciones los desarrolladores son en su mayor\'ia los especialistas del dominio del problema a investigar.
+Este hecho resulta en menos tiempo para an\'alisis de resultados e impacta notablemente en el n\'umero de publicaciones de un grupo de investigaci\'on.
 
 \bigskip
 
-Menos tiempo para resultados y publicaciones.
+Las rutinas m\'as demandantes de c\'alculo son en su mayor\'ia cient\'ificas, su complejidad s\'olo hace posible su correcta implementaci\'on solo por especialistas en el dominio.
+Con mayor impacto que en otras areas de la computaci\'on, el c\'odigo optimizado puede ejecutarse ordenes de magnitud mejor que implementaciones directas.
 
 \bigskip
 
-Optimizaci\'on artesanal.
+El proceso de optimizaci\'on de una implementaci\'on es entonces hecho de modo artesanal, sin mucha informaci\'on cuantitativa para dirigir los esfuerzos de optimizaci\'on.
+Incluso se llega a preferir la implementaci\'on {\em ad-hoc} de algoritmos en lugar de la utilizaci\'on de librer\'ias ya disponibles optimizadas y con correctitud comprobada.
 
 \section{Estado Actual}
 
-Herramientas propietarias.
+Herramientas propietarias o muy espec\'ificas para una aplicaci\'on o sistema en particular. No aplicables en todos los casos, requiriendo instrumentaci\'on de c\'odigo.
 
 \bigskip
 
-Patrones de dise\~no.
-
-\bigskip
-
-Soporte en lenguajes.
+Existen muchos patrones de dise\~no para implementaciones concurrentes o de altas prestaciones pero no son muy utilizados en este tipo de aplicaciones.
 
 \section{Organizaci\'on del Contenido}
 
 El resto del documento explica teor\'ia de an\'alisis de rendimiento y temas
-relacionados.
+relacionados. El capitulo 2 discute el analisis de rendimiento, sus principios y teorias.
+El capitulo 3 detalla las herramientas mas utilizadas. El capitulo 4 ejemplifica la aplicacion de una herramienta para obtener informacion de analisis.
+El capitulo 5 concluye y el capitulo 6 detalla posibles trabajos futuros.
 
 \chapter{An\'alisis de Rendimiento}
 
-Este cap\'itulo describe.
+Este cap\'itulo introduce el concepto de rendimiento y teor\'ia sobre su an\'alisis.
 
 \section{Definici\'on}
 
-El rendimiento se caracteriza por la cantidad de trabajo de computo que se logra
-en comparacion con la cantidad de tiempo y el uso de los recursos.
+El rendimiento se caracteriza por la cantidad de trabajo de c\'omputo que se logra
+en comparaci\'on con la cantidad de tiempo y el uso de los recursos.
 
 \section{M\'etricas}
 
-instrucciones por segundo. FLOPs. rendimiento por WATT. por d\'olar.
-latencia de interrupciones. 
+Algunos ejemplos de medida de rendimiento son:
 
-Benchmarks, punto de referencia. aplicaci\'on sint\'etica vs aplicaciones del mundo
-real. nucleos de computo. utilizada para realizar mediciones cuantitativas y
-comparaciones de optimizaciones.
+\begin{enumerate}
+\item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on, una jerarqu\'ia de memorias o unidades de almacenamiento
+\item la cantidad de instrucciones, operaciones, datos o trabajo a procesar por cierta unidad de tiempo
+\item rendimiento por unidad de energia o por costo asociado
+\end{enumerate}
 
-Buenas caracteristicas de un benchmark. estabilidad. reproduccion. tiempo de
-ejecucion. ajuste de tama\~no del problema.
+Para medir el rendmiento se utilizan pruebas de referencias denominados {\em benchmarks}, que pueden ser aplicaciones sint\'eticas construidas especialmente para ejercitar ciertos
+reecursos computacionales e incluso aplicaciones del mundo real bien conocidas.
+
+\bigskip
+
+Las caracter\'isticas deseables son portabilidad, simplicidad, estabilidad y reproducci\'on de resultados.
+Esto permite que sean utilizadas para realizar mediciones cuantitativas y asi realizar comparaciones de optimizaciones o entre sistemas de c\'omputo diferentes.
+
+\bigskip
+
+Tambi\'en se pide que el tiempo de ejecuci\'on sea razonable y que el tama\~no del problema sea ajustable para poder seguir utilizandose con el paso del tiempo y el avance de las tecnologias.
+
+\bigskip
+
+A continuacion se introducen algunas de las m\'as utilizadas, junto con detalles y ejemplos de sus reportes.
 
 \subsubsection{STREAM}
 
-ancho de banda de acceso de escritura o lectura a la memoria principal.
+STREAM \cite{stream} es un benchmark sintetico a traves de un simple programa que mide el ancho de banda de memoria sostenido en MB/s y el rendimiento de computacion relativa de algunos vectores simples de calculo. Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura a la memoria principal del sistema bajo analisis.
+
+\begin{verbatim}
+-------------------------------------------------------------
+STREAM version $Revision: 1.2 $
+-------------------------------------------------------------
+This system uses 8 bytes per DOUBLE PRECISION word.
+-------------------------------------------------------------
+Array size = 10000000, Offset = 0
+Total memory required = 228.9 MB.
+Each test is run 10 times, but only
+the *best* time for each is used.
+-------------------------------------------------------------
+Number of Threads requested = 2
+-------------------------------------------------------------
+Printing one line per active thread....
+-------------------------------------------------------------
+Your clock granularity/precision appears to be 1 microseconds.
+Each test below will take on the order of 39952 microseconds.
+   (= 39952 clock ticks)
+Increase the size of the arrays if this shows that
+you are not getting at least 20 clock ticks per test.
+-------------------------------------------------------------
+Function      Rate (MB/s)   Avg time     Min time     Max time
+Copy:        4764.1905       0.0337       0.0336       0.0340
+Scale:       4760.2029       0.0338       0.0336       0.0340
+Add:         4993.8631       0.0488       0.0481       0.0503
+Triad:       5051.5778       0.0488       0.0475       0.0500
+-------------------------------------------------------------
+Solution Validates
+-------------------------------------------------------------
+\end{verbatim}
 
 \subsubsection{HPL}
 
 multiplicacion de matrices.
+
+\subsection{IMB}
+
+ping pong.
+
+maximo ancho de banda. mensajes con datos grandes.
+minima latencia. mensajes sin datos.
 
 \subsubsection{HPCC}
 
@@ -266,7 +320,7 @@ artesanales de optimizaci\'on.
 
 Este cap\'itulo concluye.
 
-Aportes: un m'\etodo, el an\'alisis de diferentes herramientas. resumen
+Aportes: un m\'etodo, el an\'alisis de diferentes herramientas. resumen
 introductorio del tema. ejercicios que demuestran que la optimizaci\'on artesanal
 no es buena.
 
@@ -279,7 +333,12 @@ generaci\'on de reporte de rendimiento autom\'atico para guiar optimizaciones.
 an\'alisis de mejora posible seg\'un formulas aplicadas a etapas.
 
 \begin{thebibliography}{9}
-  
+
+\bibitem{beowulf}
+ T. Sterling, D. Savarese, D. J. Becker, J. E. Dorband, U. A. Ranawake, and C. V. Packer,
+ \emph{Beowulf: A parallel workstation for scientific computation},
+ 1995.
+
 \bibitem{mpi}
   Message Passing Interface Forum,
   \emph{MPI: A Message-Passing Interface Standard},
@@ -386,6 +445,16 @@ J. Levon,
   A. H. Karp and H. P. Flatt,
   \emph{Measuring Parallel Processor Performance},
   Communication of the ACM Volume 33 Number 5, May 1990.
+
+\bibitem{myth}
+ {Lee, Victor W. and Kim, Changkyu and Chhugani, Jatin and Deisher, Michael and Kim, Daehyun and Nguyen, Anthony D. and Satish, Nadathur and Smelyanskiy, Mikhail and Chennupaty}, Srinivas, and Hammarlund, Per and Singhal, Ronak and Dubey, Pradeep,
+ \emph{Debunking the 100X GPU vs. CPU myth: an evaluation of throughput computing on CPU and GPU},
+ 2010.
+
+\bibitem{stream}
+ John D. McCalpin,
+ \emph{A Survey of Memory Bandwidth and Machine Balance in Current High Performance Computers},
+ 1995.
 
 \end{thebibliography}
 
