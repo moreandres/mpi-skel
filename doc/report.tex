@@ -111,6 +111,10 @@ reecursos computacionales e incluso aplicaciones del mundo real bien conocidas.
 
 \bigskip
 
+Otro metodo consiste en medir el uso de los recursos del sistema mientras se ejercita el mismo con un trabajo dado. Por ejemplo el nivel de carga, la cantidad de operaciones realizadas por el sistema operativo o la unidad de procesamiento.
+
+\section{Benchmarks}
+
 Las caracter\'isticas deseables son portabilidad, simplicidad, estabilidad y reproducci\'on de resultados.
 Esto permite que sean utilizadas para realizar mediciones cuantitativas y asi realizar comparaciones de optimizaciones o entre sistemas de c\'omputo diferentes.
 
@@ -120,11 +124,11 @@ Tambi\'en se pide que el tiempo de ejecuci\'on sea razonable y que el tama\~no d
 
 \bigskip
 
-A continuacion se introducen algunas de las m\'as utilizadas, junto con detalles y ejemplos de sus reportes.
+A continuaci\'on se introducen algunas de las m\'as utilizadas, junto con detalles y ejemplos de sus reportes.
 
 \subsubsection{STREAM}
 
-STREAM \cite{stream} es un benchmark sintetico a traves de un simple programa que mide el ancho de banda de memoria sostenido en MB/s y el rendimiento de computacion relativa de algunos vectores simples de calculo. Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura a la memoria principal del sistema bajo analisis.
+STREAM \cite{stream} es un benchmark sint\'etico a trav\'es de un simple programa que mide el ancho de banda de memoria sostenido en MB/s y el rendimiento de computaci\'on relativa de algunos vectores simples de calculo. Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura a la memoria principal del sistema bajo analisis.
 
 \begin{verbatim}
 -------------------------------------------------------------
@@ -157,21 +161,286 @@ Solution Validates
 -------------------------------------------------------------
 \end{verbatim}
 
-\subsubsection{HPL}
+\subsubsection{Linpack}
+
+\cite{linpack}
 
 multiplicacion de matrices.
 
+\cite{hpl}
+
+HPL es una version distribuida utilizando MPI.
+
+\begin{verbatim}
+============================================================
+HPLinpack 2.0  --  High-Performance Linpack benchmark  --   September 10, 2008
+Written by A. Petitet and R. Clint Whaley,  Innovative Computing Laboratory, UTK
+Modified by Piotr Luszczek, Innovative Computing Laboratory, UTK
+Modified by Julien Langou, University of Colorado Denver
+============================================================
+An explanation of the input/output parameters follows:
+T/V    : Wall time / encoded variant.
+N      : The order of the coefficient matrix A.
+NB     : The partitioning blocking factor.
+P      : The number of process rows.
+Q      : The number of process columns.
+Time   : Time in seconds to solve the linear system.
+Gflops : Rate of execution for solving the linear system.
+
+The following parameter values will be used:
+N      :   28888
+NB     :     168
+PMAP   : Row-major process mapping
+P      :       4
+Q      :       4
+PFACT  :   Right
+NBMIN  :       4
+NDIV   :       2
+RFACT  :   Crout
+BCAST  :  1ringM
+DEPTH  :       0
+SWAP   : Mix (threshold = 64)
+L1     : transposed form
+U      : transposed form
+EQUIL  : yes
+ALIGN  : 8 double precision words
+
+--------------------------------------------------------------------------------
+
+- The matrix A is randomly generated for each test.
+- The following scaled residual check will be computed:
+      ||Ax-b||_oo / ( eps * ( || x ||_oo * || A ||_oo + || b ||_oo ) * N )
+- The relative machine precision (eps) is taken to be               1.110223e-16
+- Computational tests pass if scaled residuals are less than                16.0
+
+Column=000168 Fraction=0.005 Mflops=133122.97
+...
+Column=025872 Fraction=0.895 Mflops=98107.60
+============================================================
+=
+T/V                N    NB     P     Q               Time                 Gflops
+--------------------------------------------------------------------------------
+WR01C2R4       28888   168     4     4             165.83              9.693e+01
+--------------------------------------------------------------------------------
+||Ax-b||_oo/(eps*(||A||_oo*||x||_oo+||b||_oo)*N)=        0.0043035 ...... PASSED
+============================================================
+Finished      1 tests with the following results:
+              1 tests completed and passed residual checks,
+              0 tests completed and failed residual checks,
+              0 tests skipped because of illegal input values.
+\end{verbatim}
+
 \subsection{IMB}
 
-ping pong.
+ping pong. utlizando MPI.
 
 maximo ancho de banda. mensajes con datos grandes.
 minima latencia. mensajes sin datos.
+
+\begin{verbatim}
+# Intel (R) MPI Benchmark Suite V3.1, MPI-1 part
+# Date                  : Wed Mar  3 10:45:16 2010
+# Machine               : x86_64
+# System                : Linux
+# Release               : 2.6.16.46-0.12-smp
+# Version               : #1 SMP Thu May 17 14:00:09 UTC 2007
+# MPI Version           : 2.0
+# MPI Thread Environment: MPI_THREAD_SINGLE
+# Calling sequence was:
+# ../IMB-MPI1 pingpong
+# Minimum message length in bytes:   0
+# Maximum message length in bytes:   4194304
+#
+# MPI_Datatype                   :   MPI_BYTE
+# MPI_Datatype for reductions    :   MPI_FLOAT
+# MPI_Op                         :   MPI_SUM
+#
+#
+# List of Benchmarks to run:
+# PingPong
+#---------------------------------------------------
+# Benchmarking PingPong
+# #processes = 2
+#---------------------------------------------------
+       #bytes #repetitions      t[usec]   Mbytes/sec
+            0         1000        17.13         0.00
+            1         1000        17.89         0.05
+            2         1000        17.82         0.11
+            4         1000        17.95         0.21
+...
+      1048576           40      8993.23       111.19
+      2097152           20     17919.20       111.61
+      4194304           10     35766.45       111.84
+\end{verbatim}
 
 \subsubsection{HPCC}
 
 conjunto de m\'ultiple micro benchmarks.
 STREAM, HPL, ancho de banda y latencia, transformadas de {\it fourier}.
+
+la mejor maquina depende de la aplicacion a ejecutar. algunas aplicaciones necesitan mejor ancho de banda de memoria, mejor canales de comunicacion, o la mayor capacidad de computo 
+posible.
+
+\begin{verbatim}
+This is the DARPA/DOE HPC Challenge Benchmark version 1.2.0 October 2003
+Produced by Jack Dongarra and Piotr Luszczek
+Innovative Computing Laboratory
+University of Tennessee Knoxville and Oak Ridge National Laboratory
+See the source files for authors of specific codes.
+Compiled on Dec 20 2007 at 12:54:49
+Current time (1225739336) is Mon Nov  3 17:08:56 2008
+Begin of Summary section.
+\end{verbatim}
+
+\begin{minipage}[b]{0.5\linewidth}
+\begin{verbatim}
+VersionMajor=1
+VersionMinor=2
+VersionMicro=0
+VersionRelease=f
+LANG=C
+Success=1
+sizeof_char=1
+sizeof_short=2
+sizeof_int=4
+sizeof_long=8
+sizeof_void_ptr=8
+sizeof_size_t=8
+sizeof_float=4
+sizeof_double=8
+sizeof_s64Int=8
+sizeof_u64Int=8
+sizeof_struct_double_double=16
+CommWorldProcs=3
+MPI_Wtick=1.000000e-06
+HPL_Tflops=0.0674008
+HPL_time=26.3165
+HPL_eps=1.11022e-16
+HPL_RnormI=9.6442e-11
+HPL_Anorm1=3528.16
+HPL_AnormI=3533.01
+HPL_Xnorm1=12823.1
+HPL_XnormI=4.66036
+HPL_N=13856
+HPL_NB=64
+HPL_nprow=1
+HPL_npcol=3
+HPL_depth=2
+HPL_nbdiv=2
+HPL_nbmin=8
+HPL_cpfact=C
+HPL_crfact=R
+HPL_ctop=1
+HPL_order=R
+HPL_dMACH_EPS=1.110223e-16
+HPL_dMACH_SFMIN=2.225074e-308
+HPL_dMACH_BASE=2.000000e+00
+HPL_dMACH_PREC=2.220446e-16
+HPL_dMACH_MLEN=5.300000e+01
+HPL_dMACH_RND=1.000000e+00
+HPL_dMACH_EMIN=-1.021000e+03
+HPL_dMACH_RMIN=2.225074e-308
+HPL_dMACH_EMAX=1.024000e+03
+HPL_dMACH_RMAX=1.797693e+308
+HPL_sMACH_EPS=5.960464e-08
+HPL_sMACH_SFMIN=1.175494e-38
+HPL_sMACH_BASE=2.000000e+00
+HPL_sMACH_PREC=1.192093e-07
+HPL_sMACH_MLEN=2.400000e+01
+HPL_sMACH_RND=1.000000e+00
+HPL_sMACH_EMIN=-1.250000e+02
+HPL_sMACH_RMIN=1.175494e-38
+HPL_sMACH_EMAX=1.280000e+02
+HPL_sMACH_RMAX=3.402823e+38
+dweps=1.110223e-16
+sweps=5.960464e-08
+HPLMaxProcs=3
+HPLMinProcs=3
+DGEMM_N=4618
+StarDGEMM_Gflops=68.9053
+SingleDGEMM_Gflops=70.2692
+PTRANS_GBs=0.794254
+PTRANS_time=0.479293
+\end{verbatim}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\begin{verbatim}
+PTRANS_residual=0
+PTRANS_n=6928
+PTRANS_nb=64
+PTRANS_nprow=1
+PTRANS_npcol=3
+MPIRandomAccess_N=134217728
+MPIRandomAccess_time=30.4475
+MPIRandomAccess_CheckTime=14.0705
+MPIRandomAccess_Errors=0
+MPIRandomAccess_ErrorsFraction=0
+MPIRandomAccess_ExeUpdates=536870912
+MPIRandomAccess_GUPs=0.0176327
+MPIRandomAccess_TimeBound=-1
+MPIRandomAccess_Algorithm=0
+RandomAccess_N=33554432
+StarRandomAccess_GUPs=0.0186362
+SingleRandomAccess_GUPs=0.0184568
+STREAM_VectorSize=21332081
+STREAM_Threads=8
+StarSTREAM_Copy=4.34705
+StarSTREAM_Scale=3.24366
+StarSTREAM_Add=3.41196
+StarSTREAM_Triad=3.46198
+SingleSTREAM_Copy=4.53628
+SingleSTREAM_Scale=3.38984
+SingleSTREAM_Add=3.59073
+SingleSTREAM_Triad=3.65083
+FFT_N=8388608
+StarFFT_Gflops=2.17339
+SingleFFT_Gflops=2.26806
+MPIFFT_N=8388608
+MPIFFT_Gflops=1.7043
+MPIFFT_maxErr=1.77722e-15
+MPIFFT_Procs=2
+MaxPingPongLatency_usec=5.37932
+RandomlyOrderedRingLatency_usec=5.70686
+MinPingPongBandwidth_GBytes=0.675574
+NaturallyOrderedRingBandwidth_GBytes=0.531278
+RandomlyOrderedRingBandwidth_GBytes=0.529161
+MinPingPongLatency_usec=5.24521
+AvgPingPongLatency_usec=5.30978
+MaxPingPongBandwidth_GBytes=0.682139
+AvgPingPongBandwidth_GBytes=0.678212
+NaturallyOrderedRingLatency_usec=5.79357
+FFTEnblk=16
+FFTEnp=8
+FFTEl2size=1048576
+M_OPENMP=200505
+omp_get_num_threads=8
+omp_get_max_threads=8
+omp_get_num_procs=8
+MemProc=-1
+MemSpec=-1
+MemVal=-1
+MPIFFT_time0=2.14577e-06
+MPIFFT_time1=0.135205
+MPIFFT_time2=0.0328519
+MPIFFT_time3=0.0831249
+MPIFFT_time4=0.137934
+MPIFFT_time5=0.126668
+MPIFFT_time6=9.53674e-07
+CPS_HPCC_FFT_235=0
+CPS_HPCC_FFTW_ESTIMATE=0
+CPS_HPCC_MEMALLCTR=0
+CPS_RA_SANDIA_NOPT=0
+CPS_RA_SANDIA_OPT2=0
+CPS_USING_FFTW=0
+\end{verbatim}
+\end{minipage}
+
+\begin{verbatim}
+End of Summary section.
+End of HPC Challenge tests.
+Current time (1225739478) is Mon Nov  3 17:11:18 2008
+\end{verbatim}
 
 \subsubsection{DEISA}
 
@@ -188,14 +457,16 @@ analisis de calidad de acuerdo a la ingenier\'ia del software.
 
 \bigskip
 
-el procedimiento usualmente consiste en medir, localizar, optimizar, comparar.
-disciplina en un cambio a la vez asegura resultados reproducibles.
+el procedimiento usualmente consiste en ciclos de medir, localizar, optimizar, comparar.
+es muy importante mantener la disciplina en un cambio a la vez asegura resultados reproducibles. los resultados deben tambien ser correctamente guardados para evitar problemas de datos.
+si la configuracion del sistema es din\'amica, conviene realizar todas las pruebas de comparaci\'on durante una misma ejecucion para evitar diferencias debido a configuracion o diferentes
+componentes.
 
 \bigskip
 
-la reproduccion de resultados es compleja, en el caso de no tener una configuracion
-de sistema estable en el tiempo, es recomendable siempre ejecutar una version
-optimizada contra una version de referencia en un sistema de computo.
+la reproducci\'on de resultados es compleja, en el caso de no tener una configuraci\'on
+de sistema estable en el tiempo, es recomendable siempre ejecutar una versi\'on
+optimizada contra una version de referencia en un mismo sistema de c\'omputo.
 
 \bigskip
 
@@ -217,7 +488,7 @@ Este cap\'itulo revisa.
 \section{Taxonom\'ia}
 
 din\'amico versus est\'atico.
-tiempo de compilaci\'on versus tiempo de ejecucion.
+tiempo de compilaci\'on versus tiempo de ejecuci\'on.
 
 \section{gprof}
 
@@ -273,6 +544,19 @@ contadores de performance.
 costo adicional. overhead.
 
 \subsection{contadores de rendimiento}
+
+Los registros de hardware implementando contadores m\'as utilizados son los siguientes:
+
+\begin{enumerate}
+\item total processor cycles
+\item total instructions
+\item cycles stalled waiting for memory accesses
+\item floating point divide instructions
+\item L1 cache misses
+\item floating point instructions
+\item load instructions
+\item store instructions
+\end{enumerate}
 
 \subsection{ejemplos}
 
@@ -455,6 +739,21 @@ J. Levon,
  John D. McCalpin,
  \emph{A Survey of Memory Bandwidth and Machine Balance in Current High Performance Computers},
  1995.
+
+\bibitem{counters}
+ Dong H. Ahn and Jeffrey S. Vetter,
+ \emph{Scalable Analysis Techniques for Microprocessor Performance Counter Metrics},
+ 2002.
+
+\bibitem{linpack}
+ J. Dongarra, J. Bunch, C. Moler and G. W. Stewart, 
+ \emph{LINPACK Users Guide},
+ 1979.
+
+\bibitem{hpl}
+ A. Petitet, R. C. Whaley, J. Dongarra and A. Cleary, 
+ \emph{HPL - A Portable Implementation of the High-Performance Linpack Benchmark for Distributed-Memory Computers},
+ 2008.
 
 \end{thebibliography}
 
