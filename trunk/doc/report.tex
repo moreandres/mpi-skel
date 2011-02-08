@@ -40,7 +40,7 @@
   \bigskip
 
   Luego de la introducci\'on de terminolog\'ia y bases te\'oricas del an\'alisis cuantitativo
-  de rendimiento, se discute un modelo en particular de aplicaci\'on en etapas.
+  de rendimiento, se propone un modelo para aplicaciones utilizando una abstracci\'on en etapas.
 
   \bigskip
 
@@ -59,35 +59,44 @@ del informe.
 
 \section{Motivaci\'on}
 
-En el \'area de c\'omputo de altas prestaciones los desarrolladores son en su mayor\'ia los especialistas del dominio del problema a investigar.
-Este hecho resulta en menos tiempo para an\'alisis de resultados e impacta notablemente en el n\'umero de publicaciones de un grupo de investigaci\'on.
+En el \'area de c\'omputo de altas prestaciones los desarrolladores son en su mayor\'ia los
+especialistas del dominio del problema a investigar. Este hecho resulta en menos tiempo para
+an\'alisis de resultados e impacta notablemente en el n\'umero de publicaciones de un grupo de
+ investigaci\'on.
 
 \bigskip
 
-Las rutinas m\'as demandantes de c\'alculo son en su mayor\'ia cient\'ificas, su complejidad s\'olo hace posible su correcta implementaci\'on solo por especialistas en el dominio.
-Con mayor impacto que en otras areas de la computaci\'on, el c\'odigo optimizado puede ejecutarse ordenes de magnitud mejor que implementaciones directas.
+Las rutinas m\'as demandantes de c\'alculo son en su mayor\'ia cient\'ificas, su complejidad s\'olo
+hace posible su correcta implementaci\'on solo por especialistas en el dominio.
+Con mayor impacto que en otras areas de la computaci\'on, el c\'odigo optimizado puede ejecutarse
+\'ordenes de magnitud mejor que implementaciones directas.
 
 \bigskip
 
-El proceso de optimizaci\'on de una implementaci\'on es entonces hecho de modo artesanal, sin mucha informaci\'on cuantitativa para dirigir los esfuerzos de optimizaci\'on.
-Incluso se llega a preferir la implementaci\'on {\em ad-hoc} de algoritmos en lugar de la utilizaci\'on de librer\'ias ya disponibles optimizadas y con correctitud comprobada.
+El proceso de optimizaci\'on de una implementaci\'on es entonces hecho de modo artesanal,
+sin mucha informaci\'on cuantitativa para dirigir los esfuerzos de optimizaci\'on.
+Incluso se llega a preferir la implementaci\'on {\em ad-hoc} de algoritmos en lugar de la
+utilizaci\'on de librer\'ias ya disponibles optimizadas y con correctitud comprobada.
 
 \cite{parallel-programming}
 
 \section{Estado Actual}
 
-Herramientas propietarias o muy espec\'ificas para una aplicaci\'on o sistema en particular. No aplicables en todos los casos, requiriendo instrumentaci\'on de c\'odigo.
+Herramientas propietarias o muy espec\'ificas para una aplicaci\'on o sistema en particular.
+No aplicables en todos los casos, requiriendo instrumentaci\'on de c\'odigo.
 
 \bigskip
 
-Existen muchos patrones de dise\~no para implementaciones concurrentes o de altas prestaciones pero no son muy utilizados en este tipo de aplicaciones.
+Existen muchos patrones de dise\~no para implementaciones concurrentes o de altas prestaciones
+pero no son muy utilizados en este tipo de aplicaciones.
 
 \section{Organizaci\'on del Contenido}
 
 El resto del documento explica teor\'ia de an\'alisis de rendimiento y temas
-relacionados. El capitulo 2 discute el analisis de rendimiento, sus principios y teorias.
-El capitulo 3 detalla las herramientas mas utilizadas. El capitulo 4 ejemplifica la aplicacion de una herramienta para obtener informacion de analisis.
-El capitulo 5 concluye y el capitulo 6 detalla posibles trabajos futuros.
+relacionados. El cap\'itulo 2 discute el an\'alisis de rendimiento, sus principios y teor\'ias.
+El cap\'itulo 3 detalla las herramientas m\'as utilizadas. El cap\'itulo 4 ejemplifica la
+aplicaci\'on de una herramienta para obtener informaci\'on de an\'alisis.
+El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros.
 
 \chapter{An\'alisis de Rendimiento}
 
@@ -103,26 +112,32 @@ en comparaci\'on con la cantidad de tiempo y el uso de los recursos.
 Algunos ejemplos de medida de rendimiento son:
 
 \begin{enumerate}
-\item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on, una jerarqu\'ia de memorias o unidades de almacenamiento
+\item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on, una jerarqu\'ia de memorias o unidades
+  de almacenamiento
 \item la cantidad de instrucciones, operaciones, datos o trabajo a procesar por cierta unidad de tiempo
-\item rendimiento por unidad de energia o por costo asociado
+\item rendimiento por unidad de energ\'ia o por costo asociado
 \end{enumerate}
 
-Para medir el rendmiento se utilizan pruebas de referencias denominados {\em benchmarks}, que pueden ser aplicaciones sint\'eticas construidas especialmente para ejercitar ciertos
-reecursos computacionales e incluso aplicaciones del mundo real bien conocidas.
+Para medir el rendmiento se utilizan pruebas de referencias denominados {\em benchmarks}, que pueden ser aplicaciones
+sint\'eticas construidas especialmente para ejercitar ciertos recursos computacionales e incluso aplicaciones del
+ mundo real bien conocidas.
 
 \bigskip
 
-Otro metodo consiste en medir el uso de los recursos del sistema mientras se ejercita el mismo con un trabajo dado. Por ejemplo el nivel de carga, la cantidad de operaciones realizadas por el sistema operativo o la unidad de procesamiento.
+Otro m\'etodo consiste en medir el uso de los recursos del sistema mientras se ejercita el mismo con un trabajo dado.
+Por ejemplo el nivel de carga, la cantidad de operaciones realizadas por el sistema operativo o la unidad de
+procesamiento.
 
 \section{Benchmarks}
 
 Las caracter\'isticas deseables son portabilidad, simplicidad, estabilidad y reproducci\'on de resultados.
-Esto permite que sean utilizadas para realizar mediciones cuantitativas y asi realizar comparaciones de optimizaciones o entre sistemas de c\'omputo diferentes.
+Esto permite que sean utilizadas para realizar mediciones cuantitativas y as\'i realizar comparaciones de
+optimizaciones o entre sistemas de c\'omputo diferentes.
 
 \bigskip
 
-Tambi\'en se pide que el tiempo de ejecuci\'on sea razonable y que el tama\~no del problema sea ajustable para poder seguir utilizandose con el paso del tiempo y el avance de las tecnologias.
+Tambi\'en se pide que el tiempo de ejecuci\'on sea razonable y que el tama\~no del problema sea ajustable para poder
+seguir utilizandose con el paso del tiempo y el avance de las tecnolog\'ias.
 
 \bigskip
 
@@ -130,7 +145,10 @@ A continuaci\'on se introducen algunas de las m\'as utilizadas, junto con detall
 
 \subsubsection{STREAM}
 
-STREAM \cite{stream} es un benchmark sint\'etico a trav\'es de un simple programa que mide el ancho de banda de memoria sostenido en MB/s y el rendimiento de computaci\'on relativa de algunos vectores simples de calculo. Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura a la memoria principal del sistema bajo analisis.
+STREAM \cite{stream} es un benchmark sint\'etico a trav\'es de un simple programa que mide el ancho de banda de
+memoria sostenido en MB/s y el rendimiento de computaci\'on relativa de algunos vectores simples de c\'alculo.
+Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura a la memoria principal del sistema
+ bajo an\'alisis.
 
 \begin{verbatim}
 -------------------------------------------------------------
