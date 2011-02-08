@@ -32,15 +32,15 @@
   la Especializaci\'on en C\'omputo de Altas Prestaciones dictada en la Facultad
   de Inform\'atica de la Universidad Nacional de La Plata.
   El tema de investigaci\'on consiste en m\'etodos y herramientas para an\'alisis del comportamiento
- en aplicaciones de alto rendimiento.
+  en aplicaciones de alto rendimiento.
 
   \bigskip
 
   Luego de la introducci\'on de terminolog\'ia y bases te\'oricas del an\'alisis cuantitativo
   de rendimiento, se resume la experiencia de utilizar herramientas para conocer donde
- se deber\'ia localizar los esfuerzos de optimizaci\'on.
-  Antes de concluir, se propone un modelo especifico para este tipo de aplicaciones utilizando una abstracci\'on
-  simplificada de etapas.
+  se deber\'ia localizar los esfuerzos de optimizaci\'on.
+  Antes de concluir, se propone un modelo especifico para este tipo de aplicaciones utilizando
+  una abstracci\'on simplificada de etapas.
 
 \end{abstract}
 
@@ -64,22 +64,25 @@ posible su correcta implementaci\'on solo por especialistas en el dominio.
 \bigskip
 
 Con mayor impacto que en otras \'areas de la computaci\'on, el c\'odigo optimizado puede ejecutarse
-\'ordenes de magnitud mejor que implementaciones directas (matrix mult?). Adem\'as, se utiliza programaci\'on en paralelo
-para obtener la mayor cantidad disponible de capacidad de c\'omputo; aumentando la complejidad a\'un m\'as (\cite{parallel-programming}).
+\'ordenes de magnitud mejor que implementaciones directas (matrix mult?). Adem\'as, se utiliza programaci\'on
+en paralelo para obtener la mayor cantidad disponible de capacidad de c\'omputo; aumentando la complejidad
+a\'un m\'as (\cite{parallel-programming}).
 
 \bigskip
 
 El proceso de optimizaci\'on de una implementaci\'on termina entonces siendo hecho de modo artesanal,
 sin conocimiento de las herramientas disponibles y sus capacidades, y sin mucha informaci\'on cuantitativa
 para dirigir los esfuerzos de optimizaci\'on.
-Incluso se llega a preferir la implementaci\'on {\em ad-hoc} de algoritmos en lugar de la utilizaci\'on de librer\'ias
-ya disponibles, optimizadas profundamente y con correctitud comprobada por el paso del tiempo.
+Incluso se llega a preferir la implementaci\'on {\em ad-hoc} de algoritmos en lugar de la utilizaci\'on
+de librer\'ias ya disponibles, optimizadas profundamente y con correctitud comprobada por el paso del tiempo.
 
 \section{Alcance}
 
-Este trabajo considera principalmente los ambientes mayormente utilizados en el c\'omputo de aplicaciones de alto rendimiento.
-A trav\'es de las estad\'isticas mostradas por el top 500 ({\tt http://www.top500.org}), se puede determinar que los sistemas de memoria distribu\'ida
-corriendo sobre GNU/Linux son los m\'as uitlizados. Tambi\'en denominados sistemas Beowulf (\cite{beowulf}).
+Este trabajo considera principalmente los ambientes mayormente utilizados en el c\'omputo de aplicaciones de alto
+rendimiento.
+A trav\'es de las estad\'isticas mostradas por el top 500 ({\tt http://www.top500.org}),
+se puede determinar que los sistemas de memoria distribu\'ida corriendo sobre GNU/Linux
+son los m\'as uitlizados. Tambi\'en denominados sistemas Beowulf (\cite{beowulf}).
 
 \section{Estado Actual}
 
@@ -88,9 +91,10 @@ o aplicando a un sistema, lenguaje a librer\'ia en particular, o abstrayendo la 
 
 \bigskip
 
-Algunas herramientas funcionan a nivel de contadores de hardware (PTU, PAPI), otras sobre n\'ucleo del sistema operativo (oprof, kprobes),
-otras instrumentan el soporte en tiempo de ejecuci\'on sobre el cual corren los programas, otras modifican el c\'odigo fuente
-para extraer datos y otras simplemente miden la utilizaci\'on de los recursos disponibles en el sistema.
+Algunas herramientas funcionan a nivel de contadores de hardware (PTU, PAPI), otras sobre n\'ucleo del sistema
+operativo (oprof, kprobes), otras instrumentan el soporte en tiempo de ejecuci\'on sobre el cual corren los
+programas, otras modifican el c\'odigo fuente para extraer datos y otras simplemente miden la utilizaci\'on
+de los recursos disponibles en el sistema.
 
 \section{Organizaci\'on del Contenido}
 
@@ -102,7 +106,7 @@ El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros.
 
 \chapter{An\'alisis de Rendimiento}
 
-Este cap\'itulo introduce el concepto de rendimiento y teor\'ia sobre su an\'alisis.
+Este cap\'itulo introduce el concepto de rendimiento y teor\'ia sobre el an\'alisis de rendimiento.
 
 \section{Definici\'on}
 
@@ -120,15 +124,16 @@ Algunos ejemplos de medida de rendimiento son:
 \item rendimiento por unidad de energ\'ia o por costo asociado
 \end{enumerate}
 
-Para medir el rendmiento se utilizan pruebas de referencias denominados {\em benchmarks}, que pueden ser aplicaciones
-sint\'eticas construidas especialmente para ejercitar ciertos recursos computacionales o incluso aplicaciones del
- mundo real bien conocidas ejecutadas sobre un mismo conjunto de datos.
+Para medir el rendimiento se utilizan pruebas de referencias denominadas {\em benchmarks},
+estas pueden ser aplicaciones sint\'eticas constru\'idas especialmente para ejercitar
+ciertos recursos computacionales o incluso aplicaciones del mundo real ejecutadas sobre
+un mismo conjunto de datos para facilitar la comparaci\'on de resultados.
 
 \bigskip
 
-Otro m\'etodo consiste en medir el uso de los recursos del sistema mientras se ejercita el mismo con un trabajo dado.
-Por ejemplo el nivel de carga, la cantidad de operaciones realizadas por el sistema operativo o la unidad de
-procesamiento.
+Otro m\'etodo consiste en medir el uso de los recursos del sistema mientras se ejercita el mismo
+con un trabajo dado. Por ejemplo: el nivel de carga, la cantidad de operaciones realizadas
+por el sistema operativo o la unidad de procesamiento.
 
 \section{Benchmarks}
 
@@ -147,37 +152,37 @@ A continuaci\'on se introducen algunas de las m\'as utilizadas, junto con detall
 STREAM \cite{stream} es un benchmark sint\'etico a trav\'es de un simple programa que mide el ancho de banda de
 memoria sostenido en MB/s y el rendimiento de computaci\'on relativa de algunos vectores simples de c\'alculo.
 Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura a la memoria principal del sistema
- bajo an\'alisis.
+bajo an\'alisis.
 
 \begin{verbatim}
--------------------------------------------------------------
-STREAM version $Revision: 1.2 $
--------------------------------------------------------------
-This system uses 8 bytes per DOUBLE PRECISION word.
--------------------------------------------------------------
-Array size = 10000000, Offset = 0
-Total memory required = 228.9 MB.
-Each test is run 10 times, but only
-the *best* time for each is used.
--------------------------------------------------------------
-Number of Threads requested = 2
--------------------------------------------------------------
-Printing one line per active thread....
--------------------------------------------------------------
-Your clock granularity/precision appears to be 1 microseconds.
-Each test below will take on the order of 39952 microseconds.
-   (= 39952 clock ticks)
-Increase the size of the arrays if this shows that
-you are not getting at least 20 clock ticks per test.
--------------------------------------------------------------
-Function      Rate (MB/s)   Avg time     Min time     Max time
-Copy:        4764.1905       0.0337       0.0336       0.0340
-Scale:       4760.2029       0.0338       0.0336       0.0340
-Add:         4993.8631       0.0488       0.0481       0.0503
-Triad:       5051.5778       0.0488       0.0475       0.0500
--------------------------------------------------------------
-Solution Validates
--------------------------------------------------------------
+    -------------------------------------------------------------
+    STREAM version $Revision: 1.2 $
+    -------------------------------------------------------------
+    This system uses 8 bytes per DOUBLE PRECISION word.
+    -------------------------------------------------------------
+    Array size = 10000000, Offset = 0
+    Total memory required = 228.9 MB.
+    Each test is run 10 times, but only
+    the *best* time for each is used.
+    -------------------------------------------------------------
+    Number of Threads requested = 2
+    -------------------------------------------------------------
+    Printing one line per active thread....
+    -------------------------------------------------------------
+    Your clock granularity/precision appears to be 1 microseconds.
+    Each test below will take on the order of 39952 microseconds.
+    (= 39952 clock ticks)
+    Increase the size of the arrays if this shows that
+    you are not getting at least 20 clock ticks per test.
+    -------------------------------------------------------------
+    Function      Rate (MB/s)   Avg time     Min time     Max time
+    Copy:        4764.1905       0.0337       0.0336       0.0340
+    Scale:       4760.2029       0.0338       0.0336       0.0340
+    Add:         4993.8631       0.0488       0.0481       0.0503
+    Triad:       5051.5778       0.0488       0.0475       0.0500
+    -------------------------------------------------------------
+    Solution Validates
+    -------------------------------------------------------------
 \end{verbatim}
 
 \subsection{Linpack}
@@ -230,7 +235,7 @@ ALIGN  : 8 double precision words
 
 - The matrix A is randomly generated for each test.
 - The following scaled residual check will be computed:
-      ||Ax-b||_oo / ( eps * ( || x ||_oo * || A ||_oo + || b ||_oo ) * N )
+||Ax-b||_oo / ( eps * ( || x ||_oo * || A ||_oo + || b ||_oo ) * N )
 - The relative machine precision (eps) is taken to be               1.110223e-16
 - Computational tests pass if scaled residuals are less than                16.0
 
@@ -246,9 +251,9 @@ WR01C2R4       28888   168     4     4             165.83              9.693e+01
 ||Ax-b||_oo/(eps*(||A||_oo*||x||_oo+||b||_oo)*N)=        0.0043035 ...... PASSED
 ============================================================
 Finished      1 tests with the following results:
-              1 tests completed and passed residual checks,
-              0 tests completed and failed residual checks,
-              0 tests skipped because of illegal input values.
+1 tests completed and passed residual checks,
+0 tests completed and failed residual checks,
+0 tests skipped because of illegal input values.
 \end{verbatim}
 
 \subsection{Intel MPI Benchmarks}
@@ -285,15 +290,15 @@ Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes va
 # Benchmarking PingPong
 # #processes = 2
 #---------------------------------------------------
-       #bytes #repetitions      t[usec]   Mbytes/sec
-            0         1000        17.13         0.00
-            1         1000        17.89         0.05
-            2         1000        17.82         0.11
-            4         1000        17.95         0.21
+#bytes #repetitions      t[usec]   Mbytes/sec
+0         1000        17.13         0.00
+1         1000        17.89         0.05
+2         1000        17.82         0.11
+4         1000        17.95         0.21
 ...
-      1048576           40      8993.23       111.19
-      2097152           20     17919.20       111.61
-      4194304           10     35766.45       111.84
+1048576           40      8993.23       111.19
+2097152           20     17919.20       111.61
+4194304           10     35766.45       111.84
 \end{verbatim}
 
 \subsubsection{HPCC}
@@ -500,16 +505,20 @@ sistema de c\'omputo.
 
 \bigskip
 
-cuellos de botella. overhead. problemas de balanceo, contencion o uso de recursos.
+Los problemas a identificar inicialmente pueden ser: cuellos de botella, overhead, problemas de balanceo,
+contenci\'on o mal uso de recursos computacionales.
 
 \section{Modelos}
 
 paralelizacion. niveles. bit/instruccion/datos/tareas.
 
-calculo de mejora. teorica versus real. leyes de amdalah \cite{amdahl}, gustafson
-\cite{gustafson} y karp-flatt \cite{karp-flatt}.
+calculo de mejora. teorica versus real. 
+
+leyes de amdalah \cite{amdahl}, gustafson \cite{gustafson} y karp-flatt \cite{karp-flatt}.
 
 pipeline. formulas. rangos de optimizacion posibles.
+
+simulacion.
 
 \chapter{Herramientas}
 
@@ -563,7 +572,7 @@ historia. resumen. caracter\'isticas.
 
 ejecutar el profiler. ejecutar la aplicaci\'on. generar el resumen.
 
-No se necesita el c\'odigo. C\'odigo anotado si hay s\'imbolos.
+No se necesita el c\'odigo. C\'odigo anotado si hay s\'imbolos de depuracion o {\it debugging}.
 
 componentes del sistema.
 
@@ -571,7 +580,7 @@ contadores de performance.
 
 costo adicional. overhead.
 
-\subsection{contadores de rendimiento}
+\subsection{Contadores de rendimiento}
 
 Los registros de hardware implementando contadores m\'as utilizados son los siguientes:
 
@@ -640,16 +649,16 @@ no es buena.
 
 Este cap\'itulo propone.
 
-una librer\'ia m\'as infrastructura para soporte de an\'alisis.
-generaci\'on de reporte de rendimiento autom\'atico para guiar optimizaciones.
-an\'alisis de mejora posible seg\'un formulas aplicadas a etapas.
+Una librer\'ia m\'as infrastructura para soporte de an\'alisis de modo autom\'atico.
+Generaci\'on de reporte de rendimiento autom\'atico para guiar optimizaciones.
+An\'alisis de mejora posible seg\'un formulas aplicadas a etapas.
 
 \begin{thebibliography}{9}
 
 \bibitem{beowulf}
- T. Sterling, D. Savarese, D. J. Becker, J. E. Dorband, U. A. Ranawake, and C. V. Packer,
- \emph{Beowulf: A parallel workstation for scientific computation},
- 1995.
+  T. Sterling, D. Savarese, D. J. Becker, J. E. Dorband, U. A. Ranawake, and C. V. Packer,
+  \emph{Beowulf: A parallel workstation for scientific computation},
+  1995.
 
 \bibitem{mpi}
   Message Passing Interface Forum,
@@ -669,124 +678,121 @@ an\'alisis de mejora posible seg\'un formulas aplicadas a etapas.
   2004.
 
 \bibitem{gprof}
- Susan L. Graham,  Peter B. Kessler,  Marshall K. McKusick,
- \emph{gprof: A Call Graph Execution Profiler},
- 1982.
-
+  Susan L. Graham,  Peter B. Kessler,  Marshall K. McKusick,
+  \emph{gprof: A Call Graph Execution Profiler},
+  1982.
+  
 \bibitem{oprofile}
-J. Levon,
-\emph{oprofile: hardware profiler for Linux systems},
-{\tt http://oprofile.sourceforge.net}.
-
+  J. Levon,
+  \emph{oprofile: hardware profiler for Linux systems}, {\tt http://oprofile.sourceforge.net}.
+  
 \bibitem{hennessy-patterson}
- John. L. Hennesy, David A. Patterson,
- \emph{Computer Architecture: A Quantitative Approach, 3rd Edition},
- 2002.
+  John. L. Hennesy, David A. Patterson,
+  \emph{Computer Architecture: A Quantitative Approach, 3rd Edition},
+  2002.
 
 \bibitem{intel}
- Intel Press,
- \emph{Intel64 and IA-32 Architectures Software Developer's Manual - Volume 3B: System Programming Guide, Part 2},
- March 2010.
+  Intel Press,
+  \emph{Intel64 and IA-32 Architectures Software Developer's Manual - Volume 3B: System Programming Guide, Part 2},
+  March 2010.
 
 \bibitem{what}
- Ulrich Deeper,
- \emph{What Every Programmer Should Know About Memory},
- November 2007.
+  Ulrich Deeper,
+  \emph{What Every Programmer Should Know About Memory},
+  November 2007.
 
 \bibitem{patterns}
- G. Mattson, B.A. Sanders and B.L. Massingill, 
- \emph{Patterns for Parallel Programming, Addison-Wesley},
- 2004.
-
+  G. Mattson, B.A. Sanders and B.L. Massingill, 
+  \emph{Patterns for Parallel Programming, Addison-Wesley},
+  2004.
+  
 \bibitem{automatic-performance-analysis}
- T. Margalef, J. Jorba, O. Morajko, A. Morajko, E. Luque,
- \emph{Different approaches to automatic performance analysis of distributed applications},
- 2004.
-
+  T. Margalef, J. Jorba, O. Morajko, A. Morajko, E. Luque,
+  \emph{Different approaches to automatic performance analysis of distributed applications},
+  2004.
+  
 \bibitem{capturing-performance-knowledge}
- K. Huck, O. Hernandez, V. Bui, S. Chandrasekaran, B. Chapman, A. Malony, L McInnes, B. Norris,
- \emph{Capturing performance knowledge for automated analysis},
- 2008.
-
+  K. Huck, O. Hernandez, V. Bui, S. Chandrasekaran, B. Chapman, A. Malony, L McInnes, B. Norris,
+  \emph{Capturing performance knowledge for automated analysis},
+  2008.
+  
 \bibitem{automatic-openmp-mpi-analysis}
- F. Wolf, B. Mohr,
- \emph{Automatic performance analysis of hybrid MPI/OpenMP applications},
- 2003.
-
+  F. Wolf, B. Mohr,
+  \emph{Automatic performance analysis of hybrid MPI/OpenMP applications},
+  2003.
+  
 \bibitem{intro-software-performance}
- C. Smith,
- \emph{Introduction to software performance engineering: origins and outstanding problems},
- 2007.
+  C. Smith,
+  \emph{Introduction to software performance engineering: origins and outstanding problems},
+  2007.
 
 \bibitem{future-software-performance}
- M. Woodside, G. Franks, D. Petriu,
- \emph{The Future of Software Performance Engineering},
- 2007.
+  M. Woodside, G. Franks, D. Petriu,
+  \emph{The Future of Software Performance Engineering},
+  2007.
 
 \bibitem{critical-overview}
- J. Browne,
- \emph{A critical overview of computer performance evaluation},
- 1976.
+  J. Browne,
+  \emph{A critical overview of computer performance evaluation},
+  1976.
 
 \bibitem{hpctoolkit}
   Rice University,
- \emph{HPC Toolkit},
- {\tt http://hpctoolkit.org}.
-
+  \emph{HPC Toolkit}, {\tt http://hpctoolkit.org}.
+       
 \bibitem{papi}
   University of Tennessee,
-  \emph{Performance Application Programming Interface},
-  {\tt http://icl.cs.utk.edu/papi}.
-
+  \emph{Performance Application Programming Interface}, {\tt http://icl.cs.utk.edu/papi}.
+       
 \bibitem{amdahl}
   G. M. Amdahl,
   \emph{Validity of single-processor approach to achieving large-scale computing
     capability},
   Proceedings of AFIPS Conference, Reston, VA. 1967. pp. 483-485.
-
+  
 \bibitem{twelve-ways}
   D. Bailey, \emph{Twelve Ways to Fool the Masses When Giving Performance Results
     on Parallel Computers},
   RNR Technical Report, RNR-90-020, NASA Ames Research Center, 1991.
-
+  
 \bibitem{gustafson}
   J. L. Gustafson,
   \emph{Reevaluating Amdahl's Law}, CACM, 31(5), 1988. pp. 532-533.
-
+  
 \bibitem{karp-flatt}
   A. H. Karp and H. P. Flatt,
   \emph{Measuring Parallel Processor Performance},
   Communication of the ACM Volume 33 Number 5, May 1990.
-
+  
 \bibitem{myth}
- {Lee, Victor W. and Kim, Changkyu and Chhugani, Jatin and Deisher, Michael and Kim, Daehyun and Nguyen, Anthony D. and Satish, Nadathur and Smelyanskiy, Mikhail and Chennupaty}, Srinivas, and Hammarlund, Per and Singhal, Ronak and Dubey, Pradeep,
- \emph{Debunking the 100X GPU vs. CPU myth: an evaluation of throughput computing on CPU and GPU},
- 2010.
-
+  {Lee, Victor W. and Kim, Changkyu and Chhugani, Jatin and Deisher, Michael and Kim, Daehyun and Nguyen, Anthony D. and Satish, Nadathur and Smelyanskiy, Mikhail and Chennupaty}, Srinivas, and Hammarlund, Per and Singhal, Ronak and Dubey, Pradeep,
+  \emph{Debunking the 100X GPU vs. CPU myth: an evaluation of throughput computing on CPU and GPU},
+  2010.
+  
 \bibitem{stream}
- John D. McCalpin,
- \emph{A Survey of Memory Bandwidth and Machine Balance in Current High Performance Computers},
- 1995.
-
+  John D. McCalpin,
+  \emph{A Survey of Memory Bandwidth and Machine Balance in Current High Performance Computers},
+  1995.
+  
 \bibitem{counters}
- Dong H. Ahn and Jeffrey S. Vetter,
- \emph{Scalable Analysis Techniques for Microprocessor Performance Counter Metrics},
- 2002.
-
+  Dong H. Ahn and Jeffrey S. Vetter,
+  \emph{Scalable Analysis Techniques for Microprocessor Performance Counter Metrics},
+  2002.
+  
 \bibitem{linpack}
- J. Dongarra, J. Bunch, C. Moler and G. W. Stewart, 
- \emph{LINPACK Users Guide},
- 1979.
-
+  J. Dongarra, J. Bunch, C. Moler and G. W. Stewart, 
+  \emph{LINPACK Users Guide},
+  1979.
+  
 \bibitem{hpl}
- A. Petitet, R. C. Whaley, J. Dongarra and A. Cleary, 
- \emph{HPL - A Portable Implementation of the High-Performance Linpack Benchmark for Distributed-Memory Computers},
- 2008.
-
+  A. Petitet, R. C. Whaley, J. Dongarra and A. Cleary, 
+  \emph{HPL - A Portable Implementation of the High-Performance Linpack Benchmark for Distributed-Memory Computers},
+  2008.
+  
 \bibitem{parallel-programming}
-Paul E. McKenney,
-\emph{Is Parallel Programming Hard, And, If So, What Can You Do About It?},
-January, 2011.
+  Paul E. McKenney,
+  \emph{Is Parallel Programming Hard, And, If So, What Can You Do About It?},
+  January, 2011.
 
 \end{thebibliography}
 
