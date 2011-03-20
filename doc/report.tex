@@ -29,18 +29,19 @@
   \bigskip
 
   Este documento describe una investigaci\'on realizada como trabajo final para
-  la Especializaci\'on en C\'omputo de Altas Prestaciones dictada en la Facultad
-  de Inform\'atica de la Universidad Nacional de La Plata.
-  El tema de investigaci\'on consiste en m\'etodos y herramientas para an\'alisis del comportamiento
-  en aplicaciones de alto rendimiento.
+  la Especializaci\'on en C\'omputo de Altas Prestaciones dictada en la
+  Facultad   de Inform\'atica de la Universidad Nacional de La Plata.
+  El tema de investigaci\'on consiste en m\'etodos y herramientas para
+  an\'alisis del comportamiento en aplicaciones de alto rendimiento.
 
   \bigskip
 
-  Luego de la introducci\'on de terminolog\'ia y bases te\'oricas del an\'alisis cuantitativo
-  de rendimiento, se resume la experiencia de utilizar herramientas para conocer donde
-  se deber\'ia localizar los esfuerzos de optimizaci\'on.
-  Antes de concluir, se propone un modelo especifico para este tipo de aplicaciones utilizando
-  una abstracci\'on simplificada de etapas.
+  Luego de la introducci\'on de terminolog\'ia y bases te\'oricas del
+  an\'alisis cuantitativo de rendimiento, se resume la experiencia de utilizar
+  herramientas para conocer donde se deber\'ia localizar los esfuerzos de
+  optimizaci\'on. Antes de concluir se propone un modelo para este tipo de
+  aplicaciones utilizando una abstracci\'on simplificada de etapas, cuya
+  utilizaci\'on simplifica el an\'alisis de rendimiento y su optimizaci\'on.
 
 \end{abstract}
 
@@ -48,100 +49,117 @@
 
 \chapter{Introducci\'on}
 
-Este cap\'itulo introduce este trabajo y su alcance. Luego de revisar la motivaci\'on del mismo,
-se resume el estado actual de la investigaci\'on y se detalla el contenido restante
-del informe.
+Este cap\'itulo introduce este trabajo y su alcance. Luego de revisar la
+motivaci\'on del mismo, se resume el estado actual de la investigaci\'on y se
+detalla el contenido restante del informe.
 
 \section{Motivaci\'on}
 
-En el \'area de c\'omputo de altas prestaciones los desarrolladores son en su mayor\'ia los
-especialistas del dominio del problema a investigar, sin tener necesariamente conocimientos
-avanzados de programaci\'on y optimizaci\'on de rendimiento. Este hecho resulta en menos tiempo para
-an\'alisis de resultados e impacta directamente en la productividad de cualquier grupo de investigaci\'on.
-Las rutinas m\'as demandantes de c\'alculo  son en su mayor\'ia cient\'ificas, y su complejidad s\'olo hace
-posible su correcta implementaci\'on solo por especialistas en el dominio.
+En el \'area de c\'omputo de altas prestaciones los desarrolladores son en su
+mayor\'ia los especialistas del dominio del problema a investigar, sin tener
+necesariamente conocimientos avanzados de programaci\'on y optimizaci\'on de
+rendimiento. Este hecho resulta en menos tiempo para an\'alisis de resultados
+e impacta directamente en la productividad de cualquier grupo de
+investigaci\'on. Las rutinas m\'as demandantes de c\'alculo son en su
+mayor\'ia cient\'ificas, y su complejidad s\'olo hace posible su correcta
+implementaci\'on solo por especialistas en el dominio.
 
 \bigskip
 
-Con mayor impacto que en otras \'areas de la computaci\'on, el c\'odigo optimizado puede ejecutarse
-\'ordenes de magnitud mejor que implementaciones directas (matrix mult?). Adem\'as, se utiliza programaci\'on
-en paralelo para obtener la mayor cantidad disponible de capacidad de c\'omputo; aumentando la complejidad
-a\'un m\'as (\cite{parallel-programming}).
+Con mayor impacto que en otras \'areas de la computaci\'on, el c\'odigo
+optimizado puede ejecutarse \'ordenes de magnitud mejor que implementaciones
+directas \cite{mm-matrixmultiplicationtool}. Adem\'as, se utiliza
+programaci\'on en paralelo para obtener la mayor cantidad disponible de
+capacidad de c\'omputo; aumentando la complejidad a\'un m\'as
+\cite{parallel-programming}.
 
 \bigskip
 
-El proceso de optimizaci\'on de una implementaci\'on termina entonces siendo hecho de modo artesanal,
-sin conocimiento de las herramientas disponibles y sus capacidades, y sin mucha informaci\'on cuantitativa
-para dirigir los esfuerzos de optimizaci\'on.
-Incluso se llega a preferir la implementaci\'on {\em ad-hoc} de algoritmos en lugar de la utilizaci\'on
-de librer\'ias ya disponibles, optimizadas profundamente y con correctitud comprobada por el paso del tiempo.
+El proceso de optimizaci\'on de una implementaci\'on termina entonces siendo
+hecho de modo artesanal, sin conocimiento de las herramientas disponibles y
+sus capacidades, y sin mucha informaci\'on cuantitativa para dirigir los
+esfuerzos de optimizaci\'on. Incluso se llega a preferir la implementaci\'on
+{\em ad-hoc} de algoritmos en lugar de la utilizaci\'on de librer\'ias ya
+disponibles, optimizadas profundamente y con correctitud comprobada por el
+paso del tiempo.
 
 \section{Alcance}
 
-Este trabajo considera principalmente los ambientes mayormente utilizados en el c\'omputo de aplicaciones de alto
-rendimiento.
-A trav\'es de las estad\'isticas mostradas por el top 500 ({\tt http://www.top500.org}),
-se puede determinar que los sistemas de memoria distribu\'ida corriendo sobre GNU/Linux
-son los m\'as uitlizados. Tambi\'en denominados sistemas Beowulf (\cite{beowulf}).
+Este trabajo considera principalmente los ambientes mayormente utilizados en
+el c\'omputo de aplicaciones de alto rendimiento. A trav\'es de las
+estad\'isticas mostradas por el Top 500 ({\tt http://www.top500.org}), se
+puede determinar que los sistemas de memoria distribu\'ida corriendo sobre
+GNU/Linux son los m\'as uitlizados. Tambi\'en denominados sistemas Beowulf
+\cite{beowulf}.
 
 \section{Estado Actual}
 
-Actualmente existe incontables herramientas para el an\'alisis de c\'odigo, la mayor\'ia siendo propietarias
-o aplicando a un sistema, lenguaje a librer\'ia en particular, o abstrayendo la ejecucion a diferentes niveles de abstracci\'on.
+Actualmente existe incontables herramientas para el an\'alisis de c\'odigo, la
+mayor\'ia siendo propietarias o aplicando a un sistema, lenguaje a librer\'ia
+en particular, o abstrayendo la ejecucion a diferentes niveles de
+abstracci\'on.
 
 \bigskip
 
-Algunas herramientas funcionan a nivel de contadores de hardware (PTU, PAPI), otras sobre n\'ucleo del sistema
-operativo (oprof, kprobes), otras instrumentan el soporte en tiempo de ejecuci\'on sobre el cual corren los
-programas, otras modifican el c\'odigo fuente para extraer datos y otras simplemente miden la utilizaci\'on
-de los recursos disponibles en el sistema.
+Algunas herramientas funcionan a nivel de contadores de hardware (PTU, PAPI),
+otras sobre n\'ucleo del sistema operativo (oprof, kprobes), otras
+instrumentan el soporte en tiempo de ejecuci\'on sobre el cual corren los
+programas, otras modifican el c\'odigo fuente para extraer datos y otras
+simplemente miden la utilizaci\'on de los recursos disponibles en el sistema.
 
 \section{Organizaci\'on del Contenido}
 
 El resto del documento explica teor\'ia de an\'alisis de rendimiento y temas
-relacionados. El cap\'itulo 2 discute el an\'alisis de rendimiento, sus principios y teor\'ias.
-El cap\'itulo 3 detalla las herramientas m\'as utilizadas. El cap\'itulo 4 ejemplifica la
-aplicaci\'on de una herramienta para obtener informaci\'on de an\'alisis.
-El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros.
+relacionados. El cap\'itulo 2 discute el an\'alisis de rendimiento, sus
+principios y teor\'ias. El cap\'itulo 3 detalla las herramientas m\'as
+utilizadas. El cap\'itulo 4 ejemplifica la aplicaci\'on de una herramienta
+para obtener informaci\'on de an\'alisis. El cap\'itulo 5 concluye y el
+cap\'itulo 6 detalla posibles trabajos futuros.
 
 \chapter{An\'alisis de Rendimiento}
 
-Este cap\'itulo introduce el concepto de rendimiento y teor\'ia sobre el an\'alisis de rendimiento.
+Este cap\'itulo introduce el concepto de rendimiento y teor\'ia sobre el
+an\'alisis de rendimiento.
 
 \section{Definici\'on}
 
-El rendimiento se caracteriza por la cantidad de trabajo de c\'omputo que se logra
-en comparaci\'on con la cantidad de tiempo y el uso de los recursos.
+El rendimiento se caracteriza por la cantidad de trabajo de c\'omputo que se
+logra en comparaci\'on con la cantidad de tiempo y el uso de los recursos.
 
 \section{M\'etricas}
 
 Algunos ejemplos de medida de rendimiento son:
 
 \begin{enumerate}
-\item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on, una jerarqu\'ia de memorias o unidades
-  de almacenamiento
-\item la cantidad de instrucciones, operaciones, datos o trabajo a procesar por cierta unidad de tiempo
+\item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on,
+  una jerarqu\'ia de memorias o unidades   de almacenamiento
+\item la cantidad de instrucciones, operaciones, datos o trabajo a procesar
+  por cierta unidad de tiempo
 \item rendimiento por unidad de energ\'ia o por costo asociado
 \end{enumerate}
 
-Para medir el rendimiento se utilizan pruebas de referencias denominadas {\em benchmarks},
-estas pueden ser aplicaciones sint\'eticas constru\'idas especialmente para ejercitar
-ciertos recursos computacionales o incluso aplicaciones del mundo real ejecutadas sobre
-un mismo conjunto de datos para facilitar la comparaci\'on de resultados.
+Para medir el rendimiento se utilizan pruebas de referencias denominadas
+{\em benchmarks}, estas pueden ser aplicaciones sint\'eticas constru\'idas
+especialmente para ejercitar ciertos recursos computacionales o incluso
+aplicaciones del mundo real ejecutadas sobre un mismo conjunto de datos para
+facilitar la comparaci\'on de resultados.
 
 \bigskip
 
-Otro m\'etodo consiste en medir el uso de los recursos del sistema mientras se ejercita el mismo
-con un trabajo dado. Por ejemplo: el nivel de carga, la cantidad de operaciones realizadas
-por el sistema operativo o la unidad de procesamiento.
+Otro m\'etodo consiste en medir el uso de los recursos del sistema mientras se
+ejercita el mismo con un trabajo dado. Por ejemplo: el nivel de carga, la
+cantidad de operaciones realizadas por el sistema operativo o la unidad de
+procesamiento.
 
 \section{Benchmarks}
 
-Las caracter\'isticas deseables son portabilidad, simplicidad, estabilidad y reproducci\'on de resultados.
-Esto permite que sean utilizadas para realizar mediciones cuantitativas y as\'i realizar comparaciones de
-optimizaciones o entre sistemas de c\'omputo diferentes.
-Tambi\'en se pide que el tiempo de ejecuci\'on sea razonable y que el tama\~no del problema sea ajustable para poder
-seguir utilizandose con el paso del tiempo y el avance de las tecnolog\'ias.
+Las caracter\'isticas deseables son portabilidad, simplicidad, estabilidad y
+reproducci\'on de resultados. Esto permite que sean utilizadas para realizar
+mediciones cuantitativas y as\'i realizar comparaciones de optimizaciones o
+entre sistemas de c\'omputo diferentes. Tambi\'en se pide que el tiempo de
+ejecuci\'on sea razonable y que el tama\~no del problema sea ajustable para
+poder seguir utilizandose con el paso del tiempo y el avance de las
+tecnolog\'ias.
 
 \bigskip
 
@@ -655,8 +673,15 @@ An\'alisis de mejora posible seg\'un formulas aplicadas a etapas.
 
 \begin{thebibliography}{9}
 
+\bibitem{mm-matrixmultiplicationtool}
+  A. More,
+  \emph{A Case Study on High Performance Matrix Multiplication},
+  \tt{http://code.google.com/p/mm-matrixmultiplicationtool},
+  2008.
+
 \bibitem{beowulf}
-  T. Sterling, D. Savarese, D. J. Becker, J. E. Dorband, U. A. Ranawake, and C. V. Packer,
+  T. Sterling, D. Savarese, D. J. Becker, J. E. Dorband, U. A. Ranawake,
+  and C. V. Packer,
   \emph{Beowulf: A parallel workstation for scientific computation},
   1995.
 
