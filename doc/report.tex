@@ -163,14 +163,16 @@ tecnolog\'ias.
 
 \bigskip
 
-A continuaci\'on se introducen algunas de las m\'as utilizadas, junto con detalles y ejemplos de sus reportes.
+A continuaci\'on se introducen algunas de las m\'as utilizadas, junto con
+detalles y ejemplos de sus reportes.
 
 \subsection{STREAM}
 
-STREAM \cite{stream} es un benchmark sint\'etico a trav\'es de un simple programa que mide el ancho de banda de
-memoria sostenido en MB/s y el rendimiento de computaci\'on relativa de algunos vectores simples de c\'alculo.
-Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura a la memoria principal del sistema
-bajo an\'alisis.
+STREAM \cite{stream} es un benchmark sint\'etico a trav\'es de un simple
+programa que mide el ancho de banda de memoria sostenido en MB/s y el
+rendimiento de computaci\'on relativa de algunos vectores simples de c\'alculo.
+Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura
+a la memoria principal del sistema bajo an\'alisis.
 
 \begin{verbatim}
     -------------------------------------------------------------
@@ -207,18 +209,19 @@ bajo an\'alisis.
 
 \cite{linpack}
 
-Linpack es un conjunto de subrutinas {\it Fortran} que resuelven ecuaciones lineales y problemas relacionados como
-multiplicaci\'on de matrices.
+Linpack es un conjunto de subrutinas {\it Fortran} que resuelven ecuaciones
+lineales y problemas relacionados como la multiplicaci\'on de matrices.
 
 \cite{hpl}
 
-HPL es una versi\'on portable del benchmark Linpack para sistemas de memoria distribu\'ida. El paquete de software
-utiliza la librer\'ia MPI para comunicaci\'on entre los nodos de computo con memoria distribu\'ida.
+HPL es una versi\'on portable del benchmark Linpack para sistemas de memoria
+distribu\'ida. El paquete de software utiliza la librer\'ia MPI para
+comunicaci\'on entre los nodos de c\'omputo con memoria distribu\'ida.
 
 \begin{verbatim}
 ============================================================
 HPLinpack 2.0  --  High-Performance Linpack benchmark  --   September 10, 2008
-Written by A. Petitet and R. Clint Whaley,  Innovative Computing Laboratory, UTK
+Written by A. Petitet and R. Clint Whaley, Innovative Computing Laboratory, UTK
 Modified by Piotr Luszczek, Innovative Computing Laboratory, UTK
 Modified by Julien Langou, University of Colorado Denver
 ============================================================
@@ -248,25 +251,22 @@ L1     : transposed form
 U      : transposed form
 EQUIL  : yes
 ALIGN  : 8 double precision words
-
---------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------
 - The matrix A is randomly generated for each test.
 - The following scaled residual check will be computed:
 ||Ax-b||_oo / ( eps * ( || x ||_oo * || A ||_oo + || b ||_oo ) * N )
-- The relative machine precision (eps) is taken to be               1.110223e-16
-- Computational tests pass if scaled residuals are less than                16.0
+- The relative machine precision (eps) is taken to be 1.110223e-16
+- Computational tests pass if scaled residuals are less than 16.0
 
 Column=000168 Fraction=0.005 Mflops=133122.97
 ...
 Column=025872 Fraction=0.895 Mflops=98107.60
-============================================================
-=
-T/V                N    NB     P     Q               Time                 Gflops
---------------------------------------------------------------------------------
-WR01C2R4       28888   168     4     4             165.83              9.693e+01
---------------------------------------------------------------------------------
-||Ax-b||_oo/(eps*(||A||_oo*||x||_oo+||b||_oo)*N)=        0.0043035 ...... PASSED
+=============================================================
+T/V                N    NB     P     Q               Time                Gflops
+-------------------------------------------------------------------------------
+WR01C2R4       28888   168     4     4             165.83             9.693e+01
+-------------------------------------------------------------------------------
+||Ax-b||_oo/(eps*(||A||_oo*||x||_oo+||b||_oo)*N)=       0.0043035 ...... PASSED
 ============================================================
 Finished      1 tests with the following results:
 1 tests completed and passed residual checks,
@@ -276,12 +276,14 @@ Finished      1 tests with the following results:
 
 \subsection{Intel MPI Benchmarks}
 
-Es un conjunto de benchmarks cuyo objetivo es ejercitar y medir las funciones m\'as importantes de MPI.
+Es un conjunto de benchmarks cuyo objetivo es ejercitar y medir las funciones
+m\'as importantes de MPI.
 
-El benchmark m\'as conocido es el popular Ping Pong. Ejercita la transmisi\'on de mensajes ida y vuelta entre dos
-nodos de c\'omputo con diferentes tama\~nos de mensajes.
-Para obtener el m\'aximo ancho de banda posible, se ejercita la comunicaci\'on con mensajes con datos grandes.
-Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, sin datos.
+El benchmark m\'as conocido es el popular Ping Pong. Ejercita la transmisi\'on
+de mensajes ida y vuelta entre dos nodos de c\'omputo con diferentes tama\~nos
+de mensajes. Para obtener el m\'aximo ancho de banda posible, se ejercita la
+comunicaci\'on con mensajes con datos grandes. Para obtener la m\'inima
+latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, sin datos.
 
 \begin{verbatim}
 # Intel (R) MPI Benchmark Suite V3.1, MPI-1 part
@@ -292,15 +294,13 @@ Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes va
 # Version               : #1 SMP Thu May 17 14:00:09 UTC 2007
 # MPI Version           : 2.0
 # MPI Thread Environment: MPI_THREAD_SINGLE
-# Calling sequence was:
-# ../IMB-MPI1 pingpong
+# Calling sequence was: ../IMB-MPI1 pingpong
 # Minimum message length in bytes:   0
 # Maximum message length in bytes:   4194304
 #
 # MPI_Datatype                   :   MPI_BYTE
 # MPI_Datatype for reductions    :   MPI_FLOAT
 # MPI_Op                         :   MPI_SUM
-#
 #
 # List of Benchmarks to run:
 # PingPong
@@ -321,12 +321,14 @@ Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes va
 
 \subsubsection{HPCC}
 
-El benchmark HPC Challenge (HPCC) es un conjunto de m\'ultiple micro benchmarks utilizados frecuentemente para medir
-el rendimiento de un sistema de c\'omputo. Entre ellos STREAM, HPL, Ping Pong, transformadas de {\it Fourier} y
-otros.
+El benchmark HPC Challenge (HPCC) es un conjunto de m\'ultiple micro
+benchmarks utilizados frecuentemente para medir el rendimiento de un sistema
+de c\'omputo. Entre ellos STREAM, HPL, Ping Pong, transformadas de
+{\it Fourier} y otros.
 
-La mejor m\'aquina depende de la aplicaci\'on a ejecutar, algunas aplicaciones necesitan mejor ancho de banda de
-memoria, mejor canales de comunicaci\'on, o la mayor capacidad de c\'omputo posible.
+La mejor m\'aquina depende de la aplicaci\'on a ejecutar, algunas aplicaciones
+necesitan mejor ancho de banda de memoria, mejor canales de comunicaci\'on, o
+la mayor capacidad de c\'omputo posible.
 
 \begin{verbatim}
 This is the DARPA/DOE HPC Challenge Benchmark version 1.2.0 October 2003
@@ -491,12 +493,11 @@ Current time (1225739478) is Mon Nov  3 17:11:18 2008
 
 \subsubsection{DEISA}
 
-Un conjunto de aplicaciones de astrof\'isica, din\'amica de fluidos, modelado clim\'atico,
-bio-ciencia, ciencia de los materiales, fusi\'on de energ\'ia y f\'isica de particulas.
-
-Permite una medici\'on m\'as cercana al mundo real, sin utilizar aplicaciones sint\'eticas.
-
-DEISA es de libre acceso pero no puede ser redistribu\'ida por terceros.
+Un conjunto de aplicaciones de astrof\'isica, din\'amica de fluidos, modelado
+clim\'atico, bio-ciencia, ciencia de los materiales, fusi\'on de energ\'ia y
+f\'isica de particulas. Permite una medici\'on m\'as cercana al mundo real,
+sin utilizar aplicaciones sint\'eticas. DEISA es de libre acceso pero no puede
+ser redistribu\'ida por terceros.
 
 \bigskip
 
@@ -508,23 +509,27 @@ An\'alisis de calidad de acuerdo a la ingenier\'ia del software.
 
 \bigskip
 
-El procedimiento usualmente consiste en ciclos de medir, localizar, optimizar, comparar.
-Es muy importante mantener la disciplina en realizar un cambio a la vez ya que asegura resultados reproducibles.
+El procedimiento usualmente consiste en ciclos de medir, localizar, optimizar,
+comparar. Es muy importante mantener la disciplina en realizar un cambio a la
+vez ya que asegura resultados reproducibles.
 
-Los resultados deben tambien ser correctamente guardados para evitar problemas de datos.
-Si la configuraci\'on del sistema es din\'amica, conviene realizar todas las pruebas de comparaci\'on durante una
-misma ejecuci\'on para evitar diferencias debido a configuraci\'on o diferentes componentes.
+Los resultados deben tambi\'en ser correctamente guardados para evitar
+problemas de datos. Si la configuraci\'on del sistema es din\'amica, conviene
+realizar todas las pruebas de comparaci\'on durante una misma ejecuci\'on para
+evitar diferencias debido a configuraci\'on o a actualizaci\'on de componentes.
 
 \bigskip
 
-La reproducci\'on de resultados es compleja, en el caso de no tener una configuraci\'on de sistema estable en el
-tiempo, es recomendable siempre ejecutar una versi\'on optimizada contra una version de referencia en un mismo
+La reproducci\'on de resultados es compleja, en el caso de no tener una
+configuraci\'on de sistema estable en el tiempo, es recomendable siempre
+ejecutar una versi\'on optimizada contra una version de referencia en un mismo
 sistema de c\'omputo.
 
 \bigskip
 
-Los problemas a identificar inicialmente pueden ser: cuellos de botella, overhead, problemas de balanceo,
-contenci\'on o mal uso de recursos computacionales.
+Los problemas a identificar inicialmente pueden ser: cuellos de botella,
+overhead, problemas de balanceo, contenci\'on o mal uso de recursos
+computacionales.
 
 \section{Modelos}
 
@@ -532,7 +537,8 @@ paralelizacion. niveles. bit/instruccion/datos/tareas.
 
 calculo de mejora. teorica versus real. 
 
-leyes de amdalah \cite{amdahl}, gustafson \cite{gustafson} y karp-flatt \cite{karp-flatt}.
+leyes de amdalah \cite{amdahl}, gustafson \cite{gustafson} y karp-flatt
+\cite{karp-flatt}.
 
 pipeline. formulas. rangos de optimizacion posibles.
 
@@ -562,13 +568,15 @@ se necesita ejecutar un analizador sobre los datos acumulados.
 perfil plano. una lista de las funciones ejecutadas ordenadas por la cantidad
 acumulada de tiempo utilizado.
 
-el gr\'afico de llamadas. muestra el tiempo utilizado por las funciones y sus hijos.
+el gr\'afico de llamadas. muestra el tiempo utilizado por las funciones y sus
+hijos.
 
 las funciones recursivas son manejadas de manera especial.
 
 \subsection{perfil de ejecuci\'on}
 
-time, cumulative seconds, self seconds, calls, self ms/call, total ms/call, name
+time, cumulative seconds, self seconds, calls, self ms/call, total ms/call,
+name
 
 \subsection{gr\'afico de llamadas}
 
@@ -590,7 +598,8 @@ historia. resumen. caracter\'isticas.
 
 ejecutar el profiler. ejecutar la aplicaci\'on. generar el resumen.
 
-No se necesita el c\'odigo. C\'odigo anotado si hay s\'imbolos de depuracion o {\it debugging}.
+No se necesita el c\'odigo. C\'odigo anotado si hay s\'imbolos de depuracion o
+{\it debugging}.
 
 componentes del sistema.
 
@@ -600,7 +609,8 @@ costo adicional. overhead.
 
 \subsection{Contadores de rendimiento}
 
-Los registros de hardware implementando contadores m\'as utilizados son los siguientes:
+Los registros de hardware implementando contadores m\'as utilizados son los
+siguientes:
 
 \begin{enumerate}
 \item total processor cycles
@@ -621,23 +631,23 @@ Este cap\'itulo aplica.
 
 \section{Multiplicaci\'on de Matrices}
 
-La multiplicaci\'on de matrices es una operaci\'on fundamental en m\'ultiples campos
-de aplicaci\'on cient\'ifica como la resoluci\'on de ecuaciones lineales y la
-representaci\'on de grafos y espacios dimensionales. Por ello existe abundante
-material sobre el tema.
+La multiplicaci\'on de matrices es una operaci\'on fundamental en m\'ultiples
+campos de aplicaci\'on cient\'ifica como la resoluci\'on de ecuaciones
+lineales y la representaci\'on de grafos y espacios dimensionales. Por ello
+existe abundante material sobre el tema.
 
 \bigskip
 
-El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en el
-ap\'endice. Al aplicar las herramientas vistas previamente se identifica claramente
-que la multiplicaci\'on de los elementos de la matriz consume el mayor tiempo de
-c\'omputo.
+El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en
+el ap\'endice. Al aplicar las herramientas vistas previamente se identifica
+claramente que la multiplicaci\'on de los elementos de la matriz consume el
+mayor tiempo de c\'omputo.
 
 \bigskip
 
-A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se demuestra
-claramente con este ejercicio la sofisticaci\'on de librer\'ias contra m\'etodos
-artesanales de optimizaci\'on.
+A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se
+demuestra claramente con este ejercicio la sofisticaci\'on de librer\'ias
+contra m\'etodos artesanales de optimizaci\'on.
 
 \section{Distribuci\'on de Calor en Dos Dimensiones}
 
@@ -645,31 +655,33 @@ artesanales de optimizaci\'on.
 
 \section{Transformadas de {\it Fourier}}
 
-El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en el
-ap\'endice. Al aplicar las herramientas vistas previamente se identifica claramente
-que la evaluacion de derivadas parciales consume el mayor tiempo de c\'omputo.
+El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en
+el ap\'endice. Al aplicar las herramientas vistas previamente se identifica
+claramente que la evaluacion de derivadas parciales consume el mayor tiempo de
+c\'omputo.
 
 \bigskip
 
-A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se demuestra
-claramente con este ejercicio la sofisticaci\'on de librer\'ias contra m\'etodos
-artesanales de optimizaci\'on.
+A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se
+demuestra claramente con este ejercicio la sofisticaci\'on de librer\'ias
+contra m\'etodos artesanales de optimizaci\'on.
 
 \chapter{Conclusiones}
 
 Este cap\'itulo concluye.
 
 Aportes: un m\'etodo, el an\'alisis de diferentes herramientas. resumen
-introductorio del tema. ejercicios que demuestran que la optimizaci\'on artesanal
-no es buena.
+introductorio del tema. ejercicios que demuestran que la optimizaci\'on
+artesanal no es buena.
 
 \chapter{Trabajo Futuro}
 
 Este cap\'itulo propone.
 
-Una librer\'ia m\'as infrastructura para soporte de an\'alisis de modo autom\'atico.
-Generaci\'on de reporte de rendimiento autom\'atico para guiar optimizaciones.
-An\'alisis de mejora posible seg\'un formulas aplicadas a etapas.
+Una librer\'ia m\'as infrastructura para soporte de an\'alisis de modo
+autom\'atico. Generaci\'on de reporte de rendimiento autom\'atico para guiar
+optimizaciones. An\'alisis de mejora posible seg\'un formulas aplicadas a
+etapas.
 
 \begin{thebibliography}{9}
 
