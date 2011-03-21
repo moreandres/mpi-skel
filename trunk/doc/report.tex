@@ -330,6 +330,8 @@ La mejor m\'aquina depende de la aplicaci\'on a ejecutar, algunas aplicaciones
 necesitan mejor ancho de banda de memoria, mejor canales de comunicaci\'on, o
 la mayor capacidad de c\'omputo posible.
 
+% TBD: insertar cuadro de localidad espacial y temporal
+
 \begin{verbatim}
 This is the DARPA/DOE HPC Challenge Benchmark version 1.2.0 October 2003
 Produced by Jack Dongarra and Piotr Luszczek
@@ -511,7 +513,7 @@ An\'alisis de calidad de acuerdo a la ingenier\'ia del software.
 
 El procedimiento usualmente consiste en ciclos de medir, localizar, optimizar,
 comparar. Es muy importante mantener la disciplina en realizar un cambio a la
-vez ya que asegura resultados reproducibles.
+vez ya que esto asegura resultados reproducibles.
 
 Los resultados deben tambi\'en ser correctamente guardados para evitar
 problemas de datos. Si la configuraci\'on del sistema es din\'amica, conviene
@@ -537,8 +539,24 @@ paralelizacion. niveles. bit/instruccion/datos/tareas.
 
 calculo de mejora. teorica versus real. 
 
-leyes de amdalah \cite{amdahl}, gustafson \cite{gustafson} y karp-flatt
-\cite{karp-flatt}.
+Existen algunas leyes frecuentemente utilizadas durante el an\'alisis de
+rendimiento. La ley de {\it Amdahl} \cite{amdahl} dimensiona la mejora que
+puede obtenerse en un sistema de acuerdo a las mejoras logradas en sus
+componentes.
+
+\bigskip
+
+Desde un punto de vista m\'as general, la ley de {\it Gustafson}
+\cite{gustafson} establece que las aplicaciones que manejan problemas
+repetitivos con conjuntos de datos similares pueden ser f\'acilmente
+paralelizadas. En comparaci\'on, la ley anterior no escala el tama\~no o
+resoluci\'on de problema cuando se incrementa la potencia de c\'alculo, es
+decir con un tama\~no de problema fijo.
+
+\bigskip
+
+Para medir el grado de paralelismo de una aplicaci\'on puede utilizarse la
+m\'etrica de Karp-Flatt \cite{karp-flatt}.
 
 pipeline. formulas. rangos de optimizacion posibles.
 
