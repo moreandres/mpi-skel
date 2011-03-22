@@ -175,48 +175,59 @@ Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura
 a la memoria principal del sistema bajo an\'alisis.
 
 \begin{verbatim}
-    -------------------------------------------------------------
-    STREAM version $Revision: 1.2 $
-    -------------------------------------------------------------
-    This system uses 8 bytes per DOUBLE PRECISION word.
-    -------------------------------------------------------------
-    Array size = 10000000, Offset = 0
-    Total memory required = 228.9 MB.
-    Each test is run 10 times, but only
-    the *best* time for each is used.
-    -------------------------------------------------------------
-    Number of Threads requested = 2
-    -------------------------------------------------------------
-    Printing one line per active thread....
-    -------------------------------------------------------------
-    Your clock granularity/precision appears to be 1 microseconds.
-    Each test below will take on the order of 39952 microseconds.
-    (= 39952 clock ticks)
-    Increase the size of the arrays if this shows that
-    you are not getting at least 20 clock ticks per test.
-    -------------------------------------------------------------
-    Function      Rate (MB/s)   Avg time     Min time     Max time
-    Copy:        4764.1905       0.0337       0.0336       0.0340
-    Scale:       4760.2029       0.0338       0.0336       0.0340
-    Add:         4993.8631       0.0488       0.0481       0.0503
-    Triad:       5051.5778       0.0488       0.0475       0.0500
-    -------------------------------------------------------------
-    Solution Validates
-    -------------------------------------------------------------
+  STREAM version $Revision: 1.2 $
+  -------------------------------------------------------------
+  This system uses 8 bytes per DOUBLE PRECISION word.
+  -------------------------------------------------------------
+  Array size = 10000000, Offset = 0
+  Total memory required = 228.9 MB.
+  Each test is run 10 times, but only
+  the *best* time for each is used.
+  -------------------------------------------------------------
+  Function     Rate (MB/s)   Avg time     Min time     Max time
+  Copy:        4764.1905       0.0337       0.0336       0.0340
+  Scale:       4760.2029       0.0338       0.0336       0.0340
+  Add:         4993.8631       0.0488       0.0481       0.0503
+  Triad:       5051.5778       0.0488       0.0475       0.0500
+  -------------------------------------------------------------
+  Solution Validates
 \end{verbatim}
+
+Dentro de una misma ejecuci\'on de este benchmark, se realizan diferentes
+operaciones en memoria.
+
+\begin{figure}[H]
+  \begin{center}
+    \begin{tabular}{|l|l|l|}\hline
+      {\bf Funci\'on} & {\bf Operaci\'on} & {\bf Descripci\'on} \\ \hline
+      copy & $ \forall i $ $ b_{i} = a_{i} $ & copia simple \\ \hline
+      scale & $ \forall i $ $ b_{i} = c \times a_{i} $ & multiplicaci\'on escalar \\ \hline
+      add & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & suma directa \\ \hline
+      triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & suma y multiplicaci\'on escalar \\ \hline
+    \end{tabular}
+    \caption{Operaciones del Benchmark STREAM}
+  \end{center}
+  \label{stream}
+\end{figure}
 
 \subsection{Linpack}
 
-\cite{linpack}
+Linpack \cite{linpack} es un conjunto de subrutinas {\it FORTRAN} que resuelven
+problemas de algebra lineal como ecuaciones lineales y multiplicaci\'on de
+matrices. HPL \cite{hpl} es una versi\'on portable del benchmark que incluye
+el paquete Linpack pero utilizando sistemas de memoria distribu\'ida. El
+paquete de software utiliza la librer\'ia MPI para comunicaci\'on entre los
+ nodos de c\'omputo con memoria distribu\'ida.
 
-Linpack es un conjunto de subrutinas {\it Fortran} que resuelven ecuaciones
-lineales y problemas relacionados como la multiplicaci\'on de matrices.
+\bigskip
 
-\cite{hpl}
+TOP500.
 
-HPL es una versi\'on portable del benchmark Linpack para sistemas de memoria
-distribu\'ida. El paquete de software utiliza la librer\'ia MPI para
-comunicaci\'on entre los nodos de c\'omputo con memoria distribu\'ida.
+\bigskip
+
+Existe cierta controversia de que no es una buena forma de ejercitar un sistema
+de computo distribuido ya que no implica uso importante de la red, solo
+computo intensivo utilizando unidades aritmeticas y la jerarquia local de memoria.
 
 \begin{verbatim}
 ============================================================
@@ -706,7 +717,7 @@ etapas.
 \bibitem{mm-matrixmultiplicationtool}
   A. More,
   \emph{A Case Study on High Performance Matrix Multiplication},
-  \tt{http://code.google.com/p/mm-matrixmultiplicationtool},
+  {\tt http://code.google.com/p/mm-matrixmultiplicationtool},
   2008.
 
 \bibitem{beowulf}
@@ -854,7 +865,7 @@ etapas.
 \bibitem{hpl}
   A. Petitet, R. C. Whaley, J. Dongarra and A. Cleary, 
   \emph{HPL - A Portable Implementation of the High-Performance Linpack
-    Benchmark for Distributed-Memory Computers},
+    Benchmark for Distributed-Memory Computers}, {\tt http://www.netlib.org/benchmark/hpl}
   2008.
   
 \bibitem{parallel-programming}
