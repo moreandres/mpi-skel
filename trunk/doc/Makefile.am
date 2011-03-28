@@ -1,5 +1,5 @@
 EXTRA_DIST = doc.tex proposal.tex request.tex
-CLEANFILES = *.pdf *.toc *.log
+CLEANFILES = *.pdf *.toc *.log *.aux
 
 pdf:
 	pdflatex request.tex; pdflatex request.tex
