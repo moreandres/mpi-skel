@@ -579,28 +579,36 @@ Este cap\'itulo revisa.
 
 \section{Taxonom\'ia}
 
-din\'amico versus est\'atico.
-tiempo de compilaci\'on versus tiempo de ejecuci\'on.
+Existen diferentes alternativas sobre el modo de extraer informaci\'on de
+caracteristicas relacionadas con el rendimiento de una aplicaci\'on.
+Estos metodos pueden clasificarse como din\'amico o est\'atico.
+Tambien pueden clasificarse como aplicables en tiempo de compilaci\'on o
+tiempo de ejecuci\'on.
 
 \section{gprof}
 
-profiling din\'amico.
+Esta herramienta extrae el perfil din\'amico de una aplicaci\'on, en tiempo
+de ejecuci\'on. Se instrumenta la aplicacion con una opci\'on espec\'ifica que
+incluye informacion de uso de las diferentes partes del programa y los
+recursos del sistema como procesador y memoria.
 
-se necesita compilar la aplicaci\'on con una opci\'on espec\'ifica.
+\bigskip
 
-se necesita ejecutar la aplicaci\'on con un conjunto de datos dado.
+La aplicaci\'on debe ejecutarse con un conjunto de datos dado. El conjunto de
+datos debe ser representativo y debe tambi\'en ejercitar la aplicaci\'on por
+una cantidad de tiempo suficiente como para intensificar el uso de los
+recursos. Los datos del perfil de una ejecucion son luegos obtenidos en la
+forma de un archivo de datos, luego se procede a procesar los datos acumulados
+con un analizador respectivo.
 
-datos del perfil de una aplicaci\'on.
+\bigskip
 
-se necesita ejecutar un analizador sobre los datos acumulados.
-
-perfil plano. una lista de las funciones ejecutadas ordenadas por la cantidad
-acumulada de tiempo utilizado.
-
-el gr\'afico de llamadas. muestra el tiempo utilizado por las funciones y sus
-hijos.
-
-las funciones recursivas son manejadas de manera especial.
+Provee un perfil plano que consiste en una simple lista de las funciones
+ejecutadas ordenadas por la cantidad acumulada de tiempo utilizado.
+Tambi\'en provee el gr\'afico de llamadas anidadas, que muestra el tiempo
+utilizado por cada funciones en llamadas sucesivas. Las funciones recursivas
+son manejadas de manera especial ya que imposibilitan el armado de relaciones
+de dependencias.
 
 \subsection{perfil de ejecuci\'on}
 
@@ -665,6 +673,17 @@ campos de aplicaci\'on cient\'ifica como la resoluci\'on de ecuaciones
 lineales y la representaci\'on de grafos y espacios dimensionales. Por ello
 existe abundante material sobre el tema.
 
+\begin{verbatim}
+for (i = 0; i < n; i++)
+  for (j = 0; j < n; j++)
+    for (k = 0; k < n; k++)
+      c[i * n + j] += 
+        a[i * n + k] * b[k * n + j];
+\end{verbatim}
+
+Diferentes alternativas de implementaci\'on son discutidas en
+\cite{mm-matrixmultiplicationtool}.
+
 \bigskip
 
 El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en
@@ -680,7 +699,46 @@ contra m\'etodos artesanales de optimizaci\'on.
 
 \section{Distribuci\'on de Calor en Dos Dimensiones}
 
-\section{Reinas}
+\begin{verbatim}
+  for (j = 1; j < matrix_height - 1; j++) {
+    for (i = 1; i < grid_length - 1; i++) {
+      
+      matrix[j * grid_length + i] = 0.25 * (tmp[j * grid_length + i - 1]
+    + tmp[j * grid_length + i + 1]
+    + tmp[(j - 1) * grid_length + i]
+    + tmp[(j + 1) * grid_length + i]);
+
+      diff = matrix[pos(i,j)] - tmp[pos(i,j)];
+
+      if (error < diff) {
+         error = diff;
+      }
+    }
+  }
+\end{verbatim}
+
+La salida del c\'alculo puede graficarse f\'acilmente con {\it gnuplot}.
+
+\section{Problema de las Ocho Reinas}
+
+El dilema trata en el problema de posicionar en un tablero de ajedrez ocho
+reinas sin que una amenace a las dem\'as. Una reina amenaza a cualquier otra
+pieza en el mismo diagonal, fila o columna en el tablero.
+
+\bigskip
+
+Este problema suele resolverse utilizando recursi\'on.
+
+\begin{verbatim}
+int columns = 8;
+int column = 0;
+for (column = 0; column < columns; column++)
+   queen();
+
+void queen() {
+   queen();
+}
+\end{verbatim}
 
 \section{Transformadas de {\it Fourier}}
 
@@ -695,22 +753,84 @@ A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se
 demuestra claramente con este ejercicio la sofisticaci\'on de librer\'ias
 contra m\'etodos artesanales de optimizaci\'on.
 
+\begin{verbatim}
+void R16SRFFT(float input[16],float output[16] ) {
+  float temp, out0, out1, out2, out3, out4, out5, out6, out7, out8;
+  float out9, out10, out11, out12, out13, out14, out15;
+  float tmp[16];
+  int i = 0;
+
+  for ( i = 0; i < 8; i++ )
+    tmp[i] = input[i] + input[i+8]
+  for ( i = 8; i < 12; i++ )
+    tmp[i] = input[i-8] - input[i];
+  for ( i = 12; i < 16; i++ )
+    tmp[i] = input[i] - input[i-8];
+
+  temp = ( out13 - out9 ) * ( SIN_2PI_16 ); 
+
+  tmp[9] = tmp[9] * (C_P_S_2PI_16) + temp; 
+  tmp[13] = tmp[13] * (C_M_S_2PI_16) + temp;
+  
+  out14 *= ( SIN_4PI_16 ); out14 = out14 - out10;
+  out10 *= ( SIN_4PI_16 ); out10 = out14 + out10 + out10;
+  
+  temp=(out15-out11)*(SIN_6PI_16);
+
+  out11=out11*(C_P_S_6PI_16)+temp;
+  out15=out15*(C_M_S_6PI_16)+temp;
+
+  out8+=out10; out10=out8-out10-out10;
+  out9+=out11; out11=out9-out11-out11;
+
+  out12+=out14; out14=out12-out14-out14;
+  out13+=out15; out15=out13-out15-out15;
+
+  output[1]=out8+out9; output[7]=out8-out9;
+
+  output[9]=out12+out13; output[15]=out13-out12;
+  
+  output[5]=out10+out15; output[13]=out14-out11;
+  output[3]=out10-out15; output[11]=-out14-out11;
+  
+  out0=out0+out4; out4=out0-out4-out4;
+  out1=out1+out5; out5=out1-out5-out5;
+  out2+=out6; out6=out2-out6-out6;
+  out3+=out7; out7=out3-out7-out7;
+
+  output[0]=out0+out2; output[4]=out0-out2;
+  out1+=out3; output[12]=out3+out3-out1;
+
+  output[0]+=out1;  /* Real Part of X[0] */
+  output[8]=output[0]-out1-out1; /*Real Part of X[4] */
+
+  out5*=SIN_4PI_16; out7*=SIN_4PI_16;
+  out5=out5-out7; out7=out5+out7+out7;
+
+  output[14]=out6-out7; /* Imag Part of X[5] */
+  output[2]=out5+out4; /* Real Part of X[7] */
+  output[6]=out4-out5; /*Real Part of X[5] */
+  output[10]=-out7-out6; /* Imag Part of X[7] */}
+\end{verbatim}
+
 \chapter{Conclusiones}
 
-Este cap\'itulo concluye.
-
-Aportes: un m\'etodo, el an\'alisis de diferentes herramientas. resumen
-introductorio del tema. ejercicios que demuestran que la optimizaci\'on
-artesanal no es buena.
+Este trabajo aporta el estado del arte del an\'alisis de rendimiento en
+aplicaciones de c\'omputo de altas prestaciones. Discute, clasifica y detalla
+diferentes opciones en herramientas de soporte. Se demuestra su aplicaci\'on
+en varios problemas simples pero suficientemente interesantes. Propone un
+modelo simple de implementaci\'on para dimensionar las optimizaciones posibles.
 
 \chapter{Trabajo Futuro}
+
+\section{Infrastructura de Soporte para An\'alisis}
 
 Este trabajo fue realizado pensando en ser utilizado como un primer paso
 a una implementaci\'on pr\'actica del m\'etodo propuesto, incluyendo soporte
 autom\'atico para al utilizaci\'on de las herramientas y la generaci\'on de
 reportes de an\'alisis de rendimiento.
 
-\bigskip
+\section{Herramientas Adicionales de Soporte}
 
 La implementaci\'on de nuevas tecnolog\'ias para el an\'alisis de rendimiento
 es incesante y continua, los siguientes proyectos est\'an ampliamente
@@ -722,11 +842,12 @@ relacionados con este estudio.
 \item Proyecto C: descripci\'on del proyecto C.
 \end{itemize}
 
-\bigskip
+\section{Aplicaci\'on en el Mundo Real}
 
-La utilizacion de estas ideas en una aplicacion del mundo real es materia
+La utilizaci\'on de estas ideas en una aplicaci\'on del mundo real es materia
 pendiente, otra posibilidad es reimplementar desde cero alguna aplicaci\'on
-cient\'ifica en colaboracion con algun grupo de investigaci\'on.
+cient\'ifica en colaboraci\'on con alg\'un grupo de investigaci\'on y realizar
+varios ciclos de optimizaci\'on.
 
 \begin{thebibliography}{9}
 
