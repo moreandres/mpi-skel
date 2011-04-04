@@ -221,20 +221,17 @@ paquete de software utiliza la librer\'ia MPI para comunicaci\'on entre los
 
 \bigskip
 
-TOP500.
-
-\bigskip
-
-Existe cierta controversia de que no es una buena forma de ejercitar un sistema
-de computo distribuido ya que no implica uso importante de la red, solo
-computo intensivo utilizando unidades aritmeticas y la jerarquia local de memoria.
+Aunque este benchmark es utilizado mundialmente para la comparaci\'on de la
+velocidad de las supercomputadoras. TOP500. Existe cierta controversia de que
+no es una buena forma de ejercitar un sistema de c\'omputo distribu\'ido ya
+que no implica uso mayoritario de la red, s\'olo procesamiento intensivo de
+aritm\'etica de punto flotante utilizando sobre la jerarqu\'ia local de
+memoria.
 
 \begin{verbatim}
-============================================================
-HPLinpack 2.0  --  High-Performance Linpack benchmark  --   September 10, 2008
-Written by A. Petitet and R. Clint Whaley, Innovative Computing Laboratory, UTK
-Modified by Piotr Luszczek, Innovative Computing Laboratory, UTK
-Modified by Julien Langou, University of Colorado Denver
+=================================================================
+HPLinpack 2.0 - High-Performance Linpack benchmark - Sep 10, 2008
+Written by A. Petitet and R. Clint Whaley
 ============================================================
 An explanation of the input/output parameters follows:
 T/V    : Wall time / encoded variant.
@@ -288,13 +285,12 @@ Finished      1 tests with the following results:
 \subsection{Intel MPI Benchmarks}
 
 Es un conjunto de benchmarks cuyo objetivo es ejercitar y medir las funciones
-m\'as importantes de MPI.
-
-El benchmark m\'as conocido es el popular Ping Pong. Ejercita la transmisi\'on
-de mensajes ida y vuelta entre dos nodos de c\'omputo con diferentes tama\~nos
-de mensajes. Para obtener el m\'aximo ancho de banda posible, se ejercita la
-comunicaci\'on con mensajes con datos grandes. Para obtener la m\'inima
-latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, sin datos.
+m\'as importantes de MPI. El benchmark m\'as conocido es el popular Ping Pong.
+Ejercita la transmisi\'on de mensajes ida y vuelta entre dos nodos de
+c\'omputo con diferentes tama\~nos de mensajes. Para obtener el m\'aximo ancho
+de banda posible, se ejercita la comunicaci\'on con mensajes con datos grandes.
+Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes
+vac\'ios, sin datos.
 
 \begin{verbatim}
 # Intel (R) MPI Benchmark Suite V3.1, MPI-1 part
@@ -580,9 +576,9 @@ Este cap\'itulo revisa.
 \section{Taxonom\'ia}
 
 Existen diferentes alternativas sobre el modo de extraer informaci\'on de
-caracteristicas relacionadas con el rendimiento de una aplicaci\'on.
+caracter\'isticas relacionadas con el rendimiento de una aplicaci\'on.
 Estos metodos pueden clasificarse como din\'amico o est\'atico.
-Tambien pueden clasificarse como aplicables en tiempo de compilaci\'on o
+Tambi\'en pueden clasificarse como aplicables en tiempo de compilaci\'on o
 tiempo de ejecuci\'on.
 
 \section{gprof}
@@ -610,28 +606,32 @@ utilizado por cada funciones en llamadas sucesivas. Las funciones recursivas
 son manejadas de manera especial ya que imposibilitan el armado de relaciones
 de dependencias.
 
-\subsection{perfil de ejecuci\'on}
+\subsection{Perfil de Ejecuci\'on}
 
-time, cumulative seconds, self seconds, calls, self ms/call, total ms/call,
-name
+El perfil de ejecuci\'on muestra el tiempo y el tiempo acumulado en segundos
+de cada l\'inea de c\'odigo de la aplicaci\'on.
 
-\subsection{gr\'afico de llamadas}
+{\tt time, cumulative seconds, self seconds, calls, self ms/call,
+  total ms/call, name}
+
+\subsection{Gr\'afico de llamadas}
+
 
 index, \% time, self, children, called, name
 
-\subsection{comportamiento}
+\subsection{Comportamiento}
 
 precisi\'on estad\'istica. muestreo. incompatibilidades.
 
-\subsection{ejemplos}
+\subsection{Ejemplos}
 
 \section{oprofile}
 
-\subsection{introduccion}
+\subsection{Introducci\'on}
 
 historia. resumen. caracter\'isticas. 
 
-\subsection{procedimiento}
+\subsection{Procedimiento}
 
 ejecutar el profiler. ejecutar la aplicaci\'on. generar el resumen.
 
@@ -644,7 +644,7 @@ contadores de performance.
 
 costo adicional. overhead.
 
-\subsection{Contadores de rendimiento}
+\subsection{Contadores de Rendimiento}
 
 Los registros de hardware implementando contadores m\'as utilizados son los
 siguientes:
@@ -733,7 +733,7 @@ La salida del c\'alculo puede graficarse f\'acilmente con {\it gnuplot}.
 
 El dilema trata en el problema de posicionar en un tablero de ajedrez ocho
 reinas sin que una amenace a las dem\'as. Una reina amenaza a cualquier otra
-pieza en el mismo diagonal, fila o columna en el tablero.
+pieza en el tablero que este en la mismo diagonal, fila o columna.
 
 \bigskip
 
@@ -761,8 +761,8 @@ ondas como en la \'optica y electromagnetismo.
 
 El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en
 el ap\'endice. Al aplicar las herramientas vistas previamente se identifica
-claramente que la evaluacion de derivadas parciales consume el mayor tiempo de
-c\'omputo.
+claramente que la evaluaci\'on de derivadas parciales consume el mayor tiempo
+de c\'omputo.
 
 \bigskip
 
