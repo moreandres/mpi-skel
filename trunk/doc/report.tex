@@ -522,6 +522,8 @@ El procedimiento usualmente consiste en ciclos de medir, localizar, optimizar,
 comparar. Es muy importante mantener la disciplina en realizar un cambio a la
 vez ya que esto asegura resultados reproducibles.
 
+\bigskip
+
 Los resultados deben tambi\'en ser correctamente guardados para evitar
 problemas de datos. Si la configuraci\'on del sistema es din\'amica, conviene
 realizar todas las pruebas de comparaci\'on durante una misma ejecuci\'on para
@@ -540,11 +542,18 @@ Los problemas a identificar inicialmente pueden ser: cuellos de botella,
 overhead, problemas de balanceo, contenci\'on o mal uso de recursos
 computacionales.
 
+\bigskip
+
+Es muy importante tomar decisiones basadas en datos concretos, ya que en
+caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
+un r\'edito adecuado.
+
 \section{Modelos}
 
 paralelizacion. niveles. bit/instruccion/datos/tareas.
-
 calculo de mejora. teorica versus real. 
+
+\bigskip
 
 Existen algunas leyes frecuentemente utilizadas durante el an\'alisis de
 rendimiento. La ley de {\it Amdahl} \cite{amdahl} dimensiona la mejora que
@@ -569,9 +578,18 @@ pipeline. formulas. rangos de optimizacion posibles.
 
 simulacion.
 
+\bigskip
+
+Entre los patrones de dise\~no m\'as discutidos se encuentran: master/worker,
+pipeline, work-stealing. En el dise\~no master/worker, un proceso dirige el
+trabajo de los demas. En pipeline el trabajo se divide en etapas
+independendientes. En work-stealing los trabajadores obtienen el trabajo desde
+un conjunto en com\'un.
+
 \chapter{Herramientas}
 
-Este cap\'itulo revisa.
+Este cap\'itulo revisa las herramientas disponibles para soporte de an\'alisis
+de rendimiento de aplicaciones.
 
 \section{Taxonom\'ia}
 
@@ -615,7 +633,6 @@ de cada l\'inea de c\'odigo de la aplicaci\'on.
   total ms/call, name}
 
 \subsection{Gr\'afico de llamadas}
-
 
 index, \% time, self, children, called, name
 
