@@ -547,7 +547,8 @@ m\'etrica de Karp-Flatt \cite{karp-flatt}.
 
 pipeline. formulas. rangos de optimizacion posibles.
 
-simulacion.
+simulacion. soporte para decidir si cambiar hardware o arquitectura del
+sistema.
 
 \bigskip
 
@@ -660,17 +661,24 @@ Modificaciones controladas.
 
 Medir. Analizar. Optimizar. Comparar.
 
-\bigskip
+\section{Actividades}
+
+\subsection{Medici\'on}
 
 Como medir? Benchmark repetible. Baja Desviacion. No muy rapido pero por unos
 minutos. Si hay mucha deviacion se debe repetir la medicion muchas veces y
 tomar el promedio.
 
-Como analizar? Pareto. State-of-the-art. Librerias para el mismo problema.
+\subsection{An\'alisis}
 
+Como analizar? Pareto. State-of-the-art. Librerias para el mismo problema.
 Como dibujar un pareto? Como se entiende un pareto?
 
+\subsection{Optimizaci\'on}
+
 Como optimizar? Librerias. Dependencias. Paralelizar.
+
+\subsection{Comparaci\'on}
 
 Como comparar? Antes/Despues. Repeticiones. Para utilizar informacion
 historica es preciso garantizar que el sistema siendo ejercitado es el mismo. Por ello es preferible ser cautos y ejecutar las dos versiones conjuntamente
@@ -680,6 +688,10 @@ al momento de realizar las pruebas.
 
 Modelo por etapas. Facil de identificar donde realizar optimizaciones y la
 ganancia esperada. El calculo de las leyes de amdalah y demas es directo.
+
+\bigskip
+
+formulas de tiempo de ejecucion. amdalah.
 
 \chapter{Casos de Estudio}
 
