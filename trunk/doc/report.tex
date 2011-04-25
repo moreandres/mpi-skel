@@ -144,11 +144,9 @@ an\'alisis de rendimiento.
 
 El rendimiento se caracteriza por la cantidad de trabajo de c\'omputo que se
 logra en comparaci\'on con la cantidad de tiempo y el uso de los recursos.
-
-\bigskip
-
-{\bf TBD} La definicion segun blablaes bnlabla.
-Mientras que blabl bla es blabla.
+El rendimiento es evaluado entonces de forma medible, utilizando alguna
+m\'etrica en particular de modo de poder comparar relativamente dos sistemas o
+un mismo sistema bajo una configuraci\'on distinta.
 
 \section{M\'etricas}
 
@@ -162,6 +160,14 @@ Algunos ejemplos de medida de rendimiento son:
 \item rendimiento por unidad de energ\'ia o por costo asociado
 \end{enumerate}
 
+Un m\'etodo de medicion de rendimiento indirecto consiste en medir el uso de
+los recursos del sistema mientras se ejercita el mismo con un trabajo dado.
+Por ejemplo: el nivel de carga, la cantidad de operaciones realizadas por el
+sistema operativo o la unidad de procesamiento, la utilizaci\'on de memoria o
+archivos temporales e incluso el ancho de red utilizado.
+
+\section{Benchmarks}
+
 Para medir el rendimiento se utilizan pruebas de referencias denominadas
 {\em benchmarks}, estas pueden ser aplicaciones sint\'eticas constru\'idas
 especialmente para ejercitar ciertos recursos computacionales o incluso
@@ -169,13 +175,6 @@ aplicaciones del mundo real ejecutadas sobre un mismo conjunto de datos para
 facilitar la comparaci\'on de resultados.
 
 \bigskip
-
-Otro m\'etodo consiste en medir el uso de los recursos del sistema mientras se
-ejercita el mismo con un trabajo dado. Por ejemplo: el nivel de carga, la
-cantidad de operaciones realizadas por el sistema operativo o la unidad de
-procesamiento.
-
-\section{Benchmarks}
 
 Las caracter\'isticas deseables son portabilidad, simplicidad, estabilidad y
 reproducci\'on de resultados. Esto permite que sean utilizadas para realizar
@@ -187,8 +186,20 @@ tecnolog\'ias.
 
 \bigskip
 
-A continuaci\'on se introducen algunas de las m\'as utilizadas, junto con
-detalles y ejemplos de sus reportes.
+A continuaci\'on se introducen algunas de las m\'as utilizadas para c\'omputo
+de altas prestaciones, y posteriormente sus detalles espec\'ificos y ejemplos
+de sus reportes de salida.
+
+\begin{figure}[H]
+  \begin{center}
+    \begin{tabular}{|l|l|l|}\hline
+      {\bf Benchmark} & {\bf Componente} & {\bf Descripci\'on} \\ \hline
+      STREAM & memoria & ancho de banda sostenido \\ \hline
+    \end{tabular}
+    \caption{Benchmarks}
+  \end{center}
+  \label{benchmark-list}
+\end{figure}
 
 \subsection{STREAM}
 
@@ -241,16 +252,33 @@ problemas de algebra lineal como ecuaciones lineales y multiplicaci\'on de
 matrices. HPL \cite{hpl} es una versi\'on portable del benchmark que incluye
 el paquete Linpack pero utilizando sistemas de memoria distribu\'ida. El
 paquete de software utiliza la librer\'ia MPI para comunicaci\'on entre los
- nodos de c\'omputo con memoria distribu\'ida.
+nodos de c\'omputo con memoria distribu\'ida.
 
 \bigskip
 
-Aunque este benchmark es utilizado mundialmente para la comparaci\'on de la
-velocidad de las supercomputadoras. TOP500. Existe cierta controversia de que
-no es una buena forma de ejercitar un sistema de c\'omputo distribu\'ido ya
-que no implica uso mayoritario de la red, s\'olo procesamiento intensivo de
-aritm\'etica de punto flotante utilizando sobre la jerarqu\'ia local de
-memoria.
+Este benchmark es utilizado mundialmente para la comparaci\'on de la
+velocidad de las supercomputadoras en el ranking TOP500. 
+Existe cierta controversia de que no es una buena forma de ejercitar un
+sistema de c\'omputo distribu\'ido ya que no implica uso significativo de la
+red, s\'olo procesamiento intensivo de aritm\'etica de punto flotante
+utilizando sobre la jerarqu\'ia local de memoria.
+
+\bigskip
+
+Un gr\'afico del TOP500 de los \'ultimos a\~nos demuestra claramente la
+tendendia en crecimiento de rendimiento y la relacion entre el primero y los
+mejores 10.
+
+{\em TBD: insert historic TOP500}
+
+\bigskip
+
+Este benchmark requiere cierto conocimiento para una correcta configuracion,
+de modo de utilizar los recursos del sistema mejor. Por ejemplo el tama\~no de
+bloque que se va a utilizar para la distribucion de trabajo depende del cache
+del procesador y puede afectar notablemente la performance del sistema.
+
+{\em TBD: insert HPL chart with different NBs}
 
 \begin{verbatim}
 =================================================================
@@ -347,6 +375,10 @@ vac\'ios, sin datos.
 4194304           10     35766.45       111.84
 \end{verbatim}
 
+Este benchmark es uno de los mas utilizados por su simpleza, muy utilizado
+para comprobar que los dispositivos de red esten configurados en modo de baja
+latencia. Debe ejecutarse en todos los links de un cluster o sistema.
+
 \subsubsection{HPCC}
 
 El benchmark HPC Challenge \cite{hpcc} (HPCC) es internamente un conjunto de
@@ -357,7 +389,7 @@ y otros.
 \bigskip
 
 En un principio se utilizaba solamente Linpack para calcular la potencia
-de calculo de una supercomputadora, pero luego se determino que la mejor
+de calculo de una supercomputadora, pero luego se determin\'o que la mejor
 m\'aquina depende de la aplicaci\'on a ejecutar, algunas aplicaciones
 necesitan mejor ancho de banda de memoria, mejor canales de comunicaci\'on, o
 la mayor capacidad de c\'omputo posible.
@@ -371,6 +403,8 @@ y puestos en consideraci\'on de acuerdo al tipo de aplicaci\'on en discusi\'on.
 
 Para una mejor comparacion de resultados, se utilizan diagramas denominados
 {\it kiviats}.
+
+
 
 \begin{verbatim}
 This is the DARPA/DOE HPC Challenge Benchmark version 1.2.0 October 2003
