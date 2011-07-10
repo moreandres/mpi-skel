@@ -101,33 +101,35 @@ de las mismas.
 
 \section{Estado Actual}
 
-Actualmente existe incontables herramientas para el an\'alisis de c\'odigo, la
-mayor\'ia siendo propietarias o aplicando a un sistema, lenguaje a librer\'ia
-en particular, o abstrayendo la ejecucion a diferentes niveles de
-abstracci\'on.
+Actualmente existen diversas herramientas para el an\'alisis de rendimiento.
+Estas funcionan a diferentes niveles de abstracci\'on, desde contadores de eventos
+a nivel de hardware, pasando por soporte del n\'ucleo del sistema operativo hasta
+monitores del uso de los recursos disponibles en el sistema durante la ejecuci\'on.
 
 \bigskip
 
-Algunas herramientas funcionan a nivel de contadores de hardware (PTU, PAPI),
-otras sobre n\'ucleo del sistema operativo (oprof, kprobes), otras
-instrumentan el soporte en tiempo de ejecuci\'on sobre el cual corren los
-programas, otras modifican el c\'odigo fuente para extraer datos y otras
-simplemente miden la utilizaci\'on de los recursos disponibles en el sistema.
+open 
+
+source 
+
+examples?
+
+\bigskip
+
+Intel
+
+AMD
+
+Others offerings?
 
 \section{Organizaci\'on del Contenido}
 
-El resto del documento explica teor\'ia de an\'alisis de rendimiento y temas
-relacionados. El cap\'itulo 2 discute el an\'alisis de rendimiento, sus
+El resto del documento explica teor\'ia aplicada de an\'alisis de rendimiento
+y temas relacionados. El cap\'itulo 2 discute el an\'alisis de rendimiento, sus
 principios y teor\'ias. El cap\'itulo 3 detalla las herramientas m\'as
-utilizadas. El cap\'itulo 4 ejemplifica la aplicaci\'on de una herramienta
-para obtener informaci\'on de an\'alisis. El cap\'itulo 5 concluye y el
-cap\'itulo 6 detalla posibles trabajos futuros.
-
-\bigskip
-
-Aunque una lectura de principio a fin es recomendada, se recomienda al
-impaciente ir directo a los casos de aplicacion y luego revisar los detalles
-si lo considera necesario.
+utilizadas. El cap\'itulo 4 ejemplifica la aplicaci\'on de las herramientas
+para obtener informaci\'on de an\'alisis a trav\'es de un proceso sistem\'atico.
+El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros.
 
 \chapter{An\'alisis de Rendimiento}
 
@@ -138,7 +140,7 @@ an\'alisis de rendimiento.
 
 El rendimiento se caracteriza por la cantidad de trabajo de c\'omputo que se
 logra en comparaci\'on con la cantidad de tiempo y el uso de los recursos.
-El rendimiento es evaluado entonces de forma medible, utilizando alguna
+El rendimiento es evaluado entonces de forma cuantificable, utilizando alguna
 m\'etrica en particular de modo de poder comparar relativamente dos sistemas o
 un mismo sistema bajo una configuraci\'on distinta.
 
