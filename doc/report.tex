@@ -39,11 +39,19 @@
 
   \bigskip
 
-  Este trabajo contribuye con un resumen de las teor\'ia del analisis del
+  Este trabajo resume la experiencia que debe atravesar cualquier
+  individuo en busca de las diferentes alternativas para el an\'alisis de
+  rendimiento. Incluyendo la selecci\'on y prueba de herramientas de soporte y la
+  definici\'on de un procedimiento rudimentario para la aplicaci\'on sistem\'atica
+  de las mismas.
+
+  \bigskip
+
+  Este trabajo contribuye entonces con un resumen de las teor\'ia del an\'alisis del
   rendimiento m\'as una descripci\'on de los herramientas de soporte 
-  disponibles al momento. Se propone tambi\'en un proceso para analizar el
-  rendimiento, ejemplicando su aplicaci\'on a un conjunto de n\'ucleos de
-  c\'omputo como ejemplo de aplicaci\'on.
+  disponibles actualmente. Se propone tambi\'en un proceso para analizar el
+  rendimiento, ejemplificando su aplicaci\'on a un conjunto de n\'ucleos de
+  c\'omputo representativos.
 
 \end{abstract}
 
@@ -57,11 +65,11 @@ del rendimiento y se detalla el contenido restante del informe.
 
 \section{Motivaci\'on}
 
-En el \'area de c\'omputo de altas prestaciones los desarrolladores son en su
-mayor\'ia los especialistas del dominio del problema a investigar. Las rutinas
+En el \'area de c\'omputo de altas prestaciones los desarrolladores son los mismos
+especialistas del dominio del problema a resolver. Las rutinas
 m\'as demandantes de c\'alculo son en su mayor\'ia cient\'ificas y su
-complejidad hace posible su correcta implementaci\'on solo por especialistas
-en el dominio. Este hecho resulta en menos tiempo para an\'alisis de resultados
+complejidad hace posible su correcta implementaci\'on solo por los mismos investigadores.
+Este hecho resulta en un reducido tiempo para an\'alisis de resultados
 e impacta directamente en la productividad de cualquier grupo de investigaci\'on.
 
 \bigskip
@@ -69,63 +77,44 @@ e impacta directamente en la productividad de cualquier grupo de investigaci\'on
 Con mayor impacto que en otras \'areas de la computaci\'on, el c\'odigo
 optimizado puede ejecutarse \'ordenes de magnitud mejor que una implementaci\'on
 directa \cite{mm-matrixmultiplicationtool}. Adem\'as, se utiliza
-programaci\'on en paralelo para obtener la mayor cantidad disponible de
-capacidad de c\'omputo; aumentando la complejidad de implementaci\'on y
-optimizaci\'on a\'un m\'as \cite{parallel-programming}.
+programaci\'on en paralelo para obtener una mejor utilizaci\'on de la
+capacidad de c\'omputo disponible; aumentando la complejidad de implementaci\'on, depuraci\'on y
+optimizaci\'on \cite{parallel-programming}.
 
 \bigskip
 
 El proceso de optimizaci\'on de una implementaci\'on termina entonces siendo
-hecho de modo artesanal, sin conocimiento de las herramientas disponibles y
+hecho de modo {\it ad-hoc}, sin conocimiento pleno de las herramientas disponibles y
 sus capacidades, y sin la utilizaci\'on de informaci\'on cuantitativa para dirigir los
-esfuerzos de optimizaci\'on. Incluso es frecuente la implementacion {\em ad-hoc}
+esfuerzos de optimizaci\'on. Incluso es frecuente la implementaci\'on directa
 de algoritmos en lugar de la utilizaci\'on de librer\'ias ya disponibles, optimizadas
 profundamente y con correctitud comprobada por el paso del tiempo.
 
 \section{Alcance}
 
-Este trabajo considera principalmente los ambientes mayormente utilizados en
+Este trabajo considera en particular los ambientes m\'as utilizados en
 el c\'omputo de aplicaciones de alto rendimiento. A trav\'es de las
-estad\'isticas mostradas por el Top500 \footnote{Ranking de supercomputadoras
+estad\'isticas mostradas por el Top500 \footnote{El Top500 es una lista actualizada de supercomputadoras
 de acuerdo al benchmark Linpack, disponible en {\tt http://www.top500.org}.}, se
-puede determinar que los sistemas de memoria distribu\'ida corriendo sobre
-GNU/Linux, denominados sistemas Beowulf \cite{beowulf}, son los m\'as utilizados.
-
-\bigskip
-
-Este trabajo resume tambi\'en la experiencia que debe realizar cualquier
-individuo en busca de las diferentes alternativas para el an\'alisis de
-rendimiento. Incluyendo la selecci\'on y prueba de herramientas de soporte y la
-definici\'on de un procedimiento rudimentario para la aplicaci\'on sistem\'atica
-de las mismas.
+puede determinar que estos sistemas son los de memoria distribu\'ida corriendo sobre
+GNU/Linux, denominados sistemas Beowulf \cite{beowulf}.
 
 \section{Estado Actual}
 
 Actualmente existen diversas herramientas para el an\'alisis de rendimiento.
-Estas funcionan a diferentes niveles de abstracci\'on, desde contadores de eventos
-a nivel de hardware, pasando por soporte del n\'ucleo del sistema operativo hasta
-monitores del uso de los recursos disponibles en el sistema durante la ejecuci\'on.
-
-\bigskip
-
-open 
-
-source 
-
-examples?
-
-\bigskip
-
-Intel
-
-AMD
-
-Others offerings?
+Estas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
+a nivel de hardware, pasando por soporte del n\'ucleo del sistema operativo para ofrecer
+monitores del uso de los recursos disponibles en el sistema durante la ejecuci\'on, hasta la
+utilizaci\'on directa de tiempo de ejecuci\'on de una aplicaci\'on de referencia.
 
 \section{Organizaci\'on del Contenido}
 
-El resto del documento explica teor\'ia aplicada de an\'alisis de rendimiento
-y temas relacionados. El cap\'itulo 2 discute el an\'alisis de rendimiento, sus
+El resto del documento explica inicialmente teor\'ia sobre el an\'alisis del rendimiento que luego es
+ejemplificada a trav\'es de diversas herramientas utilizando procedimientos sistem\'aticos.
+
+\bigskip
+
+El cap\'itulo 2 discute el an\'alisis de rendimiento, sus
 principios y teor\'ias. El cap\'itulo 3 detalla las herramientas m\'as
 utilizadas. El cap\'itulo 4 ejemplifica la aplicaci\'on de las herramientas
 para obtener informaci\'on de an\'alisis a trav\'es de un proceso sistem\'atico.
