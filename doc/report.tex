@@ -34,14 +34,14 @@
   an\'alisis cuantitativo de rendimiento, se resume la experiencia de utilizar
   herramientas para conocer donde se deber\'ia localizar los esfuerzos de
   optimizaci\'on. Antes de concluir se propone un modelo para este tipo de
-  aplicaciones utilizando una abstracci\'on simplificada de etapas, cuya
-  utilizaci\'on simplifica el an\'alisis de rendimiento y su optimizaci\'on.
+  aplicaciones utilizando una abstracci\'on en etapas, cuya
+  utilizaci\'on simplifica el an\'alisis de rendimiento y facilita el proceso de optimizaci\'on.
 
   \bigskip
 
   Este trabajo resume la experiencia que debe atravesar cualquier
   individuo en busca de las diferentes alternativas para el an\'alisis de
-  rendimiento. Incluyendo la selecci\'on y prueba de herramientas de soporte y la
+  rendimiento. Incluyendo la selecci\'on de herramientas de soporte y la
   definici\'on de un procedimiento rudimentario para la aplicaci\'on sistem\'atica
   de las mismas.
 
@@ -68,7 +68,7 @@ del rendimiento y se detalla el contenido restante del informe.
 En el \'area de c\'omputo de altas prestaciones los desarrolladores son los mismos
 especialistas del dominio del problema a resolver. Las rutinas
 m\'as demandantes de c\'alculo son en su mayor\'ia cient\'ificas y su
-complejidad hace posible su correcta implementaci\'on solo por los mismos investigadores.
+complejidad hace posible su correcta implementaci\'on s\'{o}lo por los mismos investigadores.
 Este hecho resulta en un reducido tiempo para an\'alisis de resultados
 e impacta directamente en la productividad de cualquier grupo de investigaci\'on.
 
@@ -76,7 +76,7 @@ e impacta directamente en la productividad de cualquier grupo de investigaci\'on
 
 Con mayor impacto que en otras \'areas de la computaci\'on, el c\'odigo
 optimizado puede ejecutarse \'ordenes de magnitud mejor que una implementaci\'on
-directa \cite{mm-matrixmultiplicationtool}. Adem\'as, se utiliza
+directa \cite{mm-matrixmultiplicationtool}. Adem\'as, se necesita utilizar
 programaci\'on en paralelo para obtener una mejor utilizaci\'on de la
 capacidad de c\'omputo disponible; aumentando la complejidad de implementaci\'on, depuraci\'on y
 optimizaci\'on \cite{parallel-programming}.
@@ -86,7 +86,7 @@ optimizaci\'on \cite{parallel-programming}.
 El proceso de optimizaci\'on de una implementaci\'on termina entonces siendo
 hecho de modo {\it ad-hoc}, sin conocimiento pleno de las herramientas disponibles y
 sus capacidades, y sin la utilizaci\'on de informaci\'on cuantitativa para dirigir los
-esfuerzos de optimizaci\'on. Incluso es frecuente la implementaci\'on directa
+esfuerzos de optimizaci\'on. Es frecuente la implementaci\'on directa
 de algoritmos en lugar de la utilizaci\'on de librer\'ias ya disponibles, optimizadas
 profundamente y con correctitud comprobada por el paso del tiempo.
 
@@ -104,21 +104,21 @@ GNU/Linux, denominados sistemas Beowulf \cite{beowulf}.
 Actualmente existen diversas herramientas para el an\'alisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
 a nivel de hardware, pasando por soporte del n\'ucleo del sistema operativo para ofrecer
-monitores del uso de los recursos disponibles en el sistema durante la ejecuci\'on, hasta la
-utilizaci\'on directa de tiempo de ejecuci\'on de una aplicaci\'on de referencia.
+monitores del uso de los recursos disponibles, hasta la
+utilizaci\'on directa del tiempo de ejecuci\'on de una aplicaci\'on de referencia.
 
 \section{Organizaci\'on del Contenido}
 
 El resto del documento explica inicialmente teor\'ia sobre el an\'alisis del rendimiento que luego es
-ejemplificada a trav\'es de diversas herramientas utilizando procedimientos sistem\'aticos.
+ejemplificada a trav\'es de diversas herramientas.
 
 \bigskip
 
 El cap\'itulo 2 discute el an\'alisis de rendimiento, sus
-principios y teor\'ias. El cap\'itulo 3 detalla las herramientas m\'as
+principios y teor\'ia. El cap\'itulo 3 detalla las herramientas m\'as
 utilizadas. El cap\'itulo 4 ejemplifica la aplicaci\'on de las herramientas
 para obtener informaci\'on de an\'alisis a trav\'es de un proceso sistem\'atico.
-El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros.
+El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros o extensiones.
 
 \chapter{An\'alisis de Rendimiento}
 
@@ -149,37 +149,38 @@ Un m\'etodo de medicion de rendimiento indirecto consiste en medir el uso de
 los recursos del sistema mientras se ejercita el mismo con un trabajo dado.
 Por ejemplo: el nivel de carga, la cantidad de operaciones realizadas por el
 sistema operativo o la unidad de procesamiento, la utilizaci\'on de memoria o
-archivos temporales e incluso el ancho de red utilizado.
+archivos temporales e incluso el ancho de banda de red utilizado.
 
 \section{Benchmarks}
 
 Para medir el rendimiento se utilizan pruebas de referencias denominadas
-{\em benchmarks}, estas pueden ser aplicaciones sint\'eticas constru\'idas
-especialmente para ejercitar ciertos recursos computacionales o incluso
-aplicaciones del mundo real ejecutadas sobre un mismo conjunto de datos para
+{\em benchmarks}; \'estas pueden ser aplicaciones sint\'eticas constru\'idas
+especialmente para ejercitar ciertos recursos computacionales, o pueden ser incluso
+aplicaciones del mundo real ejecutadas sobre un conjunto de datos prefijado para
 facilitar la comparaci\'on de resultados.
 
 \bigskip
 
-Las caracter\'isticas deseables son portabilidad, simplicidad, estabilidad y
+Las caracter\'isticas deseables en un {\it benchmark} son portabilidad, simplicidad, estabilidad y
 reproducci\'on de resultados. Esto permite que sean utilizadas para realizar
 mediciones cuantitativas y as\'i realizar comparaciones de optimizaciones o
 entre sistemas de c\'omputo diferentes. Tambi\'en se pide que el tiempo de
 ejecuci\'on sea razonable y que el tama\~no del problema sea ajustable para
-poder seguir utilizandose con el paso del tiempo y el avance de las
+poder seguir siendo utilizable con el paso del tiempo y el avance de las
 tecnolog\'ias.
 
 \bigskip
 
 A continuaci\'on se introducen algunas de las m\'as utilizadas para c\'omputo
-de altas prestaciones, y posteriormente sus detalles espec\'ificos y ejemplos
-de sus reportes de salida.
+de altas prestaciones, y posteriormente algunos detalles espec\'ificos y ejemplos de sus datos de salida.
 
 \begin{figure}[H]
   \begin{center}
     \begin{tabular}{|l|l|l|}\hline
       {\bf Benchmark} & {\bf Componente} & {\bf Descripci\'on} \\ \hline
       STREAM & memoria & ancho de banda sostenido \\ \hline
+      Linpack & procesador & operaciones de punto flotante \\ \hline
+      IMB & red & latencia y ancho de banda de comunicaci\'on \\ \hline
     \end{tabular}
     \caption{Benchmarks}
   \end{center}
@@ -188,11 +189,28 @@ de sus reportes de salida.
 
 \subsection{STREAM}
 
-STREAM \cite{stream} es un benchmark sint\'etico a trav\'es de un simple
+STREAM \cite{stream} es un {\it benchmark} sint\'etico a trav\'es de un simple
 programa que mide el ancho de banda de memoria sostenido en MB/s y el
 rendimiento de computaci\'on relativa de algunos vectores simples de c\'alculo.
 Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura
 a la memoria principal del sistema bajo an\'alisis.
+
+Dentro de una misma ejecuci\'on de este benchmark, se realizan diferentes
+operaciones en memoria.
+
+\begin{figure}[H]
+  \begin{center}
+    \begin{tabular}{|l|l|l|}\hline
+      {\bf Funci\'on} & {\bf Operaci\'on} & {\bf Descripci\'on} \\ \hline
+      copy & $ \forall i $ $ b_{i} = a_{i} $ & copia simple \\ \hline
+      scale & $ \forall i $ $ b_{i} = c \times a_{i} $ & multiplicaci\'on escalar \\ \hline
+      add & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & suma directa \\ \hline
+      triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & suma y multiplicaci\'on escalar \\ \hline
+    \end{tabular}
+    \caption{Operaciones del Benchmark STREAM}
+  \end{center}
+  \label{stream}
+\end{figure}
 
 \begin{verbatim}
   STREAM version $Revision: 1.2 $
@@ -213,23 +231,6 @@ a la memoria principal del sistema bajo an\'alisis.
   Solution Validates
 \end{verbatim}
 
-Dentro de una misma ejecuci\'on de este benchmark, se realizan diferentes
-operaciones en memoria.
-
-\begin{figure}[H]
-  \begin{center}
-    \begin{tabular}{|l|l|l|}\hline
-      {\bf Funci\'on} & {\bf Operaci\'on} & {\bf Descripci\'on} \\ \hline
-      copy & $ \forall i $ $ b_{i} = a_{i} $ & copia simple \\ \hline
-      scale & $ \forall i $ $ b_{i} = c \times a_{i} $ & multiplicaci\'on escalar \\ \hline
-      add & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & suma directa \\ \hline
-      triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & suma y multiplicaci\'on escalar \\ \hline
-    \end{tabular}
-    \caption{Operaciones del Benchmark STREAM}
-  \end{center}
-  \label{stream}
-\end{figure}
-
 \subsection{Linpack}
 
 Linpack \cite{linpack} es un conjunto de subrutinas {\it FORTRAN} que resuelven
@@ -246,7 +247,7 @@ velocidad de las supercomputadoras en el ranking TOP500.
 Existe cierta controversia de que no es una buena forma de ejercitar un
 sistema de c\'omputo distribu\'ido ya que no implica uso significativo de la
 red, s\'olo procesamiento intensivo de aritm\'etica de punto flotante
-utilizando sobre la jerarqu\'ia local de memoria.
+sobre la jerarqu\'ia local de memoria.
 
 \bigskip
 
@@ -254,16 +255,18 @@ Un gr\'afico del TOP500 de los \'ultimos a\~nos demuestra claramente la
 tendendia en crecimiento de rendimiento y la relacion entre el primero y los
 mejores 10.
 
-{\em TBD: insert historic TOP500}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{top500.png}
+\caption{Indicadores Hist\'oricos del Top500}
+\end{center}
+\end{figure}
 
 \bigskip
 
-Este benchmark requiere cierto conocimiento para una correcta configuracion,
-de modo de utilizar los recursos del sistema mejor. Por ejemplo el tama\~no de
-bloque que se va a utilizar para la distribucion de trabajo depende del cache
-del procesador y puede afectar notablemente la performance del sistema.
-
-{\em TBD: insert HPL chart with different NBs}
+Este {\it benchmark} requiere conocimiento avanzado para una correcta configuraci\'on,
+por ejemplo el tama\~no de bloque que se va a utilizar para la distribuci\'on de trabajo debe estar relacionado con el tama\~no del {\it cache}
+del procesador, afectar notablemente el rendimiento del sistema.
 
 \begin{verbatim}
 =================================================================
@@ -318,13 +321,15 @@ Finished      1 tests with the following results:
 
 \subsection{Intel MPI Benchmarks}
 
-Es un conjunto de benchmarks cuyo objetivo es ejercitar y medir las funciones
-m\'as importantes de MPI. El benchmark m\'as conocido es el popular Ping Pong.
-Ejercita la transmisi\'on de mensajes ida y vuelta entre dos nodos de
-c\'omputo con diferentes tama\~nos de mensajes. Para obtener el m\'aximo ancho
-de banda posible, se ejercita la comunicaci\'on con mensajes con datos grandes.
-Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes
-vac\'ios, sin datos.
+Es un conjunto de {\it benchmarks} cuyo objetivo es ejercitar las funciones
+m\'as importantes de MPI. El m\'as conocido es el popular Ping Pong,
+el cual ejercita la transmisi\'on de mensajes ida y vuelta entre dos nodos de
+c\'omputo con diferentes tama\~nos de mensajes. 
+
+\bigskip
+
+Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on con mensajes con datos grandes.
+Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, sin datos.
 
 \begin{verbatim}
 # Intel (R) MPI Benchmark Suite V3.1, MPI-1 part
@@ -360,13 +365,13 @@ vac\'ios, sin datos.
 4194304           10     35766.45       111.84
 \end{verbatim}
 
-Este benchmark es uno de los mas utilizados por su simpleza, muy utilizado
-para comprobar que los dispositivos de red esten configurados en modo de baja
-latencia. Debe ejecutarse en todos los links de un cluster o sistema.
+Este {\it benchmark} es uno de los m\'as utilizados por su simpleza, muy utilizado
+en particular para comprobar que los dispositivos de red est\'en configurados propiamente para c\'omputo
+de altas prestaciones.
 
 \subsubsection{HPCC}
 
-El benchmark HPC Challenge \cite{hpcc} (HPCC) es internamente un conjunto de
+El {\it benchmark} HPC Challenge \cite{hpcc} (HPCC) es internamente un conjunto de
 varios benchmarks de-facto para medir el rendimiento de un sistema de
 c\'omputo. Entre ellos STREAM, HPL, Ping Pong, transformadas de {\it Fourier}
 y otros.
@@ -374,22 +379,22 @@ y otros.
 \bigskip
 
 En un principio se utilizaba solamente Linpack para calcular la potencia
-de calculo de una supercomputadora, pero luego se determin\'o que la mejor
+de c\'alculo de una supercomputadora, pero luego se determin\'o que la mejor
 m\'aquina depende de la aplicaci\'on a ejecutar, algunas aplicaciones
 necesitan mejor ancho de banda de memoria, mejor canales de comunicaci\'on, o
 la mayor capacidad de c\'omputo posible.
 
 \bigskip
 
-Por ello este benchmark muestra diferentes resultados que son representativos
+Este benchmark muestra diferentes resultados que son representativos
 y puestos en consideraci\'on de acuerdo al tipo de aplicaci\'on en discusi\'on.
 
 % TBD: insertar cuadro de localidad espacial y temporal
 
-Para una mejor comparacion de resultados, se utilizan diagramas denominados
+Para una mejor comparaci\'on de resultados de HPCC, se utilizan diagramas denominados
 {\it kiviats}.
 
-
+% TBD: insertar cuadro de localidad espacial y temporal
 
 \begin{verbatim}
 This is the DARPA/DOE HPC Challenge Benchmark version 1.2.0 October 2003
@@ -491,18 +496,6 @@ End of Summary section.
 End of HPC Challenge tests.
 \end{verbatim}
 
-\subsubsection{DEISA}
-
-Un conjunto de aplicaciones de astrof\'isica, din\'amica de fluidos, modelado
-clim\'atico, bio-ciencia, ciencia de los materiales, fusi\'on de energ\'ia y
-f\'isica de particulas. Permite una medici\'on m\'as cercana al mundo real,
-sin utilizar aplicaciones sint\'eticas. DEISA es de libre acceso pero no puede
-ser redistribu\'ida por terceros.
-
-\bigskip
-
-$ t = N * C / f $
-
 \section{T\'ecnicas}
 
 An\'alisis de calidad de acuerdo a la ingenier\'ia del software.
@@ -511,18 +504,12 @@ An\'alisis de calidad de acuerdo a la ingenier\'ia del software.
 
 El procedimiento usualmente consiste en ciclos de medir, localizar, optimizar,
 comparar. Es muy importante mantener la disciplina en realizar un cambio a la
-vez ya que esto asegura resultados reproducibles.
+vez ya que esto asegura resultados reproducibles y convergentes.
 
 \bigskip
 
 Los resultados deben tambi\'en ser correctamente guardados para evitar
-problemas de datos. Si la configuraci\'on del sistema es din\'amica, conviene
-realizar todas las pruebas de comparaci\'on durante una misma ejecuci\'on para
-evitar diferencias debido a configuraci\'on o a actualizaci\'on de componentes.
-
-\bigskip
-
-La reproducci\'on de resultados es compleja, en el caso de no tener una
+problemas de datos. Si la configuraci\'on del sistema es din\'amica, la reproducci\'on de resultados es compleja, en el caso de no tener una
 configuraci\'on de sistema estable en el tiempo, es recomendable siempre
 ejecutar una versi\'on optimizada contra una version de referencia en un mismo
 sistema de c\'omputo.
@@ -574,7 +561,7 @@ sistema.
 
 Entre los patrones de dise\~no m\'as discutidos se encuentran: master/worker,
 pipeline, work-stealing. En el dise\~no master/worker, un proceso dirige el
-trabajo de los demas. En pipeline el trabajo se divide en etapas
+trabajo de los dem\'as. En pipeline el trabajo se divide en etapas
 independendientes. En work-stealing los trabajadores obtienen el trabajo desde
 un conjunto en com\'un.
 
