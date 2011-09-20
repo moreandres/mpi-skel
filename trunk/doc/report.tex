@@ -26,7 +26,7 @@
   la Especializaci\'on en C\'omputo de Altas Prestaciones dictada en la
   Facultad de Inform\'atica de la Universidad Nacional de La Plata.
   El tema de investigaci\'on consiste en m\'etodos y herramientas para
-  an\'alisis del comportamiento en aplicaciones de alto rendimiento.
+  el an\'alisis del comportamiento de aplicaciones de alto rendimiento.
 
   \bigskip
 
@@ -41,7 +41,7 @@
 
   Este trabajo resume la experiencia que debe atravesar cualquier
   individuo en busca de las diferentes alternativas para el an\'alisis de
-  rendimiento. Incluyendo la selecci\'on de herramientas de soporte y la
+  rendimiento; incluyendo la selecci\'on de herramientas de soporte y la
   definici\'on de un procedimiento rudimentario para la aplicaci\'on sistem\'atica
   de las mismas.
 
@@ -51,7 +51,7 @@
   rendimiento m\'as una descripci\'on de los herramientas de soporte 
   disponibles actualmente. Se propone tambi\'en un proceso para analizar el
   rendimiento, ejemplificando su aplicaci\'on a un conjunto de n\'ucleos de
-  c\'omputo representativos.
+  c\'omputo no triviales.
 
 \end{abstract}
 
@@ -68,15 +68,15 @@ del rendimiento y se detalla el contenido restante del informe.
 En el \'area de c\'omputo de altas prestaciones los desarrolladores son los mismos
 especialistas del dominio del problema a resolver. Las rutinas
 m\'as demandantes de c\'alculo son en su mayor\'ia cient\'ificas y su
-complejidad hace posible su correcta implementaci\'on s\'{o}lo por los mismos investigadores.
-Este hecho resulta en un reducido tiempo para an\'alisis de resultados
+alta complejidad hace posible su correcta implementaci\'on s\'{o}lo por los mismos investigadores.
+Este hecho resulta en un reducido tiempo de an\'alisis de resultados
 e impacta directamente en la productividad de cualquier grupo de investigaci\'on.
 
 \bigskip
 
 Con mayor impacto que en otras \'areas de la computaci\'on, el c\'odigo
-optimizado puede ejecutarse \'ordenes de magnitud mejor que una implementaci\'on
-directa \cite{mm-matrixmultiplicationtool}. Adem\'as, se necesita utilizar
+optimizado correctamente puede ejecutarse \'ordenes de magnitud mejor que una implementaci\'on
+directa \cite{mm-matrixmultiplicationtool}. Adem\'as, se utiliza
 programaci\'on en paralelo para obtener una mejor utilizaci\'on de la
 capacidad de c\'omputo disponible; aumentando la complejidad de implementaci\'on, depuraci\'on y
 optimizaci\'on \cite{parallel-programming}.
@@ -105,12 +105,12 @@ Actualmente existen diversas herramientas para el an\'alisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
 a nivel de hardware, pasando por soporte del n\'ucleo del sistema operativo para ofrecer
 monitores del uso de los recursos disponibles, hasta la
-utilizaci\'on directa del tiempo de ejecuci\'on de una aplicaci\'on de referencia.
+simple utilizaci\'on del tiempo de ejecuci\'on de una aplicaci\'on o trabajo de referencia.
 
 \section{Organizaci\'on del Contenido}
 
-El resto del documento explica inicialmente teor\'ia sobre el an\'alisis del rendimiento que luego es
-ejemplificada a trav\'es de diversas herramientas.
+El resto del documento explica inicialmente teor\'ia sobre el an\'alisis del rendimiento, que luego es
+aplicada a trav\'es de diversas herramientas.
 
 \bigskip
 
@@ -139,17 +139,17 @@ Algunos ejemplos de medida de rendimiento son:
 
 \begin{enumerate}
 \item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on,
-  una jerarqu\'ia de memorias o unidades   de almacenamiento
+  una jerarqu\'ia de memorias o unidad de almacenamiento
 \item la cantidad de instrucciones, operaciones, datos o trabajo a procesar
   por cierta unidad de tiempo
-\item rendimiento por unidad de energ\'ia o por costo asociado
+\item rendimiento por unidad de energ\'ia o por costo asociado a la compra y mantenimiento de un sistema
 \end{enumerate}
 
-Un m\'etodo de medicion de rendimiento indirecto consiste en medir el uso de
+Un m\'etodo de medici\'on de rendimiento indirecto consiste en medir el uso de
 los recursos del sistema mientras se ejercita el mismo con un trabajo dado.
-Por ejemplo: el nivel de carga, la cantidad de operaciones realizadas por el
+Por ejemplo: el nivel de carga de trabajo en el sistema, la cantidad de operaciones realizadas por el
 sistema operativo o la unidad de procesamiento, la utilizaci\'on de memoria o
-archivos temporales e incluso el ancho de banda de red utilizado.
+archivos temporales e incluso el ancho de banda de red utilizado durante la comunicaci\'on.
 
 \section{Benchmarks}
 
@@ -178,9 +178,9 @@ de altas prestaciones, y posteriormente algunos detalles espec\'ificos y ejemplo
   \begin{center}
     \begin{tabular}{|l|l|l|}\hline
       {\bf Benchmark} & {\bf Componente} & {\bf Descripci\'on} \\ \hline
-      STREAM & memoria & ancho de banda sostenido \\ \hline
-      Linpack & procesador & operaciones de punto flotante \\ \hline
-      IMB & red & latencia y ancho de banda de comunicaci\'on \\ \hline
+      STREAM & Memoria & Ancho de banda sostenido \\ \hline
+      Linpack & Procesador & Operaciones de punto flotante \\ \hline
+      IMB & Red & Latencia y ancho de banda de comunicaci\'on \\ \hline
     \end{tabular}
     \caption{Benchmarks}
   \end{center}
@@ -195,22 +195,27 @@ rendimiento de computaci\'on relativa de algunos vectores simples de c\'alculo.
 Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura
 a la memoria principal del sistema bajo an\'alisis.
 
-Dentro de una misma ejecuci\'on de este benchmark, se realizan diferentes
+\bigskip
+
+Dentro de una misma ejecuci\'on de este benchmark, se ejercitan diferentes
 operaciones en memoria.
 
 \begin{figure}[H]
   \begin{center}
     \begin{tabular}{|l|l|l|}\hline
       {\bf Funci\'on} & {\bf Operaci\'on} & {\bf Descripci\'on} \\ \hline
-      copy & $ \forall i $ $ b_{i} = a_{i} $ & copia simple \\ \hline
-      scale & $ \forall i $ $ b_{i} = c \times a_{i} $ & multiplicaci\'on escalar \\ \hline
-      add & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & suma directa \\ \hline
-      triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & suma y multiplicaci\'on escalar \\ \hline
+      copy & $ \forall i $ $ b_{i} = a_{i} $ & Copia simple \\ \hline
+      scale & $ \forall i $ $ b_{i} = c \times a_{i} $ & Multiplicaci\'on escalar \\ \hline
+      add & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & Suma directa \\ \hline
+      triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & Suma y multiplicaci\'on escalar \\ \hline
     \end{tabular}
     \caption{Operaciones del Benchmark STREAM}
   \end{center}
   \label{stream}
 \end{figure}
+
+La salida en pantalla muestra entonces los diferentes tiempos conseguidos y la cantidad de informaci\'on transferida por unidad de tiempo.
+Como \'ultimo paso, el programa valida tambi\'en la soluci\'on computada.
 
 \begin{verbatim}
   STREAM version $Revision: 1.2 $
@@ -234,16 +239,12 @@ operaciones en memoria.
 \subsection{Linpack}
 
 Linpack \cite{linpack} es un conjunto de subrutinas {\it FORTRAN} que resuelven
-problemas de algebra lineal como ecuaciones lineales y multiplicaci\'on de
-matrices. HPL \cite{hpl} es una versi\'on portable del benchmark que incluye
-el paquete Linpack pero utilizando sistemas de memoria distribu\'ida. El
-paquete de software utiliza la librer\'ia MPI para comunicaci\'on entre los
-nodos de c\'omputo con memoria distribu\'ida.
+problemas de \'algebra lineal como ecuaciones lineales y multiplicaci\'on de
+matrices. High Performance Linpack (HPL) \cite{hpl} es una versi\'on portable del {\it benchmark} que incluye
+el paquete Linpack pero utilizando sistemas de memoria distribu\'ida.
 
 \bigskip
 
-Este benchmark es utilizado mundialmente para la comparaci\'on de la
-velocidad de las supercomputadoras en el ranking TOP500. 
 Existe cierta controversia de que no es una buena forma de ejercitar un
 sistema de c\'omputo distribu\'ido ya que no implica uso significativo de la
 red, s\'olo procesamiento intensivo de aritm\'etica de punto flotante
@@ -251,22 +252,26 @@ sobre la jerarqu\'ia local de memoria.
 
 \bigskip
 
+Sin embargo, este benchmark es utilizado mundialmente para la comparaci\'on de la
+velocidad de las supercomputadoras en el ranking TOP500. 
 Un gr\'afico del TOP500 de los \'ultimos a\~nos demuestra claramente la
-tendendia en crecimiento de rendimiento y la relacion entre el primero y los
-mejores 10.
+tendencia en crecimiento de rendimiento; tambi\'en la relaci\'on entre el primero, el último y la suma de todos los sistemas en la lista.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=12cm]{top500.png}
+\includegraphics[width=10cm]{top500.png}
 \caption{Indicadores Hist\'oricos del Top500}
 \end{center}
 \end{figure}
 
+Este {\it benchmark} requiere conocimiento avanzado para una correcta configuraci\'on,
+por ejemplo el tama\~no de bloque que se va a utilizar para la distribuci\'on de trabajo
+debe estar directamente relacionado con el tama\~no del {\it cache} de memoria del procesador.
+
 \bigskip
 
-Este {\it benchmark} requiere conocimiento avanzado para una correcta configuraci\'on,
-por ejemplo el tama\~no de bloque que se va a utilizar para la distribuci\'on de trabajo debe estar relacionado con el tama\~no del {\it cache}
-del procesador, afectar notablemente el rendimiento del sistema.
+La salida en pantalla resume entonces los datos de entrada y los resultados conseguidos.
+Como \'ultimo paso el programa valida que los resultados sean correctos.
 
 \begin{verbatim}
 =================================================================
@@ -329,7 +334,7 @@ c\'omputo con diferentes tama\~nos de mensajes.
 \bigskip
 
 Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on con mensajes con datos grandes.
-Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, sin datos.
+Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, es decir sin datos.
 
 \begin{verbatim}
 # Intel (R) MPI Benchmark Suite V3.1, MPI-1 part
@@ -354,33 +359,31 @@ Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes va
 # Benchmarking PingPong
 # #processes = 2
 #---------------------------------------------------
-#bytes #repetitions      t[usec]   Mbytes/sec
-0         1000        17.13         0.00
-1         1000        17.89         0.05
-2         1000        17.82         0.11
-4         1000        17.95         0.21
+#bytes     #repetitions  t[usec]     Mbytes/sec
+0              1000           17.13        0.00
+1              1000           17.89        0.05
+2              1000           17.82        0.11
+4              1000           17.95        0.21
 ...
-1048576           40      8993.23       111.19
-2097152           20     17919.20       111.61
-4194304           10     35766.45       111.84
+1048576    40              8993.23    111.19
+2097152    20              17919.20  111.61
+4194304    10              35766.45  111.84
 \end{verbatim}
 
-Este {\it benchmark} es uno de los m\'as utilizados por su simpleza, muy utilizado
-en particular para comprobar que los dispositivos de red est\'en configurados propiamente para c\'omputo
+Este {\it benchmark} es uno de los m\'as utilizados por su simpleza, 
+en particular para comprobar que los dispositivos de red est\'en configurados adecuadamente para c\'omputo
 de altas prestaciones.
 
 \subsubsection{HPCC}
 
 El {\it benchmark} HPC Challenge \cite{hpcc} (HPCC) es internamente un conjunto de
-varios benchmarks de-facto para medir el rendimiento de un sistema de
-c\'omputo. Entre ellos STREAM, HPL, Ping Pong, transformadas de {\it Fourier}
+varios benchmarks para medir el rendimiento de un sistema de
+c\'omputo. Entre ellos STREAM, HPL, Ping Pong, Transformadas de {\it Fourier}
 y otros.
 
 \bigskip
 
-En un principio se utilizaba solamente Linpack para calcular la potencia
-de c\'alculo de una supercomputadora, pero luego se determin\'o que la mejor
-m\'aquina depende de la aplicaci\'on a ejecutar, algunas aplicaciones
+La mejor m\'aquina depende de la aplicaci\'on a ejecutar, ya que algunas aplicaciones
 necesitan mejor ancho de banda de memoria, mejor canales de comunicaci\'on, o
 la mayor capacidad de c\'omputo posible.
 
@@ -391,10 +394,12 @@ y puestos en consideraci\'on de acuerdo al tipo de aplicaci\'on en discusi\'on.
 
 % TBD: insertar cuadro de localidad espacial y temporal
 
+\bigskip
+
 Para una mejor comparaci\'on de resultados de HPCC, se utilizan diagramas denominados
 {\it kiviats}.
 
-% TBD: insertar cuadro de localidad espacial y temporal
+% TBD: insertar cuadro kiviatl
 
 \begin{verbatim}
 This is the DARPA/DOE HPC Challenge Benchmark version 1.2.0 October 2003
@@ -505,6 +510,11 @@ An\'alisis de calidad de acuerdo a la ingenier\'ia del software.
 El procedimiento usualmente consiste en ciclos de medir, localizar, optimizar,
 comparar. Es muy importante mantener la disciplina en realizar un cambio a la
 vez ya que esto asegura resultados reproducibles y convergentes.
+
+\bigskip
+
+En el caso de tener problemas de desviaci\'on en los resultados medidos, es aconsejable obtener un gran n\'umero de muestras y utilizar
+un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible.
 
 \bigskip
 
@@ -693,16 +703,34 @@ al momento de realizar las pruebas.
 
 \chapter{Modelo}
 
-Modelo por etapas. Facil de identificar donde realizar optimizaciones y la
-ganancia esperada. El calculo de las leyes de amdalah y demas es directo.
+Este cap\'itulo propone la utilizaci\'on de un modelo por etapas para el desarrollo de aplicaciones de alto rendimiento.
+Se introduce la propuesta y la justificaci\'on de su utilizaci\'on para un mejor an\'alisis de rendimiento.
+
+\section{Definici\'on}
+
+Modelo por etapas. F\'acil de identificar donde realizar optimizaciones y la
+ganancia esperada.
+
+% TBD: insertar dibujo del modelo por etapas
+
+Este patron de diseno tiene grandes beneficios ademas de su simplicidad. Checkpointing. Serial. Paralelo. 
+
+Visualizacion directa.
+
+\section{An\'alisis}
+
+ El c\'alculo de las leyes de amdalah y dem\'as es directo.
+
+% TBD: insertar formulas asumiendo un modelo por etapas
 
 \bigskip
 
-formulas de tiempo de ejecucion. amdalah.
+formulas de tiempo de ejecuci\'on. amdalah.
 
 \chapter{Casos de Estudio}
 
-Este cap\'itulo aplica.
+Este cap\'itulo aplica el modelo propuesto en el cap\'itulo anterior. Varios ejemplos no triviales de aplicaciones de altas prestaciones son implementados
+y analizados utilizando los benchmarks y herramientas anteriormente presentadas.
 
 \section{Multiplicaci\'on de Matrices}
 
@@ -741,10 +769,11 @@ contra m\'etodos artesanales de optimizaci\'on.
   for (j = 1; j < matrix_height - 1; j++) {
     for (i = 1; i < grid_length - 1; i++) {
       
-      matrix[j * grid_length + i] = 0.25 * (tmp[j * grid_length + i - 1]
-    + tmp[j * grid_length + i + 1]
-    + tmp[(j - 1) * grid_length + i]
-    + tmp[(j + 1) * grid_length + i]);
+      matrix[j * grid_length + i] = 
+                     0.25 * (tmp[j * grid_length + i - 1]
+                  + tmp[j * grid_length + i + 1]
+                  + tmp[(j - 1) * grid_length + i]
+                  + tmp[(j + 1) * grid_length + i]);
 
       diff = matrix[pos(i,j)] - tmp[pos(i,j)];
 
@@ -767,7 +796,7 @@ La salida del c\'alculo puede graficarse f\'acilmente con {\it gnuplot}.
 \section{Problema de las Ocho Reinas}
 
 El dilema trata en el problema de posicionar en un tablero de ajedrez ocho
-reinas sin que una amenace a las dem\'as. Una reina amenaza a cualquier otra
+reinas sin que alguna amenace a las dem\'as. Una reina amenaza a cualquier otra
 pieza en el tablero que este en la mismo diagonal, fila o columna.
 
 \bigskip
@@ -835,8 +864,8 @@ for (i = 0; i <= length / 2; i++) {
 }
 \end{verbatim}
 
-Una implementaci\'on mas eficiente es la denominada fast fourier transform.
-Un algoritmo m\'as eficiente es el denominado {\it Goertzel}.
+Una implementaci\'on m\'as eficiente es la denominada {\it Fast Fourier Transform}.
+Un algoritmo a\'un m\'as eficiente es el denominado {\it Goertzel}.
 
 \chapter{Conclusiones}
 
