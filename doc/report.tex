@@ -536,12 +536,17 @@ Es muy importante tomar decisiones basadas en datos concretos, ya que en
 caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
 un r\'edito adecuado.
 
-\section{Modelos}
+\section{Teor\'ia}
 
-paralelizacion. niveles. bit/instruccion/datos/tareas.
-calculo de mejora. teorica versus real. 
+Una vez obtenida una implementaci\'on eficiente, la unica alternativa para mejorar el rendimiento es explotar el paralelismo que
+ofrecen los sistemas de c\'omputo. Este paralelismo se puede explotar a diferentes niveles, desde instrucciones que ejecutan una misma instruccion a varios
+datos a la vez, pasando por la utilizacion varias unidades de computo en el mismo sistema hasta la utilizacion de unidades de computo en diferentes sistemas.
 
 \bigskip
+
+El c\'alculo de las mejoras de rendimiento, cual es la potencial mejor y su l\'imite m\'aximo es una tarea no trivial.
+
+\subsection{Ley de {\it Amdahl}}
 
 Existen algunas leyes frecuentemente utilizadas durante el an\'alisis de
 rendimiento. La ley de {\it Amdahl} \cite{amdahl} dimensiona la mejora que
@@ -550,6 +555,10 @@ componentes.
 
 \bigskip
 
+$ T = S + \frac{P }{ p} $ donde T = tiempo de ejecuci\'on, S = trabajo serial, P = trabajo paralelizable, p = unidades de c\'omputo
+
+\subsection{Ley de {\it Gustafson}}
+
 Desde un punto de vista m\'as general, la ley de {\it Gustafson}
 \cite{gustafson} establece que las aplicaciones que manejan problemas
 repetitivos con conjuntos de datos similares pueden ser f\'acilmente
@@ -557,7 +566,7 @@ paralelizadas. En comparaci\'on, la ley anterior no escala el tama\~no o
 resoluci\'on de problema cuando se incrementa la potencia de c\'alculo, es
 decir con un tama\~no de problema fijo.
 
-\bigskip
+\subsection{M\'etrica de {\it Karp-Flatt}}
 
 Para medir el grado de paralelismo de una aplicaci\'on puede utilizarse la
 m\'etrica de Karp-Flatt \cite{karp-flatt}.
@@ -567,13 +576,25 @@ pipeline. formulas. rangos de optimizacion posibles.
 simulacion. soporte para decidir si cambiar hardware o arquitectura del
 sistema.
 
-\bigskip
+\section{Patrones de Dise\~no}
 
 Entre los patrones de dise\~no m\'as discutidos se encuentran: master/worker,
 pipeline, work-stealing. En el dise\~no master/worker, un proceso dirige el
 trabajo de los dem\'as. En pipeline el trabajo se divide en etapas
 independendientes. En work-stealing los trabajadores obtienen el trabajo desde
 un conjunto en com\'un.
+
+\subsection{Pipeline}
+
+Etapas.
+
+\subsection{Master/Worker}
+
+Maestro/Trabajador.
+
+\subsection{Work-Stealing}
+
+Robo de Trabajo.
 
 \chapter{Herramientas}
 
@@ -691,15 +712,20 @@ tomar el promedio.
 Como analizar? Pareto. State-of-the-art. Librerias para el mismo problema.
 Como dibujar un pareto? Como se entiende un pareto?
 
+Un gr\'afico de Pareto incluye tanto un diagrama de barras como uno de l\'ineas, ambos superpuestos.
+Los valores individuales son representados en orden descendiente en las barras, y el valor acumulado del porcentaje total es representado con una l\'inea.
+
+Esto permite identificar r\'apidamente el lugar a optimizar. El componente, archivo, funci\'on, c\'odigo, instrucci\'on.
+
 \subsection{Optimizaci\'on}
 
 Como optimizar? Librerias. Dependencias. Paralelizar.
 
 \subsection{Comparaci\'on}
 
-Como comparar? Antes/Despues. Repeticiones. Para utilizar informacion
-historica es preciso garantizar que el sistema siendo ejercitado es el mismo. Por ello es preferible ser cautos y ejecutar las dos versiones conjuntamente
-al momento de realizar las pruebas.
+C\'omo comparar? Antes/Despues. Repeticiones. Para utilizar informaci\'on
+hist\'orica es preciso garantizar que el sistema siendo ejercitado es el mismo. Por ello es preferible ser cautos y ejecutar las dos versiones conjuntamente
+al momento de realizar las pruebas. 
 
 \chapter{Modelo}
 
@@ -708,24 +734,25 @@ Se introduce la propuesta y la justificaci\'on de su utilizaci\'on para un mejor
 
 \section{Definici\'on}
 
-Modelo por etapas. F\'acil de identificar donde realizar optimizaciones y la
-ganancia esperada.
+Modelo por etapas. F\'acil de identificar donde realizar optimizaciones y la ganancia esperada.
 
 % TBD: insertar dibujo del modelo por etapas
 
-Este patron de diseno tiene grandes beneficios ademas de su simplicidad. Checkpointing. Serial. Paralelo. 
+Este patr\'on de dise\~no tiene grandes beneficios adem\'as de su simplicidad. Checkpointing. Serial. Paralelo. Pareto.
 
-Visualizacion directa.
+Visualizaci\'on directa.
 
 \section{An\'alisis}
 
  El c\'alculo de las leyes de amdalah y dem\'as es directo.
 
+\subsection{F\'ormulas}
+
 % TBD: insertar formulas asumiendo un modelo por etapas
 
 \bigskip
 
-formulas de tiempo de ejecuci\'on. amdalah.
+F\'ormulas de tiempo de ejecuci\'on. amdalah.
 
 \chapter{Casos de Estudio}
 
