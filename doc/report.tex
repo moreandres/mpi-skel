@@ -92,12 +92,11 @@ profundamente y con correctitud comprobada por el paso del tiempo.
 
 \section{Alcance}
 
-Este trabajo considera en particular los ambientes m\'as utilizados en
-el c\'omputo de aplicaciones de alto rendimiento. A trav\'es de las
+Este trabajo considera en particular a los sistemas de memoria distribu\'ida corriendo sobre
+GNU/Linux, denominados sistemas Beowulf \cite{beowulf}. A trav\'es de las
 estad\'isticas mostradas por el Top500 \footnote{El Top500 es una lista actualizada de supercomputadoras
 de acuerdo al benchmark Linpack, disponible en {\tt http://www.top500.org}.}, se
-puede determinar que estos sistemas son los de memoria distribu\'ida corriendo sobre
-GNU/Linux, denominados sistemas Beowulf \cite{beowulf}.
+puede determinar que son los m\'as utilizados en el c\'omputo de aplicaciones de alto rendimiento.
 
 \section{Estado Actual}
 
@@ -105,7 +104,7 @@ Actualmente existen diversas herramientas para el an\'alisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
 a nivel de hardware, pasando por soporte del n\'ucleo del sistema operativo para ofrecer
 monitores del uso de los recursos disponibles, hasta la
-simple utilizaci\'on del tiempo de ejecuci\'on de una aplicaci\'on o trabajo de referencia.
+simple utilizaci\'on del tiempo de ejecuci\'on de una aplicaci\'on o la comparaci\'on contra un trabajo de referencia.
 
 \section{Organizaci\'on del Contenido}
 
@@ -118,17 +117,17 @@ El cap\'itulo 2 discute el an\'alisis de rendimiento, sus
 principios y teor\'ia. El cap\'itulo 3 detalla las herramientas m\'as
 utilizadas. El cap\'itulo 4 ejemplifica la aplicaci\'on de las herramientas
 para obtener informaci\'on de an\'alisis a trav\'es de un proceso sistem\'atico.
-El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros o extensiones.
+El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros o extensiones a considerar.
 
 \chapter{An\'alisis de Rendimiento}
 
-Este cap\'itulo introduce el concepto de rendimiento y teor\'ia sobre el
+Este cap\'itulo introduce el concepto de rendimiento y teor\'ia b\'asica sobre
 an\'alisis de rendimiento.
 
 \section{Definici\'on}
 
 El rendimiento se caracteriza por la cantidad de trabajo de c\'omputo que se
-logra en comparaci\'on con la cantidad de tiempo y el uso de los recursos.
+logra en comparaci\'on con la cantidad de tiempo y el uso de los recursos  empleados.
 El rendimiento es evaluado entonces de forma cuantificable, utilizando alguna
 m\'etrica en particular de modo de poder comparar relativamente dos sistemas o
 un mismo sistema bajo una configuraci\'on distinta.
@@ -166,13 +165,13 @@ reproducci\'on de resultados. Esto permite que sean utilizadas para realizar
 mediciones cuantitativas y as\'i realizar comparaciones de optimizaciones o
 entre sistemas de c\'omputo diferentes. Tambi\'en se pide que el tiempo de
 ejecuci\'on sea razonable y que el tama\~no del problema sea ajustable para
-poder seguir siendo utilizable con el paso del tiempo y el avance de las
+poder seguir siendo \'util con el paso del tiempo y el avance de las
 tecnolog\'ias.
 
 \bigskip
 
 A continuaci\'on se introducen algunas de las m\'as utilizadas para c\'omputo
-de altas prestaciones, y posteriormente algunos detalles espec\'ificos y ejemplos de sus datos de salida.
+de altas prestaciones, y posteriormente algunos detalles espec\'ificos y ejemplos de sus datos de salida como referencia.
 
 \begin{figure}[H]
   \begin{center}
@@ -198,7 +197,7 @@ a la memoria principal del sistema bajo an\'alisis.
 \bigskip
 
 Dentro de una misma ejecuci\'on de este benchmark, se ejercitan diferentes
-operaciones en memoria.
+operaciones en memoria. A continuaci\'on se resume las operaciones ejercitadas.
 
 \begin{figure}[H]
   \begin{center}
@@ -210,8 +209,8 @@ operaciones en memoria.
       triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & Suma y multiplicaci\'on escalar \\ \hline
     \end{tabular}
     \caption{Operaciones del Benchmark STREAM}
-  \end{center}
-  \label{stream}
+   \end{center}
+ \label{stream}
 \end{figure}
 
 La salida en pantalla muestra entonces los diferentes tiempos conseguidos y la cantidad de informaci\'on transferida por unidad de tiempo.
@@ -224,8 +223,7 @@ Como \'ultimo paso, el programa valida tambi\'en la soluci\'on computada.
   -------------------------------------------------------------
   Array size = 10000000, Offset = 0
   Total memory required = 228.9 MB.
-  Each test is run 10 times, but only
-  the *best* time for each is used.
+  Each test is run 10 times, but only the *best* time is used.
   -------------------------------------------------------------
   Function     Rate (MB/s)   Avg time     Min time     Max time
   Copy:        4764.1905       0.0337       0.0336       0.0340
@@ -327,14 +325,16 @@ Finished      1 tests with the following results:
 \subsection{Intel MPI Benchmarks}
 
 Es un conjunto de {\it benchmarks} cuyo objetivo es ejercitar las funciones
-m\'as importantes de MPI. El m\'as conocido es el popular Ping Pong,
-el cual ejercita la transmisi\'on de mensajes ida y vuelta entre dos nodos de
+m\'as importantes del estandar para librer\'ias de paso de mensajes (MPI) \cite{mpi}.
+El m\'as conocido es el popular ping-pong, el cual ejercita la transmisi\'on de mensajes ida y vuelta entre dos nodos de
 c\'omputo con diferentes tama\~nos de mensajes. 
 
 \bigskip
 
 Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on con mensajes con datos grandes.
-Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, es decir sin datos.
+Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, es decir transmitiendo mensajes sin datos.
+
+\bigskip
 
 \begin{verbatim}
 # Intel (R) MPI Benchmark Suite V3.1, MPI-1 part
@@ -353,8 +353,7 @@ Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes va
 # MPI_Datatype for reductions    :   MPI_FLOAT
 # MPI_Op                         :   MPI_SUM
 #
-# List of Benchmarks to run:
-# PingPong
+# List of Benchmarks to run: PingPong
 #---------------------------------------------------
 # Benchmarking PingPong
 # #processes = 2
@@ -376,28 +375,28 @@ de altas prestaciones.
 
 \subsubsection{HPCC}
 
-El {\it benchmark} HPC Challenge \cite{hpcc} (HPCC) es internamente un conjunto de
-varios benchmarks para medir el rendimiento de un sistema de
-c\'omputo. Entre ellos STREAM, HPL, Ping Pong, Transformadas de {\it Fourier}
+El {\it benchmark} HPC Challenge \cite{hpcc} (HPCC) est\'a compuesto internamente por un conjunto de
+varios {\it benchmarks}, entre ellos STREAM, HPL, Ping Pong, Transformadas de {\it Fourier}
 y otros.
 
 \bigskip
 
+Este benchmark muestra diferentes resultados que son representativos
+y puestos en consideraci\'on de acuerdo al tipo de aplicaci\'on en discusi\'on.
 La mejor m\'aquina depende de la aplicaci\'on a ejecutar, ya que algunas aplicaciones
 necesitan mejor ancho de banda de memoria, mejor canales de comunicaci\'on, o
 la mayor capacidad de c\'omputo posible.
 
 \bigskip
 
-Este benchmark muestra diferentes resultados que son representativos
-y puestos en consideraci\'on de acuerdo al tipo de aplicaci\'on en discusi\'on.
+Una taxonom\'ia interesante para entender como el benchmark se relaciona a diferentes n\'ucleos de c\'omputo
+se muestra a continuaci\'on.
 
 % TBD: insertar cuadro de localidad espacial y temporal
 
 \bigskip
 
-Para una mejor comparaci\'on de resultados de HPCC, se utilizan diagramas denominados
-{\it kiviats}.
+Para una mejor comparaci\'on de resultados de HPCC, se utilizan diagramas denominados {\it kiviats}.
 
 % TBD: insertar cuadro kiviatl
 
@@ -514,7 +513,8 @@ vez ya que esto asegura resultados reproducibles y convergentes.
 \bigskip
 
 En el caso de tener problemas de desviaci\'on en los resultados medidos, es aconsejable obtener un gran n\'umero de muestras y utilizar
-un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible.
+un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible. Sin embargo, es siempre preferible aumentar el tama\~no
+del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener un resultado m\'as predecible.
 
 \bigskip
 
@@ -605,7 +605,7 @@ de rendimiento de aplicaciones.
 
 Existen diferentes alternativas sobre el modo de extraer informaci\'on de
 caracter\'isticas relacionadas con el rendimiento de una aplicaci\'on.
-Estos metodos pueden clasificarse como din\'amico o est\'atico.
+Estos m\'etodos pueden clasificarse como din\'amico o est\'atico.
 Tambi\'en pueden clasificarse como aplicables en tiempo de compilaci\'on o
 tiempo de ejecuci\'on.
 
@@ -621,7 +621,7 @@ recursos del sistema como procesador y memoria.
 La aplicaci\'on debe ejecutarse con un conjunto de datos dado. El conjunto de
 datos debe ser representativo y debe tambi\'en ejercitar la aplicaci\'on por
 una cantidad de tiempo suficiente como para intensificar el uso de los
-recursos. Los datos del perfil de una ejecucion son luegos obtenidos en la
+recursos. Los datos del perfil de una ejecuci\'on son luegos obtenidos en la
 forma de un archivo de datos, luego se procede a procesar los datos acumulados
 con un analizador respectivo.
 
@@ -630,7 +630,7 @@ con un analizador respectivo.
 Provee un perfil plano que consiste en una simple lista de las funciones
 ejecutadas ordenadas por la cantidad acumulada de tiempo utilizado.
 Tambi\'en provee el gr\'afico de llamadas anidadas, que muestra el tiempo
-utilizado por cada funciones en llamadas sucesivas. Las funciones recursivas
+utilizado por cada funci\'on en llamadas sucesivas. Las funciones recursivas
 son manejadas de manera especial ya que imposibilitan el armado de relaciones
 de dependencias.
 
@@ -662,7 +662,7 @@ historia. resumen. caracter\'isticas.
 
 ejecutar el profiler. ejecutar la aplicaci\'on. generar el resumen.
 
-No se necesita el c\'odigo. C\'odigo anotado si hay s\'imbolos de depuracion o
+No se necesita el c\'odigo. C\'odigo anotado si hay s\'imbolos de depuraci\'on o
 {\it debugging}.
 
 componentes del sistema.
@@ -894,6 +894,11 @@ for (i = 0; i <= length / 2; i++) {
 Una implementaci\'on m\'as eficiente es la denominada {\it Fast Fourier Transform}.
 Un algoritmo a\'un m\'as eficiente es el denominado {\it Goertzel}.
 
+\bigskip
+
+Este caso de aplicacion no demuestra como al conocer el algoritmo implementado se
+facilita la tarea de buscar algoritmos optimizados para cada caso en particular.
+
 \chapter{Conclusiones}
 
 Este trabajo aporta el estado del arte del an\'alisis de rendimiento en
@@ -905,19 +910,29 @@ optimizaciones posibles.
 
 \bigskip
 
-{\bf TBD}
+La optimizaci\'on del rendimiento de una aplicaci\'on es algo no trivial, requiere de mucha
+disciplina y del manejo de datos que identifiquen las partes a mejorar fehacientemente.
+Existen diferentes niveles de abstracci\'on en los cuales una aplicaci\'on puede ser analizada con el fin
+de encontrar puntos de mejora. 
 
 \bigskip
 
-{\bf TBD}
+Es preciso realizar un an\'alisis del comportamiento y del uso de los recursos antes de
+empezar a optimizar una aplicaci\'on. Muchas veces las mejoras no son significativas si no
+son realizadas en el lugar correcto.
+
+\bigskip
+
+El utilizar un mismo modelo para implementar las aplicaciones abre muchas puertas para
+la automatizaci\'on, comparaci\'on y estudio de t\'ecnicas de optimizaci\'on que no pueden
+ser siempre aplicadas sin reestructurar las aplicaciones.
 
 \chapter{Trabajo Futuro}
 
 \section{Infrastructura de Soporte para An\'alisis}
 
-Este trabajo fue realizado pensando en ser utilizado como un primer paso
-a una implementaci\'on pr\'actica del m\'etodo propuesto, incluyendo soporte
-autom\'atico para al utilizaci\'on de las herramientas y la generaci\'on de
+Este trabajo fue realizado como un primer paso a una implementaci\'on pr\'actica del m\'etodo propuesto,
+incluyendo soporte autom\'atico para al utilizaci\'on de las herramientas y la generaci\'on integrada de
 reportes de an\'alisis de rendimiento.
 
 \section{Herramientas Adicionales de Soporte}
