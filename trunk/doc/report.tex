@@ -102,7 +102,7 @@ puede determinar que son los m\'as utilizados en el c\'omputo de aplicaciones de
 
 Actualmente existen diversas herramientas para el an\'alisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
-a nivel de hardware, pasando por soporte del n\'ucleo del sistema operativo para ofrecer
+a nivel de {\it hardware}, pasando por soporte del n\'ucleo del sistema operativo para ofrecer
 monitores del uso de los recursos disponibles, hasta la
 simple utilizaci\'on del tiempo de ejecuci\'on de una aplicaci\'on o la comparaci\'on contra un trabajo de referencia.
 
@@ -121,8 +121,7 @@ El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros o e
 
 \chapter{An\'alisis de Rendimiento}
 
-Este cap\'itulo introduce el concepto de rendimiento y teor\'ia b\'asica sobre
-an\'alisis de rendimiento.
+Este cap\'itulo introduce el concepto de rendimiento y teor\'ia b\'asica sobre su an\'alisis.
 
 \section{Definici\'on}
 
@@ -150,6 +149,56 @@ Por ejemplo: el nivel de carga de trabajo en el sistema, la cantidad de operacio
 sistema operativo o la unidad de procesamiento, la utilizaci\'on de memoria o
 archivos temporales e incluso el ancho de banda de red utilizado durante la comunicaci\'on.
 
+\section{T\'ecnicas}
+
+An\'alisis de calidad de acuerdo a la ingenier\'ia del software.
+
+% TBD: review wikipedia about this and get inspired
+
+\bigskip
+
+El procedimiento usualmente consiste en ciclos de medir, localizar, optimizar,
+comparar. Es muy importante mantener la disciplina en realizar un cambio a la
+vez ya que esto asegura resultados reproducibles y convergentes.
+
+\bigskip
+
+% TBD: insert nice chart here with the activities as a loop iterated over small changes
+
+\bigskip
+
+En el caso de tener problemas de desviaci\'on en los resultados medidos, es aconsejable obtener un gran n\'umero de muestras y utilizar
+un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible. Sin embargo, es siempre preferible aumentar el tama\~no
+del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener un resultado m\'as predecible.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{deviation.png}
+\caption{Desviaci\'on Normal}
+\end{center}
+\end{figure}
+
+
+\bigskip
+
+Los resultados deben tambi\'en ser correctamente guardados para evitar
+problemas de datos. Si la configuraci\'on del sistema es din\'amica, la reproducci\'on de resultados es compleja, en el caso de no tener una
+configuraci\'on de sistema estable en el tiempo, es recomendable siempre
+ejecutar una versi\'on optimizada contra una version de referencia en un mismo
+sistema de c\'omputo.
+
+\bigskip
+
+Los problemas a identificar inicialmente pueden ser: cuellos de botella,
+overhead, problemas de balanceo, contenci\'on o mal uso de recursos
+computacionales.
+
+\bigskip
+
+Es muy importante tomar decisiones basadas en datos concretos, ya que en
+caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
+un r\'edito adecuado.
+
 \section{Benchmarks}
 
 Para medir el rendimiento se utilizan pruebas de referencias denominadas
@@ -157,6 +206,10 @@ Para medir el rendimiento se utilizan pruebas de referencias denominadas
 especialmente para ejercitar ciertos recursos computacionales, o pueden ser incluso
 aplicaciones del mundo real ejecutadas sobre un conjunto de datos prefijado para
 facilitar la comparaci\'on de resultados.
+
+\bigskip
+
+% TBD: why benchmarks are useful to analyze the performance of one application? baseline, characterization, limits, expected values
 
 \bigskip
 
@@ -197,7 +250,7 @@ a la memoria principal del sistema bajo an\'alisis.
 \bigskip
 
 Dentro de una misma ejecuci\'on de este benchmark, se ejercitan diferentes
-operaciones en memoria. A continuaci\'on se resume las operaciones ejercitadas.
+operaciones en memoria. A continuaci\'on se resumen las operaciones ejercitadas.
 
 \begin{figure}[H]
   \begin{center}
@@ -325,13 +378,13 @@ Finished      1 tests with the following results:
 \subsection{Intel MPI Benchmarks}
 
 Es un conjunto de {\it benchmarks} cuyo objetivo es ejercitar las funciones
-m\'as importantes del estandar para librer\'ias de paso de mensajes (MPI) \cite{mpi}.
+m\'as importantes del estandar para librer\'ias de paso de mensajes (MPI, por sus siglas en ingl\'es) \cite{mpi}.
 El m\'as conocido es el popular ping-pong, el cual ejercita la transmisi\'on de mensajes ida y vuelta entre dos nodos de
 c\'omputo con diferentes tama\~nos de mensajes. 
 
 \bigskip
 
-Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on con mensajes con datos grandes.
+Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on a trav\'es de mensajes con datos grandes.
 Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, es decir transmitiendo mensajes sin datos.
 
 \bigskip
@@ -373,7 +426,7 @@ Este {\it benchmark} es uno de los m\'as utilizados por su simpleza,
 en particular para comprobar que los dispositivos de red est\'en configurados adecuadamente para c\'omputo
 de altas prestaciones.
 
-\subsubsection{HPCC}
+\subsection{HPCC}
 
 El {\it benchmark} HPC Challenge \cite{hpcc} (HPCC) est\'a compuesto internamente por un conjunto de
 varios {\it benchmarks}, entre ellos STREAM, HPL, Ping Pong, Transformadas de {\it Fourier}
@@ -389,7 +442,7 @@ la mayor capacidad de c\'omputo posible.
 
 \bigskip
 
-Una taxonom\'ia interesante para entender como el benchmark se relaciona a diferentes n\'ucleos de c\'omputo
+Una analog\'ia interesante para entender como el {\it benchmark} se relaciona a diferentes n\'ucleos de c\'omputo
 se muestra a continuaci\'on.
 
 % TBD: insertar cuadro de localidad espacial y temporal
@@ -398,7 +451,14 @@ se muestra a continuaci\'on.
 
 Para una mejor comparaci\'on de resultados de HPCC, se utilizan diagramas denominados {\it kiviats}.
 
-% TBD: insertar cuadro kiviatl
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{kiviat.png}
+\caption{Diagrama Kiviat}
+\end{center}
+\end{figure}
+
+Un ejemplo de la salida que se muestra durante la ejecuci\'on se muestra a continuaci\'on.
 
 \begin{verbatim}
 This is the DARPA/DOE HPC Challenge Benchmark version 1.2.0 October 2003
@@ -500,42 +560,6 @@ End of Summary section.
 End of HPC Challenge tests.
 \end{verbatim}
 
-\section{T\'ecnicas}
-
-An\'alisis de calidad de acuerdo a la ingenier\'ia del software.
-
-\bigskip
-
-El procedimiento usualmente consiste en ciclos de medir, localizar, optimizar,
-comparar. Es muy importante mantener la disciplina en realizar un cambio a la
-vez ya que esto asegura resultados reproducibles y convergentes.
-
-\bigskip
-
-En el caso de tener problemas de desviaci\'on en los resultados medidos, es aconsejable obtener un gran n\'umero de muestras y utilizar
-un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible. Sin embargo, es siempre preferible aumentar el tama\~no
-del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener un resultado m\'as predecible.
-
-\bigskip
-
-Los resultados deben tambi\'en ser correctamente guardados para evitar
-problemas de datos. Si la configuraci\'on del sistema es din\'amica, la reproducci\'on de resultados es compleja, en el caso de no tener una
-configuraci\'on de sistema estable en el tiempo, es recomendable siempre
-ejecutar una versi\'on optimizada contra una version de referencia en un mismo
-sistema de c\'omputo.
-
-\bigskip
-
-Los problemas a identificar inicialmente pueden ser: cuellos de botella,
-overhead, problemas de balanceo, contenci\'on o mal uso de recursos
-computacionales.
-
-\bigskip
-
-Es muy importante tomar decisiones basadas en datos concretos, ya que en
-caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
-un r\'edito adecuado.
-
 \section{Teor\'ia}
 
 Una vez obtenida una implementaci\'on eficiente, la unica alternativa para mejorar el rendimiento es explotar el paralelismo que
@@ -609,6 +633,8 @@ Estos m\'etodos pueden clasificarse como din\'amico o est\'atico.
 Tambi\'en pueden clasificarse como aplicables en tiempo de compilaci\'on o
 tiempo de ejecuci\'on.
 
+% TBD: insert nice chart here, get inspired from wikipedia clasifications
+
 \section{gprof}
 
 Esta herramienta extrae el perfil din\'amico de una aplicaci\'on, en tiempo
@@ -673,7 +699,7 @@ costo adicional. overhead.
 
 \subsection{Contadores de Rendimiento}
 
-Los registros de hardware implementando contadores m\'as utilizados son los
+Los registros de {\it hardware} implementando contadores m\'as utilizados son los
 siguientes:
 
 \begin{enumerate}
@@ -687,7 +713,7 @@ siguientes:
 \item store instructions
 \end{enumerate}
 
-\subsection{ejemplos}
+\subsection{Ejemplos}
 
 \chapter{Procedimiento de An\'alisis}
 
@@ -815,7 +841,7 @@ La salida del c\'alculo puede graficarse f\'acilmente con {\it gnuplot}.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=12cm]{heat2d.png}
+\includegraphics[width=10cm]{heat2d.png}
 \caption{heat2d}
 \end{center}
 \end{figure}
