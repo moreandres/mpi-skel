@@ -149,27 +149,26 @@ Por ejemplo: el nivel de carga de trabajo en el sistema, la cantidad de operacio
 sistema operativo o la unidad de procesamiento, la utilizaci\'on de memoria o
 archivos temporales e incluso el ancho de banda de red utilizado durante la comunicaci\'on.
 
-\section{T\'ecnicas}
+\section{T\'ecnicas de An\'alisis}
 
-An\'alisis de calidad de acuerdo a la ingenier\'ia del software.
-
-% TBD: review wikipedia about this and get inspired
-
-\bigskip
-
-El procedimiento usualmente consiste en ciclos de medir, localizar, optimizar,
+El procedimiento general usualmente consiste en ciclos iterativos de medir, localizar, optimizar,
 comparar. Es muy importante mantener la disciplina en realizar un cambio a la
 vez ya que esto asegura resultados reproducibles y convergentes.
 
 \bigskip
 
-% TBD: insert nice chart here with the activities as a loop iterated over small changes
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{cycle.png}
+\caption{An\'alisis Iterativo}
+\end{center}
+\end{figure}
 
 \bigskip
 
 En el caso de tener problemas de desviaci\'on en los resultados medidos, es aconsejable obtener un gran n\'umero de muestras y utilizar
 un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible. Sin embargo, es siempre preferible aumentar el tama\~no
-del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener un resultado m\'as predecible.
+del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener as\'i un resultado m\'as predecible.
 
 \begin{figure}[H]
 \begin{center}
@@ -177,7 +176,6 @@ del problema a resolver, o la definici\'on de los resultados para ejercitar por 
 \caption{Desviaci\'on Normal}
 \end{center}
 \end{figure}
-
 
 \bigskip
 
@@ -209,7 +207,9 @@ facilitar la comparaci\'on de resultados.
 
 \bigskip
 
-% TBD: why benchmarks are useful to analyze the performance of one application? baseline, characterization, limits, expected values
+Al tener valores de referencia se pueden caracterizar los sistemas de modo de predecir el rendimiento de una aplicaci\'on.
+Los valores a los que se llegan con un {\it benchmark} suelen ser mas practicos y comparables que los teoricos de acuerdo a condiciones ideales der recursos.
+Tambi\'en es posible garantizar que el sistema sigue en un mismo estado con el correr del tiempo y los cambios de configuraciones en {\it hardware} o {\it software}.
 
 \bigskip
 
@@ -249,7 +249,7 @@ a la memoria principal del sistema bajo an\'alisis.
 
 \bigskip
 
-Dentro de una misma ejecuci\'on de este benchmark, se ejercitan diferentes
+Dentro de una misma ejecuci\'on de este {\it benchmark}, se ejercitan diferentes
 operaciones en memoria. A continuaci\'on se resumen las operaciones ejercitadas.
 
 \begin{figure}[H]
@@ -384,10 +384,14 @@ c\'omputo con diferentes tama\~nos de mensajes.
 
 \bigskip
 
-Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on a trav\'es de mensajes con datos grandes.
-Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, es decir transmitiendo mensajes sin datos.
+Este {\it benchmark} es uno de los m\'as utilizados por su simpleza, 
+en particular para comprobar que los dispositivos de red est\'en configurados adecuadamente para c\'omputo
+de altas prestaciones.
 
 \bigskip
+
+Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on a trav\'es de mensajes con datos grandes.
+Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, es decir transmitiendo mensajes sin datos.
 
 \begin{verbatim}
 # Intel (R) MPI Benchmark Suite V3.1, MPI-1 part
@@ -422,10 +426,6 @@ Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes va
 4194304    10              35766.45  111.84
 \end{verbatim}
 
-Este {\it benchmark} es uno de los m\'as utilizados por su simpleza, 
-en particular para comprobar que los dispositivos de red est\'en configurados adecuadamente para c\'omputo
-de altas prestaciones.
-
 \subsection{HPCC}
 
 El {\it benchmark} HPC Challenge \cite{hpcc} (HPCC) est\'a compuesto internamente por un conjunto de
@@ -445,7 +445,14 @@ la mayor capacidad de c\'omputo posible.
 Una analog\'ia interesante para entender como el {\it benchmark} se relaciona a diferentes n\'ucleos de c\'omputo
 se muestra a continuaci\'on.
 
-% TBD: insertar cuadro de localidad espacial y temporal
+\bigskip
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=5cm]{locality.png}
+\caption{Localidad}
+\end{center}
+\end{figure}
 
 \bigskip
 
@@ -562,7 +569,7 @@ End of HPC Challenge tests.
 
 \section{Teor\'ia}
 
-Una vez obtenida una implementaci\'on eficiente, la unica alternativa para mejorar el rendimiento es explotar el paralelismo que
+Una vez obtenida una implementaci\'on eficiente, la \'unica alternativa para mejorar el rendimiento es explotar el paralelismo que
 ofrecen los sistemas de c\'omputo. Este paralelismo se puede explotar a diferentes niveles, desde instrucciones que ejecutan una misma instruccion a varios
 datos a la vez, pasando por la utilizacion varias unidades de computo en el mismo sistema hasta la utilizacion de unidades de computo en diferentes sistemas.
 
