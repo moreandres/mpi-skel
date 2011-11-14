@@ -637,6 +637,14 @@ sistema.
 
 Esta metrica nos permite rapidamente estimar la mejora posible al aplicar un alto nivel de paralelismo.
 
+ is a measure of parallelization of code in parallel processor systems
+
+Given a parallel computation exhibiting speedup ψ on p processors, where p > 1, the experimentally determined serial fraction e is defined to be the Karp–Flatt Metric viz: The less the value of e the better the parallelization.
+
+For a problem of fixed size, the efficiency of a parallel computation typically decreases as the number of processors increases. By using the serial fraction obtained experimentally using the Karp–Flatt metric, we can determine if the efficiency decrease is due to limited opportunities of parallelism or increases in algorithmic or architectural overhead.
+
+$ e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} $
+
 \section{Patrones de Dise\~no}
 
 Entre los patrones de dise\~no m\'as discutidos se encuentran: master/worker,
@@ -644,6 +652,13 @@ pipeline, work-stealing. En el dise\~no master/worker, un proceso dirige el
 trabajo de los dem\'as. En pipeline el trabajo se divide en etapas
 independendientes. En work-stealing los trabajadores obtienen el trabajo desde
 un conjunto en com\'un.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{patterns.png}
+\caption{Patrones}
+\end{center}
+\end{figure}
 
 \subsection{Pipeline}
 
