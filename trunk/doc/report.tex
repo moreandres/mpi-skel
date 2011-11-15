@@ -575,26 +575,34 @@ datos a la vez, pasando por la utilizacion varias unidades de computo en el mism
 
 \bigskip
 
-El c\'alculo de las mejoras de rendimiento, cual es la potencial mejor y su l\'imite m\'aximo es una tarea no trivial.
-Existen algunas leyes frecuentemente utilizadas durante el an\'alisis de rendimiento.
+El c\'alculo de las mejoras posibles de rendimiento, como priorizarlas y su l\'imite m\'aximo es una tarea no trivial.
+Para ello existen algunas leyes frecuentemente utilizadas durante el an\'alisis de rendimiento.
 
 \subsection{Ley de {\it Amdahl}}
 
  La ley de {\it Amdahl} \cite{amdahl} dimensiona la mejora que puede obtenerse en un sistema de acuerdo a las mejoras logradas en sus
-componentes. Nos ayuda a establecer un l\'imite m\'aximo de mejora.
-
-The speedup of a program using multiple processors in parallel computing is limited by the time needed for the sequential fraction of the program.
- parallel computing is only useful for either small numbers of processors, or problems with very high values of P: so-called embarrassingly parallel problems
- A great part of the craft of parallel programming consists of attempting to reduce the component (1 – P) to the smallest possible value.
+componentes. Nos ayuda a establecer un l\'imite m\'aximo de mejora y a conocer de antemano cuales pueden ser los resultados de mejora.
 
 \bigskip
 
-$ maximum speed up = \frac{1}{(1-P) + \frac{P}{N}} $ donde P = trabajo paralelizable (1-P es el trabajo en serio), N = cantidad de unidades de c\'omputo
+La mejora de un programa utilizando procesamiento multiple en c\'omputo paralelo est\'a limitado por el tiempo necesario para completar su fracci\'on serial o secuencial. Frecuentemente el paralelismo solo afecta notariamente cuando es utilizado en un peque\~no n\'umero de procesadores, o cuando se aplica a problemas altamente escalables (embarrassingly parallel problems). Una vez paralelizado un programa, los esfuerzos suelen ser enfocados en como minimizar
+la parte secuencial, algunas veces haciendo m\'as trabajo redundante en paralelo.
+
+\bigskip
+
+La ley de amdahl puede ser entonces modelada de la siguiente forma:
+
+\begin{eqnarray}
+max speedup = \frac{1}{(1-P) + \frac{P}{N}}
+\end{eqnarray}
+
+donde $ P $ es el porcentaje de trabajo paralelizable ($ 1-P $ es entonces el trabajo en serie o secuencial), $ N $ es la cantidad de unidades de c\'omputo utilizadas.
 
 \bigskip
 
 Suponiendo que una aplicaci\'on requiere de un trabajo serial más un trabajo paralelizable; esta ley nos deja estimar la m\'axima ganancia posible
-de modo que incluso teniendo infinitas unidades de c\'omputo la ganancia esta limitada como se muestra a continuaci\'on.
+de modo que incluso teniendo infinitas unidades de c\'omputo la ganancia esta limitada como se muestra a continuaci\'on. Incluso en el caso de tener varias
+componentes aisladas en la parte paralela, esta ley nos ayuda a identificar el impacto al mejorar cada una de las partes.
 
 \begin{figure}[H]
 \begin{center}
@@ -603,6 +611,9 @@ de modo que incluso teniendo infinitas unidades de c\'omputo la ganancia esta li
 \end{center}
 \end{figure}
 
+La tabla anterior nos muestra que no importa la cantidad de unidades de procesamiento que sean utilizadas, en el caso de solo tener un 10\% de paralelismo
+en una aplicacion, la mejora nunca va a superar 1.10x la original. En el caso de tener un 95\%, la mejora nunca va a ser mejor a 20x. Es poco frecuente encontrar aplicaciones que sean altamente paralelizables, la mayoria solo muestra beneficios relevantes al ser escalada hasta 1024 procesadores.
+
 \subsection{Ley de {\it Gustafson}}
 
 Desde un punto de vista m\'as general, la ley de {\it Gustafson}
@@ -610,13 +621,19 @@ Desde un punto de vista m\'as general, la ley de {\it Gustafson}
 repetitivos con conjuntos de datos similares pueden ser f\'acilmente
 paralelizadas. En comparaci\'on, la ley anterior no escala el tama\~no o
 resoluci\'on de problema cuando se incrementa la potencia de c\'alculo, es
-decir con un tama\~no de problema fijo.
+decir con un tama\~no de problema fijo. 
 
-which says that problems with large, repetitive data sets can be efficiently parallelized
+\bigskip
 
-$ speedup(P) = P - \alpha . ( P - 1) $
+Al aplicar esta ley obtenemos que un problema con datos grandes o repetitivos en cantidades grandes puede ser
+eficientemente paralelizable. Nos es \'util para determinar el tama\~no de problema a utilizar cuando los recursos de c\'omputo son incrementados.
+En el mismo tiempo de ejecucion, el programa resuelve entonces problemas m\'as grandes.
 
-Gustafson's law addresses the shortcomings of Amdahl's law, which does not scale the availability of computing power as the number of machines increases. Gustafson's Law proposes that programmers set the size of problems to use the available equipment to solve problems within a practical fixed time. Therefore, if faster (more parallel) equipment is available, larger problems can be solved in the same time.
+\begin{eqnarray}
+speedup(P) = P - \alpha . ( P - 1)
+\end{eqnarray}
+
+donde $ P $ es el n\'umero de unidades de c\'omputo y $ \alpha $ el porcentaje de trabajo paralelizable.
 
 \begin{figure}[H]
 \begin{center}
@@ -625,25 +642,22 @@ Gustafson's law addresses the shortcomings of Amdahl's law, which does not scale
 \end{center}
 \end{figure}
 
+Similarmente al cuadro anterior, podemos deducir que en el caso de un programa con s\'olo 10\% de paralelismo, al incrementar los recursos 64x s\'olo podemos incrementar el tama\~no del problema 7x. Sin embargo nos recomienda incrementar 61x en el caso de tener 95\% de paralelismo.
+
 \subsection{M\'etrica de {\it Karp-Flatt}}
 
-Para medir el grado de paralelismo de una aplicaci\'on puede utilizarse la
-m\'etrica de Karp-Flatt \cite{karp-flatt}.
+Esta m\'etrica es utilizada para medir el grado de paralelismo de una aplicaci\'on \cite{karp-flatt}.
+Esta m\'etrica nos permite rapidamente estimar la mejora posible al aplicar un alto nivel de paralelismo.
 
-pipeline. formulas. rangos de optimizacion posibles.
-
-simulacion. soporte para decidir si cambiar hardware o arquitectura del
-sistema.
-
-Esta metrica nos permite rapidamente estimar la mejora posible al aplicar un alto nivel de paralelismo.
-
- is a measure of parallelization of code in parallel processor systems
+\bigskip
 
 Given a parallel computation exhibiting speedup ψ on p processors, where p > 1, the experimentally determined serial fraction e is defined to be the Karp–Flatt Metric viz: The less the value of e the better the parallelization.
 
 For a problem of fixed size, the efficiency of a parallel computation typically decreases as the number of processors increases. By using the serial fraction obtained experimentally using the Karp–Flatt metric, we can determine if the efficiency decrease is due to limited opportunities of parallelism or increases in algorithmic or architectural overhead.
 
-$ e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} $
+\begin{eqnarray}
+ e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} 
+\end{eqnarray}
 
 \section{Patrones de Dise\~no}
 
