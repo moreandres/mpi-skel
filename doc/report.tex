@@ -708,7 +708,7 @@ tiempo de ejecuci\'on.
 
 % TBD: insert nice chart here, get inspired from wikipedia clasifications
 
-\section{gprof}
+\section{gprof y gcov}
 
 Esta herramienta extrae el perfil din\'amico de una aplicaci\'on, en tiempo
 de ejecuci\'on. Se instrumenta la aplicacion con una opci\'on espec\'ifica que
@@ -758,6 +758,13 @@ precisi\'on estad\'istica. muestreo. incompatibilidades.
 
 \subsection{Introducci\'on}
 
+OProfile  is a profiling system for systems running Linux 2.2, 2.4, and
+       2.6. Profiling runs transparently in the background  and  profile  data
+       can  be  collected at any time. OProfile makes use of the hardware per-
+       formance counters provided on Intel, AMD,  and  other  processors,  and
+       uses a timer-interrupt based mechanism on CPUs without counters.  OPro-
+       file can profile the whole system in high detail.
+
 historia. resumen. caracter\'isticas. 
 
 \subsection{Procedimiento}
@@ -801,12 +808,22 @@ Modificaciones controladas.
 
 Medir. Analizar. Optimizar. Comparar.
 
+0 - correr algunos benchmarks conocidos sobre el sistema a utilizar para poder entender sus capacidades maximas.
+1 - compilar con -pg -f -f para gprof gcov -g.
+2 - elegir tamano de entrada para que se estabilice el algoritmo.
+3 - medir muchas ejecuciones. calcular desviadcion que debe ser menos de 3 sigmas. tomar promedio como baseline.
+4 - escalar tamano de entrada para calcular porcentaje paralelo.
+5 - escalar cantidad de procesadores para calcular amdalah/gustafsin
+6 - medir utilizacion de los recursos
+7 - sacar profile de funciones con  gprof
+8 - sacar gcov de las funciones que mas tiempo utilizan
+
 \section{Actividades}
 
 \subsection{Medici\'on}
 
-Como medir? Benchmark repetible. Baja Desviacion. No muy rapido pero por unos
-minutos. Si hay mucha deviacion se debe repetir la medicion muchas veces y
+Como medir? Benchmark repetible. Baja Desviaci\'on. No muy r\'apido pero por unos
+minutos. Si hay mucha deviacion se debe repetir la medici\'on muchas veces y
 tomar el promedio.
 
 \subsection{An\'alisis}
@@ -837,10 +854,12 @@ Se introduce la propuesta y la justificaci\'on de su utilizaci\'on para un mejor
 \section{Definici\'on}
 
 Modelo por etapas. F\'acil de identificar donde realizar optimizaciones y la ganancia esperada.
+Cada etapa puede ejecutar partes seriales o paralelas de un programa.
 
 % TBD: insertar dibujo del modelo por etapas
 
 Este patr\'on de dise\~no tiene grandes beneficios adem\'as de su simplicidad. Checkpointing. Serial. Paralelo. Pareto.
+Aisla componentes del algoritmo.
 
 Visualizaci\'on directa.
 
@@ -951,13 +970,13 @@ void queen() {
 
 Una transformada de {\it Fourier} \cite{fourier} transforma una se\~nal
 digitalizada en una representaci\'on matem\'atica de las frecuencias que la
-componen. Su aplicaci\'on principal se da en problemas relacionados con el
-movimiento de ondas como en la \'optica y electromagnetismo.
+componen. Su aplicaci\'on principal se da en problemas relacionados con la simulacion del
+movimiento de ondas como en la \'optica y electromagnetismo. Tambien se utiliza para el procesamiento de video y audio.
 
 \bigskip
 
-El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en
-el ap\'endice. Al aplicar las herramientas vistas previamente se identifica
+El c\'odigo fuente de una implementaci\'on simplista de una aplicacion que aplica una transformada de fourier a una fotografia 
+e encuentra adjuntado en el ap\'endice. Al aplicar las herramientas vistas previamente se identifica
 claramente que la evaluaci\'on de derivadas parciales consume el mayor tiempo
 de c\'omputo.
 
