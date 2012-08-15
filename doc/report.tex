@@ -100,10 +100,10 @@ puede determinar que son los m\'as utilizados en el c\'omputo de aplicaciones de
 
 \section{Estado Actual}
 
-Actualmente existen diversas herramientas para el an\'alisis de rendimiento.
+Actualmente existen numerosas y diversas herramientas para el an\'alisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
-a nivel de {\it hardware}, pasando por soporte del n\'ucleo del sistema operativo para ofrecer
-monitores del uso de los recursos disponibles, hasta la
+a nivel de {\it hardware}, pasando por monitores de recursos dentro del n\'ucleo del sistema operativo,
+instrumentaci\'on autom\'atica de c\'odigo, y hasta la
 simple utilizaci\'on del tiempo de ejecuci\'on de una aplicaci\'on o la comparaci\'on contra un trabajo de referencia.
 
 \section{Organizaci\'on del Contenido}
@@ -126,10 +126,10 @@ Este cap\'itulo introduce el concepto de rendimiento y teor\'ia b\'asica sobre s
 \section{Definici\'on}
 
 El rendimiento se caracteriza por la cantidad de trabajo de c\'omputo que se
-logra en comparaci\'on con la cantidad de tiempo y el uso de los recursos  empleados.
+logra en comparaci\'on con la cantidad de tiempo y los recursos ocupados.
 El rendimiento es evaluado entonces de forma cuantificable, utilizando alguna
 m\'etrica en particular de modo de poder comparar relativamente dos sistemas o
-un mismo sistema bajo una configuraci\'on distinta.
+el comportamiento de un mismo sistema bajo una configuraci\'on distinta.
 
 \section{M\'etricas}
 
@@ -137,10 +137,11 @@ Algunos ejemplos de medida de rendimiento son:
 
 \begin{enumerate}
 \item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on,
-  una jerarqu\'ia de memorias o unidad de almacenamiento
-\item la cantidad de instrucciones, operaciones, datos o trabajo a procesar
+  una jerarqu\'ia de memorias o de la unidad de almacenamiento
+\item la cantidad de instrucciones, operaciones, datos o trabajo procesados
   por cierta unidad de tiempo
-\item rendimiento por unidad de energ\'ia o por costo asociado a la compra y mantenimiento de un sistema
+\item rendimiento por unidad de energ\'ia o seg\'un el costo asociado a la compra
+y mantenimiento de un sistema de c\'omputo
 \end{enumerate}
 
 Un m\'etodo de medici\'on de rendimiento indirecto consiste en medir el uso de
@@ -180,7 +181,8 @@ del problema a resolver, o la definici\'on de los resultados para ejercitar por 
 \bigskip
 
 Los resultados deben tambi\'en ser correctamente guardados para evitar
-problemas de datos. Si la configuraci\'on del sistema es din\'amica, la reproducci\'on de resultados es compleja, en el caso de no tener una
+problemas de datos. Si la configuraci\'on del sistema es din\'amica entonces la
+reproducci\'on de resultados es no trivial. En el caso de no tener una
 configuraci\'on de sistema estable en el tiempo, es recomendable siempre
 ejecutar una versi\'on optimizada contra una version de referencia en un mismo
 sistema de c\'omputo.
@@ -570,12 +572,12 @@ End of HPC Challenge tests.
 \section{Teor\'ia}
 
 Una vez obtenida una implementaci\'on eficiente, la \'unica alternativa para mejorar el rendimiento es explotar el paralelismo que
-ofrecen los sistemas de c\'omputo. Este paralelismo se puede explotar a diferentes niveles, desde instrucciones que ejecutan una misma instruccion a varios
-datos a la vez, pasando por la utilizacion varias unidades de computo en el mismo sistema hasta la utilizacion de unidades de computo en diferentes sistemas.
+ofrecen los sistemas de c\'omputo. Este paralelismo se puede explotar a diferentes niveles, desde instrucciones que ejecutan una misma operaci\'on a varios
+datos a la vez (vectorizaci\'on), pasando por la utilizaci\'on de varias unidades de c\'omputo hasta la utilizacion de unidades de c\'omputo en diferentes sistemas para distribuir el trabajo.
 
 \bigskip
 
-El c\'alculo de las mejoras posibles de rendimiento, como priorizarlas y su l\'imite m\'aximo es una tarea no trivial.
+El c\'alculo de las mejoras posibles de rendimiento, como priorizarlas y la estimaci\'on de su l\'imite m\'aximo es una tarea compleja.
 Para ello existen algunas leyes frecuentemente utilizadas durante el an\'alisis de rendimiento.
 
 \subsection{Ley de {\it Amdahl}}
@@ -586,7 +588,7 @@ componentes. Nos ayuda a establecer un l\'imite m\'aximo de mejora y a conocer d
 \bigskip
 
 La mejora de un programa utilizando procesamiento multiple en c\'omputo paralelo est\'a limitado por el tiempo necesario para completar su fracci\'on serial o secuencial. Frecuentemente el paralelismo solo afecta notariamente cuando es utilizado en un peque\~no n\'umero de procesadores, o cuando se aplica a problemas altamente escalables (embarrassingly parallel problems). Una vez paralelizado un programa, los esfuerzos suelen ser enfocados en como minimizar
-la parte secuencial, algunas veces haciendo m\'as trabajo redundante en paralelo.
+la parte secuencial, algunas veces haciendo m\'as trabajo redundante pero en paralelo.
 
 \bigskip
 
@@ -612,7 +614,8 @@ componentes aisladas en la parte paralela, esta ley nos ayuda a identificar el i
 \end{figure}
 
 La tabla anterior nos muestra que no importa la cantidad de unidades de procesamiento que sean utilizadas, en el caso de solo tener un 10\% de paralelismo
-en una aplicacion, la mejora nunca va a superar 1.10x la original. En el caso de tener un 95\%, la mejora nunca va a ser mejor a 20x. Es poco frecuente encontrar aplicaciones que sean altamente paralelizables, la mayoria solo muestra beneficios relevantes al ser escalada hasta 1024 procesadores.
+en una aplicacion, la mejora nunca va a superar 1.10x la original. En el caso de tener un 95\%, la mejora nunca va a ser mejor a 20x. Es poco frecuente encontrar
+aplicaciones que sean completamente paralelizables, la mayoria solo muestra beneficios relevantes al ser escalada hasta 1024 procesadores.
 
 \subsection{Ley de {\it Gustafson}}
 
@@ -621,7 +624,7 @@ Desde un punto de vista m\'as general, la ley de {\it Gustafson}
 repetitivos con conjuntos de datos similares pueden ser f\'acilmente
 paralelizadas. En comparaci\'on, la ley anterior no escala el tama\~no o
 resoluci\'on de problema cuando se incrementa la potencia de c\'alculo, es
-decir con un tama\~no de problema fijo. 
+decir asume un tama\~no de problema fijo. 
 
 \bigskip
 
@@ -642,7 +645,9 @@ donde $ P $ es el n\'umero de unidades de c\'omputo y $ \alpha $ el porcentaje d
 \end{center}
 \end{figure}
 
-Similarmente al cuadro anterior, podemos deducir que en el caso de un programa con s\'olo 10\% de paralelismo, al incrementar los recursos 64x s\'olo podemos incrementar el tama\~no del problema 7x. Sin embargo nos recomienda incrementar 61x en el caso de tener 95\% de paralelismo.
+Similarmente al cuadro anterior, podemos deducir que en el caso de un programa con s\'olo 10\% de paralelismo,
+al incrementar los recursos 64x s\'olo podemos incrementar el tama\~no del problema 7x. Sin embargo nos calcula
+un incremento de 61x en el caso de tener 95\% de paralelismo.
 
 \subsection{M\'etrica de {\it Karp-Flatt}}
 
@@ -651,9 +656,11 @@ Esta m\'etrica nos permite rapidamente estimar la mejora posible al aplicar un a
 
 \bigskip
 
-Given a parallel computation exhibiting speedup ψ on p processors, where p > 1, the experimentally determined serial fraction e is defined to be the Karp–Flatt Metric viz: The less the value of e the better the parallelization.
+Dado un c\'omputo paralelo con un speedup $ \phi $ en P procesadores, donde $ p > 1 $.
+La fraccion serial {\it Karp-Flatt} $ e $ es determinada experimentalmente, mientras menor sea $ e $ mayor se supone el nivel de paralelismo posible.
 
-For a problem of fixed size, the efficiency of a parallel computation typically decreases as the number of processors increases. By using the serial fraction obtained experimentally using the Karp–Flatt metric, we can determine if the efficiency decrease is due to limited opportunities of parallelism or increases in algorithmic or architectural overhead.
+Para un problema de tama\~no fijo, la eficiencia tipicamente disminuye cuando el numero de procesadores aumenta.
+Se puede entonces determinar si esta disminucion es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema de arquitectura del sistema.
 
 \begin{eqnarray}
  e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} 
@@ -662,10 +669,10 @@ For a problem of fixed size, the efficiency of a parallel computation typically 
 \section{Patrones de Dise\~no}
 
 Entre los patrones de dise\~no m\'as discutidos se encuentran: master/worker,
-pipeline, work-stealing. En el dise\~no master/worker, un proceso dirige el
+pipeline, y work-stealing. En el dise\~no master/worker, un proceso dirige el
 trabajo de los dem\'as. En pipeline el trabajo se divide en etapas
-independendientes. En work-stealing los trabajadores obtienen el trabajo desde
-un conjunto en com\'un.
+independendientes. En work-stealing cada trabajador obtiene independientemente el trabajo
+cuando se libera.
 
 \begin{figure}[H]
 \begin{center}
@@ -693,6 +700,8 @@ Robo de Trabajo.
 
 Balanceo de carga automatico, sin importan si son unidades de c\'omputo heterogeneo.
 
+Intel Threading Building Blocks es un claro ejemplo.
+
 \chapter{Herramientas}
 
 Este cap\'itulo revisa las herramientas disponibles para soporte de an\'alisis
@@ -702,7 +711,7 @@ de rendimiento de aplicaciones.
 
 Existen diferentes alternativas sobre el modo de extraer informaci\'on de
 caracter\'isticas relacionadas con el rendimiento de una aplicaci\'on.
-Estos m\'etodos pueden clasificarse como din\'amico o est\'atico.
+Estos m\'etodos pueden clasificarse como din\'amicos o est\'aticos.
 Tambi\'en pueden clasificarse como aplicables en tiempo de compilaci\'on o
 tiempo de ejecuci\'on.
 
