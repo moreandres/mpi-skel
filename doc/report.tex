@@ -16,7 +16,7 @@
   Director: Dr Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
 }
 
-%\date{}
+\date{Abril de 2012}
 
 \maketitle
 
@@ -35,7 +35,7 @@
   herramientas para conocer donde se deber\'ia localizar los esfuerzos de
   optimizaci\'on. Antes de concluir se propone un modelo para este tipo de
   aplicaciones utilizando una abstracci\'on en etapas, cuya
-  utilizaci\'on simplifica el an\'alisis de rendimiento y facilita el proceso de optimizaci\'on.
+  utilizaci\'on simplifica el an\'alisis de rendimiento y gu\'ia el proceso de optimizaci\'on.
 
   \bigskip
 
@@ -86,9 +86,9 @@ optimizaci\'on \cite{parallel-programming}.
 El proceso de optimizaci\'on de una implementaci\'on termina entonces siendo
 hecho de modo {\it ad-hoc}, sin conocimiento pleno de las herramientas disponibles y
 sus capacidades, y sin la utilizaci\'on de informaci\'on cuantitativa para dirigir los
-esfuerzos de optimizaci\'on. Es frecuente la implementaci\'on directa
+esfuerzos de optimizaci\'on. Es incluso frecuente la implementaci\'on directa
 de algoritmos en lugar de la utilizaci\'on de librer\'ias ya disponibles, optimizadas
-profundamente y con correctitud comprobada por el paso del tiempo.
+profundamente y con correctitud altamente comprobada.
 
 \section{Alcance}
 
@@ -100,16 +100,22 @@ puede determinar que son los m\'as utilizados en el c\'omputo de aplicaciones de
 
 \section{Estado Actual}
 
+<<<<<<< .mine
+Actualmente existen numerosas herramientas para el an\'alisis de rendimiento.
+Las mismas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
+a nivel de {\it hardware}, pasando por m\'etricas en el n\'ucleo del sistema operativo, hasta la
+=======
 Actualmente existen numerosas y diversas herramientas para el an\'alisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
 a nivel de {\it hardware}, pasando por monitores de recursos dentro del n\'ucleo del sistema operativo,
 instrumentaci\'on autom\'atica de c\'odigo, y hasta la
+>>>>>>> .r117
 simple utilizaci\'on del tiempo de ejecuci\'on de una aplicaci\'on o la comparaci\'on contra un trabajo de referencia.
 
 \section{Organizaci\'on del Contenido}
 
-El resto del documento explica inicialmente teor\'ia sobre el an\'alisis del rendimiento, que luego es
-aplicada a trav\'es de diversas herramientas.
+El resto del documento explica teor\'ia introductoria sobre el an\'alisis del rendimiento, que luego es
+aplicada a trav\'es del resto del documento.
 
 \bigskip
 
@@ -127,7 +133,7 @@ Este cap\'itulo introduce el concepto de rendimiento y teor\'ia b\'asica sobre s
 
 El rendimiento se caracteriza por la cantidad de trabajo de c\'omputo que se
 logra en comparaci\'on con la cantidad de tiempo y los recursos ocupados.
-El rendimiento es evaluado entonces de forma cuantificable, utilizando alguna
+El rendimiento debe ser evaluado entonces de forma cuantificable, utilizando alguna
 m\'etrica en particular de modo de poder comparar relativamente dos sistemas o
 el comportamiento de un mismo sistema bajo una configuraci\'on distinta.
 
@@ -137,11 +143,21 @@ Algunos ejemplos de medida de rendimiento son:
 
 \begin{enumerate}
 \item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on,
+<<<<<<< .mine
+  una jerarqu\'ia de memorias o unidad de almacenamiento
+\item la cantidad de instrucciones, operaciones, datos o trabajo realizado
+=======
   una jerarqu\'ia de memorias o de la unidad de almacenamiento
 \item la cantidad de instrucciones, operaciones, datos o trabajo procesados
+>>>>>>> .r117
   por cierta unidad de tiempo
+<<<<<<< .mine
+\item rendimiento por unidad de energ\'ia utilizada
+\item rendimiento asociado al costo del equipamiento, incluyendo mantenimiento peri\'odico
+=======
 \item rendimiento por unidad de energ\'ia o seg\'un el costo asociado a la compra
 y mantenimiento de un sistema de c\'omputo
+>>>>>>> .r117
 \end{enumerate}
 
 Un m\'etodo de medici\'on de rendimiento indirecto consiste en medir el uso de
@@ -199,7 +215,7 @@ Es muy importante tomar decisiones basadas en datos concretos, ya que en
 caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
 un r\'edito adecuado.
 
-\section{Benchmarks}
+\section{Pruebas de Rendimiento}
 
 Para medir el rendimiento se utilizan pruebas de referencias denominadas
 {\em benchmarks}; \'estas pueden ser aplicaciones sint\'eticas constru\'idas
