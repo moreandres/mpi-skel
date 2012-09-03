@@ -255,11 +255,7 @@ Es muy importante tomar decisiones basadas en datos concretos, ya que en
 caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
 un r\'edito adecuado.
 
-<<<<<<< .mine
-\section{Pruebas de Referencia}
-=======
 \section{Pruebas de Rendimiento}
->>>>>>> .r118
 
 Para medir el rendimiento se utilizan pruebas de referencias denominadas
 {\em benchmarks}; \'estas pueden ser aplicaciones sint\'eticas constru\'idas
@@ -293,7 +289,7 @@ de sus datos de salida para ser utilizados de referencia.
 
 \begin{table}[H]
     \caption{Benchmarks}
-    \centering
+    \begin{center}
     \begin{tabular}{|l|l|l|}\hline
       {\bf Benchmark} & {\bf Componente} & {\bf Descripci\'on} \\ \hline
       STREAM & Memoria & Ancho de banda sostenido \\ \hline
@@ -302,6 +298,7 @@ de sus datos de salida para ser utilizados de referencia.
       HPCC & Sistema & Completo \\ \hline
         \end{tabular}
   \label{benchmark-list}
+  \end{center}
 \end{table}
 
 \bigskip
@@ -324,7 +321,8 @@ a la memoria principal del sistema bajo an\'alisis.
 Dentro de una misma ejecuci\'on de este {\it benchmark}, se ejercitan diferentes
 operaciones en memoria. A continuaci\'on se resumen las operaciones ejercitadas.
 
-\begin{figure}[H]
+\begin{table}[H]
+\caption{Operaciones del Benchmark STREAM}
   \begin{center}
     \begin{tabular}{|l|l|l|}\hline
       {\bf Funci\'on} & {\bf Operaci\'on} & {\bf Descripci\'on} \\ \hline
@@ -333,10 +331,10 @@ operaciones en memoria. A continuaci\'on se resumen las operaciones ejercitadas.
       add & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & Suma directa \\ \hline
       triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & Suma y multiplicaci\'on escalar \\ \hline
     \end{tabular}
-    \caption{Operaciones del Benchmark STREAM}
+    
    \end{center}
  \label{stream}
-\end{figure}
+\end{table}
 
 La salida en pantalla muestra entonces los diferentes tiempos conseguidos y la cantidad de informaci\'on transferida por unidad de tiempo.
 Como \'ultimo paso, el programa valida tambi\'en la soluci\'on computada.
@@ -490,7 +488,7 @@ Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes va
 \end{verbatim}
 }
 
-\subsection{HPCC}
+\subsection{HPC Challenge}
 
 El {\it benchmark} HPC Challenge \cite{hpcc} (HPCC) est\'a compuesto internamente por un conjunto de
 varios {\it benchmarks}, entre ellos STREAM, HPL, Ping Pong, Transformadas de {\it Fourier}
@@ -631,40 +629,6 @@ FFTEl2size=1048576
 \begin{verbatim}
 End of Summary section.
 End of HPC Challenge tests.
-\end{verbatim}
-}
-
-\subsection{Vectorizaci\'on}
-
-Una forma de ver si el compilador esta vectorizando los ciclos de c\'omputo
-intensivo es utilizar las opciones provistas para ello.
-
-{\small
-\begin{verbatim}
-$ gcc -Wall -Wextra -O3 -ftree-vectorizer-verbose=4 -g queen.c
-queen.c:22: note: vectorized 0 loops in function.
-queen.c:35: note: vectorized 0 loops in function.
-\end{verbatim}
-}
-
-{\small
-\begin{verbatim}
-$ icc -vec-report=10 -par-report=3 -ipo -O3 queen.c -parallel
-   procedure: main
-queen.c(40): (col. 2) remark: loop was not parallelized: existence of parallel dependence.
-queen.c(41): (col. 2) remark: loop was not parallelized: existence of parallel dependence.
-queen.c(40): (col. 2) remark: loop was not vectorized: unsupported loop structure.
-queen.c(40): (col. 2) remark: vectorization support: call to function printf cannot be vectorized.
-queen.c(40): (col. 2) remark: loop was not vectorized: existence of vector dependence.
-queen.c(41): (col. 2) remark: vectorization support: call to function printf cannot be vectorized.
-queen.c(41): (col. 2) remark: loop was not vectorized: existence of vector dependence.
-queen.c(40): (col. 2) remark: loop was not vectorized: nonstandard loop is not a vectorization candidate.
-   procedure: queens
-queen.c(27): (col. 5) remark: loop was not parallelized: existence of parallel dependence.
-queen.c(25): (col. 7) remark: loop was not vectorized: unsupported loop structure.
-queen.c(27): (col. 5) remark: vectorization support: call to function printf cannot be vectorized.
-queen.c(27): (col. 5) remark: loop was not vectorized: existence of vector dependence.
-queen.c(24): (col. 2) remark: loop was not vectorized: nonstandard loop is not a vectorization candidate.
 \end{verbatim}
 }
 
@@ -893,29 +857,21 @@ incluso programables para funciones determinadas de medici\'on.
 
 \subsection{Ejemplos}
 
-\chapter{Procedimiento de An\'alisis}
+\section{Vectorizaci\'on}
 
-\section{Proceso}
+Una forma de confirmar si el compilador esta vectorizando los ciclos de c\'omputo
+intensivo es utilizar las opciones provistas para ello. Esto es muy \'util para
+detectar si los cuellos de botella ya se encuentran optimizados o no.
 
-Modificaciones controladas.
+Por ejemplo en el caso de que el c\'odigo se recursivo se detalla lo siguiente:
 
-% TBD: insert nice chart here.
-
-\bigskip
-
-Medir. Analizar. Optimizar. Comparar.
-
-\begin{enumerate}
-\item correr algunos benchmarks conocidos sobre el sistema a utilizar para poder entender sus capacidades maximas.
-\item compilar con -pg -f -f para gprof gcov -g.
-\item elegir tamano de entrada para que se estabilice el algoritmo.
-\item medir muchas ejecuciones. calcular desviaci\'on que debe ser menos de 3 sigmas. tomar promedio geom\'etrico como baseline.
-\item escalar tamano de entrada para calcular porcentaje paralelo.
-\item escalar cantidad de procesadores para calcular amdalah/gustafsin
-\item medir utilizaci\'on de los recursos
-\item sacar profile de funciones con gprof
-\item sacar gcov de las funciones que m\'as tiempo utilizan
-\end{enumerate}
+{\small
+\begin{verbatim}
+$ gcc -Wall -Wextra -O3 -ftree-vectorizer-verbose=4 -g queen.c
+queen.c:22: note: vectorized 0 loops in function.
+queen.c:35: note: vectorized 0 loops in function.
+\end{verbatim}
+}
 
 \section{Actividades}
 
@@ -944,6 +900,85 @@ Como optimizar? Librerias. Dependencias. Paralelizar.
 C\'omo comparar? Antes/Despues. Repeticiones. Para utilizar informaci\'on
 hist\'orica es preciso garantizar que el sistema siendo ejercitado es el mismo. Por ello es preferible ser cautos y ejecutar las dos versiones conjuntamente
 al momento de realizar las pruebas. 
+
+\chapter{Procedimiento de An\'alisis}
+
+\section{Proceso}
+
+Modificaciones controladas.
+
+\begin{figure}[H]
+\label{fig:procedure}
+\begin{center}
+\includegraphics[width=5cm]{procedure.png}
+\caption{Procedimiento de An\'alisis}
+\end{center}
+\end{figure}
+
+\bigskip
+
+Medir. Analizar. Optimizar. Comparar.
+
+\begin{enumerate}
+\item correr algunos benchmarks conocidos sobre el sistema a utilizar para poder entender sus capacidades m\'aximas.
+
+\begin{verbatim}
+$ ./hpl
+$ mpiexec ./hpcc
+$ ./dgemm
+$ mpiexec ./imb-ping-pong
+\end{verbatim}
+
+\item sacar gcov del codigo para entenderlo mejor
+
+\begin{verbatim}
+$ gcov -b
+\end{verbatim}
+
+\item compilar con -pg -f -f para generar el perfil de rendimiento.
+
+problema: overhead.
+
+\begin{verbatim}
+$ gcc -Wall -Wextra -O3 --report-loop
+\end{verbatim}
+
+\item elegir tama\~no de entrada para que se estabilice el algoritmo.
+	medir muchas ejecuciones. calcular desviaci\'on que debe ser menos de 3
+	sigmas. tomar promedio geom\'etrico como baseline.
+	
+\begin{verbatim}
+$ for i in `seq 1 32`; do time ./app; done
+\end{verbatim}
+	
+\item escalar tama\~no de entrada para calcular porcentaje paralelo.
+
+\begin{verbatim}
+$ for i in `seq 1024 1024 10240`; do time ./app; done
+\end{verbatim}
+
+\item escalar cantidad de procesadores para calcular amdalah/gustafson
+
+\begin{verbatim}
+$ OMP_THREADS=i
+$ -np=i
+\end{verbatim}
+
+\item medir utilizaci\'on de los recursos
+
+\begin{verbatim}
+$ top
+\end{verbatim}
+
+\item sacar profile de funciones con gprof
+
+\begin{verbatim}
+$ gprof -l
+\end{verbatim}
+
+bottlenecks. entender algoritmo. buscar librer\'ia ya optimizada.
+
+\end{enumerate}
 
 \chapter{Casos de Estudio}
 
@@ -974,8 +1009,6 @@ El c\'odigo fuente de una implementaci\'on simplista se encuentra adjuntado en
 el ap\'endice. Al aplicar las herramientas vistas previamente se identifica
 claramente que la multiplicaci\'on de los elementos de la matriz consume el
 mayor tiempo de c\'omputo.
-
-\bigskip
 
 \bigskip
 
