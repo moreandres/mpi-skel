@@ -42,14 +42,14 @@
   Este trabajo resume la experiencia que debe atravesar cualquier
   individuo en busca de las diferentes alternativas para el an\'alisis de
   rendimiento; incluyendo la selecci\'on de herramientas de soporte y la
-  definici\'on de un procedimiento sistem\'atico para la aplicaci\'on sistem\'atica
+  definici\'on de un procedimiento sistem\'atico para la aplicaci\'on iterativa
   de las mismas.
 
   \bigskip
 
   Este trabajo contribuye entonces con un resumen de las teor\'ia del an\'alisis del
   rendimiento m\'as una descripci\'on de los herramientas de soporte 
-  disponibles actualmente. Se propone tambi\'en un proceso para analizar el
+  disponibles en el momento. Se propone tambi\'en un proceso para analizar el
   rendimiento, ejemplificando su aplicaci\'on a un conjunto de n\'ucleos de
   c\'omputo no triviales.
 
@@ -70,7 +70,8 @@ especialistas del dominio del problema a resolver. Las rutinas
 m\'as demandantes de c\'alculo son en su mayor\'ia cient\'ificas y su
 alta complejidad hace posible su correcta implementaci\'on s\'{o}lo por los mismos investigadores.
 Este hecho resulta en un reducido tiempo de an\'alisis de resultados
-e impacta directamente en la productividad de cualquier grupo de investigaci\'on.
+e impacta directamente en la productividad de cualquier grupo de investigaci\'on y
+desarrollo.
 
 \bigskip
 
@@ -78,15 +79,19 @@ Con mayor impacto que en otras \'areas de la computaci\'on, el c\'odigo
 optimizado correctamente puede ejecutarse \'ordenes de magnitud mejor que una implementaci\'on
 directa \cite{mm-matrixmultiplicationtool}. Adem\'as, se utiliza
 programaci\'on en paralelo para obtener una mejor utilizaci\'on de la
-capacidad de c\'omputo disponible; aumentando la complejidad de implementaci\'on, depuraci\'on y
-optimizaci\'on \cite{parallel-programming}.
+capacidad de c\'omputo disponible; aumentando por lo tanto la complejidad de
+implementaci\'on, depuraci\'on y optimizaci\'on \cite{parallel-programming}.
 
 \bigskip
 
-El proceso de optimizaci\'on de una implementaci\'on termina entonces siendo
+Frecuentemente el proceso de optimizaci\'on termina entonces siendo
 hecho de modo {\it ad-hoc}, sin conocimiento pleno de las herramientas disponibles y
 sus capacidades, y sin la utilizaci\'on de informaci\'on cuantitativa para dirigir los
+<<<<<<< .mine
+esfuerzos de mejora de rendimiento. Es frecuente la implementaci\'on directa
+=======
 esfuerzos de optimizaci\'on. Es incluso frecuente la implementaci\'on directa
+>>>>>>> .r118
 de algoritmos en lugar de la utilizaci\'on de librer\'ias ya disponibles, optimizadas
 profundamente y con correctitud altamente comprobada.
 
@@ -112,6 +117,26 @@ instrumentaci\'on autom\'atica de c\'odigo, y hasta la
 >>>>>>> .r117
 simple utilizaci\'on del tiempo de ejecuci\'on de una aplicaci\'on o la comparaci\'on contra un trabajo de referencia.
 
+\bigskip
+
+Ademas de teor\'ia de an\'alisis del rendimiento, un desarrollador necesita
+(al menos) conocer de las siguientes herramientas:
+
+\begin{table}[H]
+    \caption{Herramientas de Soporte para Optimizaci\'on}
+    \centering
+    \begin{tabular}{|l|l|}\hline
+      {\bf Herramienta} & {\bf Descripci\'on} \\ \hline
+      gprof & muestra informaci\'on de perfil de llamadas a funciones \\ \hline
+      oprofile & muestra informaci\'on de perfil de sistema \\ \hline
+      stream & benchmark de jerarquia de memoria \\ \hline
+      hpl & benchmark de capacidad de c\'omputo \\ \hline
+      imb pingpong & benchmark de latencia y ancho de banda \\ \hline
+      hpcc & conjunto de benchmarks \\ \hline
+    \end{tabular}
+    \label{table:tools}
+\end{table}
+
 \section{Organizaci\'on del Contenido}
 
 El resto del documento explica teor\'ia introductoria sobre el an\'alisis del rendimiento, que luego es
@@ -123,7 +148,7 @@ El cap\'itulo 2 discute el an\'alisis de rendimiento, sus
 principios y teor\'ia. El cap\'itulo 3 detalla las herramientas m\'as
 utilizadas. El cap\'itulo 4 ejemplifica la aplicaci\'on de las herramientas
 para obtener informaci\'on de an\'alisis a trav\'es de un proceso sistem\'atico.
-El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles trabajos futuros o extensiones a considerar.
+El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles extensiones de este trabajo.
 
 \chapter{An\'alisis de Rendimiento}
 
@@ -168,9 +193,9 @@ archivos temporales e incluso el ancho de banda de red utilizado durante la comu
 
 \section{T\'ecnicas de An\'alisis}
 
-El procedimiento general usualmente consiste en ciclos iterativos de medir, localizar, optimizar,
+El procedimiento de mejora general usualmente consiste en ciclos iterativos de medir, localizar, optimizar,
 comparar. Es muy importante mantener la disciplina en realizar un cambio a la
-vez ya que esto asegura resultados reproducibles y convergentes.
+vez ya que esto asegura resultados reproducibles y convergentes, sin efectos no deseados.
 
 \bigskip
 
@@ -185,16 +210,18 @@ vez ya que esto asegura resultados reproducibles y convergentes.
 
 En el caso de tener problemas de desviaci\'on en los resultados medidos, es aconsejable obtener un gran n\'umero de muestras y utilizar
 un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible. Sin embargo, es siempre preferible aumentar el tama\~no
-del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener as\'i un resultado m\'as predecible.
+del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener as\'i un resultado m\'as estable.
+
+Un buen valor suele ser 3 sigmas \ref{fig:deviation}, suponiendo una distribucion normal de los resultados
+esto nos indica un conjunto estable de resultados.
 
 \begin{figure}[H]
+\label{fig:deviation}
 \begin{center}
 \includegraphics[width=10cm]{deviation.png}
 \caption{Desviaci\'on Normal}
 \end{center}
 \end{figure}
-
-\bigskip
 
 Los resultados deben tambi\'en ser correctamente guardados para evitar
 problemas de datos. Si la configuraci\'on del sistema es din\'amica entonces la
@@ -202,6 +229,19 @@ reproducci\'on de resultados es no trivial. En el caso de no tener una
 configuraci\'on de sistema estable en el tiempo, es recomendable siempre
 ejecutar una versi\'on optimizada contra una version de referencia en un mismo
 sistema de c\'omputo.
+
+\bigskip
+
+Para comparar rendimiento entre diferentes sistemas, es bueno utilizar
+la media geom\'etrica (\ref{eq:geomean}) en lugar de la aritm\'etica,
+ya que permite dimensionar la tendencia central de un valor t\'ipico en un conjunto
+de n\'umeros. Esto permite reducir el nivel de ruido introducido por una ejecuci\'on
+problem\'atica.
+
+\begin{equation}
+\label{eq:geomean}
+g = \sqrt[n]{x_{1} \ldots x_{n}}
+\end{equation}
 
 \bigskip
 
@@ -215,7 +255,11 @@ Es muy importante tomar decisiones basadas en datos concretos, ya que en
 caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
 un r\'edito adecuado.
 
+<<<<<<< .mine
+\section{Pruebas de Referencia}
+=======
 \section{Pruebas de Rendimiento}
+>>>>>>> .r118
 
 Para medir el rendimiento se utilizan pruebas de referencias denominadas
 {\em benchmarks}; \'estas pueden ser aplicaciones sint\'eticas constru\'idas
@@ -226,8 +270,10 @@ facilitar la comparaci\'on de resultados.
 \bigskip
 
 Al tener valores de referencia se pueden caracterizar los sistemas de modo de predecir el rendimiento de una aplicaci\'on.
-Los valores a los que se llegan con un {\it benchmark} suelen ser mas practicos y comparables que los teoricos de acuerdo a condiciones ideales der recursos.
-Tambi\'en es posible garantizar que el sistema sigue en un mismo estado con el correr del tiempo y los cambios de configuraciones en {\it hardware} o {\it software}.
+Los valores a los que se llegan con un {\it benchmark} suelen ser m\'as pr\'acticos y
+comparables que los te\'oricos de acuerdo a condiciones ideales de los recursos.
+Tambi\'en es posible garantizar que el sistema sigue en un mismo estado con el correr\
+del tiempo y los cambios de configuraciones en {\it hardware} o {\it software}.
 
 \bigskip
 
@@ -242,20 +288,28 @@ tecnolog\'ias.
 \bigskip
 
 A continuaci\'on se introducen algunas de las m\'as utilizadas para c\'omputo
-de altas prestaciones, y posteriormente algunos detalles espec\'ificos y ejemplos de sus datos de salida como referencia.
+de altas prestaciones, y posteriormente algunos detalles espec\'ificos y ejemplos
+de sus datos de salida para ser utilizados de referencia.
 
-\begin{figure}[H]
-  \begin{center}
+\begin{table}[H]
+    \caption{Benchmarks}
+    \centering
     \begin{tabular}{|l|l|l|}\hline
       {\bf Benchmark} & {\bf Componente} & {\bf Descripci\'on} \\ \hline
       STREAM & Memoria & Ancho de banda sostenido \\ \hline
       Linpack & Procesador & Operaciones de punto flotante \\ \hline
-      IMB & Red & Latencia y ancho de banda de comunicaci\'on \\ \hline
-    \end{tabular}
-    \caption{Benchmarks}
-  \end{center}
+      IMB Ping Pong & Red & Latencia y ancho de banda de comunicaci\'on \\ \hline
+      HPCC & Sistema & Completo \\ \hline
+        \end{tabular}
   \label{benchmark-list}
-\end{figure}
+\end{table}
+
+\bigskip
+
+Los benchmarks pueden ser utilizados para diferentes prop\'ositos. Primero, los valores reportados son usados como referencia
+para contrastar rendimiento. Segundo, su desviaci\'on demuestra que algo ha cambiado en el sistema. Su no desviaci\'on que el sistema
+sigue saludable. Por \'ultimo, un benchmark sintetico implementando el computo que uno quiere realizar muestra el
+rendimiento m\'aximo a obtener.
 
 \subsection{STREAM}
 
@@ -287,6 +341,7 @@ operaciones en memoria. A continuaci\'on se resumen las operaciones ejercitadas.
 La salida en pantalla muestra entonces los diferentes tiempos conseguidos y la cantidad de informaci\'on transferida por unidad de tiempo.
 Como \'ultimo paso, el programa valida tambi\'en la soluci\'on computada.
 
+{\small
 \begin{verbatim}
   STREAM version $Revision: 1.2 $
   -------------------------------------------------------------
@@ -304,6 +359,7 @@ Como \'ultimo paso, el programa valida tambi\'en la soluci\'on computada.
   -------------------------------------------------------------
   Solution Validates
 \end{verbatim}
+}
 
 \subsection{Linpack}
 
@@ -314,17 +370,11 @@ el paquete Linpack pero utilizando sistemas de memoria distribu\'ida.
 
 \bigskip
 
-Existe cierta controversia de que no es una buena forma de ejercitar un
-sistema de c\'omputo distribu\'ido ya que no implica uso significativo de la
-red, s\'olo procesamiento intensivo de aritm\'etica de punto flotante
-sobre la jerarqu\'ia local de memoria.
-
-\bigskip
-
-Sin embargo, este benchmark es utilizado mundialmente para la comparaci\'on de la
+Este benchmark es utilizado mundialmente para la comparaci\'on de la
 velocidad de las supercomputadoras en el ranking TOP500. 
 Un gr\'afico del TOP500 de los \'ultimos a\~nos demuestra claramente la
-tendencia en crecimiento de rendimiento; tambi\'en la relaci\'on entre el primero, el último y la suma de todos los sistemas en la lista.
+tendencia en crecimiento de rendimiento; tambi\'en la relaci\'on entre el primero,
+el \'ultimo y la suma de todos los sistemas en la lista.
 
 \begin{figure}[H]
 \begin{center}
@@ -342,20 +392,12 @@ debe estar directamente relacionado con el tama\~no del {\it cache} de memoria d
 La salida en pantalla resume entonces los datos de entrada y los resultados conseguidos.
 Como \'ultimo paso el programa valida que los resultados sean correctos.
 
+{\small
 \begin{verbatim}
 =================================================================
 HPLinpack 2.0 - High-Performance Linpack benchmark - Sep 10, 2008
 Written by A. Petitet and R. Clint Whaley
 ============================================================
-An explanation of the input/output parameters follows:
-T/V    : Wall time / encoded variant.
-N      : The order of the coefficient matrix A.
-NB     : The partitioning blocking factor.
-P      : The number of process rows.
-Q      : The number of process columns.
-Time   : Time in seconds to solve the linear system.
-Gflops : Rate of execution for solving the linear system.
-
 The following parameter values will be used:
 N      :   28888
 NB     :     168
@@ -392,25 +434,28 @@ Finished      1 tests with the following results:
 0 tests completed and failed residual checks,
 0 tests skipped because of illegal input values.
 \end{verbatim}
+}
+
+\bigskip
+
+Existe cierta controversia de que no es una buena forma de ejercitar un
+sistema de c\'omputo distribu\'ido ya que no implica uso significativo de la
+red, s\'olo procesamiento intensivo de aritm\'etica de punto flotante
+sobre la jerarqu\'ia local de memoria.
 
 \subsection{Intel MPI Benchmarks}
 
 Es un conjunto de {\it benchmarks} cuyo objetivo es ejercitar las funciones
 m\'as importantes del estandar para librer\'ias de paso de mensajes (MPI, por sus siglas en ingl\'es) \cite{mpi}.
 El m\'as conocido es el popular ping-pong, el cual ejercita la transmisi\'on de mensajes ida y vuelta entre dos nodos de
-c\'omputo con diferentes tama\~nos de mensajes. 
-
-\bigskip
-
-Este {\it benchmark} es uno de los m\'as utilizados por su simpleza, 
-en particular para comprobar que los dispositivos de red est\'en configurados adecuadamente para c\'omputo
-de altas prestaciones.
+c\'omputo con diferentes tama\~nos de mensajes. \cite{latency}.
 
 \bigskip
 
 Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on a trav\'es de mensajes con datos grandes.
 Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, es decir transmitiendo mensajes sin datos.
 
+{\small
 \begin{verbatim}
 # Intel (R) MPI Benchmark Suite V3.1, MPI-1 part
 # Date                  : Wed Mar  3 10:45:16 2010
@@ -443,6 +488,7 @@ Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes va
 2097152    20              17919.20  111.61
 4194304    10              35766.45  111.84
 \end{verbatim}
+}
 
 \subsection{HPCC}
 
@@ -454,9 +500,9 @@ y otros.
 
 Este benchmark muestra diferentes resultados que son representativos
 y puestos en consideraci\'on de acuerdo al tipo de aplicaci\'on en discusi\'on.
-La mejor m\'aquina depende de la aplicaci\'on a ejecutar, ya que algunas aplicaciones
-necesitan mejor ancho de banda de memoria, mejor canales de comunicaci\'on, o
-la mayor capacidad de c\'omputo posible.
+La mejor m\'aquina depende de la aplicaci\'on espec\'ifica a ejecutar, ya que algunas
+aplicaciones necesitan mejor ancho de banda de memoria, mejor canal de comunicaci\'on, o
+o simplemente la mayor capacidad de c\'omputo de operaciones flotantes posible.
 
 \bigskip
 
@@ -484,6 +530,8 @@ Para una mejor comparaci\'on de resultados de HPCC, se utilizan diagramas denomi
 \end{figure}
 
 Un ejemplo de la salida que se muestra durante la ejecuci\'on se muestra a continuaci\'on.
+
+{\small
 
 \begin{verbatim}
 This is the DARPA/DOE HPC Challenge Benchmark version 1.2.0 October 2003
@@ -584,6 +632,41 @@ FFTEl2size=1048576
 End of Summary section.
 End of HPC Challenge tests.
 \end{verbatim}
+}
+
+\subsection{Vectorizaci\'on}
+
+Una forma de ver si el compilador esta vectorizando los ciclos de c\'omputo
+intensivo es utilizar las opciones provistas para ello.
+
+{\small
+\begin{verbatim}
+$ gcc -Wall -Wextra -O3 -ftree-vectorizer-verbose=4 -g queen.c
+queen.c:22: note: vectorized 0 loops in function.
+queen.c:35: note: vectorized 0 loops in function.
+\end{verbatim}
+}
+
+{\small
+\begin{verbatim}
+$ icc -vec-report=10 -par-report=3 -ipo -O3 queen.c -parallel
+   procedure: main
+queen.c(40): (col. 2) remark: loop was not parallelized: existence of parallel dependence.
+queen.c(41): (col. 2) remark: loop was not parallelized: existence of parallel dependence.
+queen.c(40): (col. 2) remark: loop was not vectorized: unsupported loop structure.
+queen.c(40): (col. 2) remark: vectorization support: call to function printf cannot be vectorized.
+queen.c(40): (col. 2) remark: loop was not vectorized: existence of vector dependence.
+queen.c(41): (col. 2) remark: vectorization support: call to function printf cannot be vectorized.
+queen.c(41): (col. 2) remark: loop was not vectorized: existence of vector dependence.
+queen.c(40): (col. 2) remark: loop was not vectorized: nonstandard loop is not a vectorization candidate.
+   procedure: queens
+queen.c(27): (col. 5) remark: loop was not parallelized: existence of parallel dependence.
+queen.c(25): (col. 7) remark: loop was not vectorized: unsupported loop structure.
+queen.c(27): (col. 5) remark: vectorization support: call to function printf cannot be vectorized.
+queen.c(27): (col. 5) remark: loop was not vectorized: existence of vector dependence.
+queen.c(24): (col. 2) remark: loop was not vectorized: nonstandard loop is not a vectorization candidate.
+\end{verbatim}
+}
 
 \section{Teor\'ia}
 
@@ -603,12 +686,17 @@ componentes. Nos ayuda a establecer un l\'imite m\'aximo de mejora y a conocer d
 
 \bigskip
 
-La mejora de un programa utilizando procesamiento multiple en c\'omputo paralelo est\'a limitado por el tiempo necesario para completar su fracci\'on serial o secuencial. Frecuentemente el paralelismo solo afecta notariamente cuando es utilizado en un peque\~no n\'umero de procesadores, o cuando se aplica a problemas altamente escalables (embarrassingly parallel problems). Una vez paralelizado un programa, los esfuerzos suelen ser enfocados en como minimizar
+La mejora de un programa utilizando procesamiento m\'ultiple en c\'omputo paralelo
+est\'a limitado por el tiempo necesario para completar su fracci\'on serial o
+secuencial. Frecuentemente el paralelismo solo afecta notariamente cuando es
+utilizado en un peque\~no n\'umero de procesadores, o cuando se aplica a problemas
+altamente escalables (embarrassingly parallel problems). Una vez paralelizado un
+programa, los esfuerzos suelen ser enfocados en como minimizar
 la parte secuencial, algunas veces haciendo m\'as trabajo redundante pero en paralelo.
 
 \bigskip
 
-La ley de amdahl puede ser entonces modelada de la siguiente forma:
+La ley de {\it Amdahl} puede ser entonces modelada de la siguiente forma:
 
 \begin{eqnarray}
 max speedup = \frac{1}{(1-P) + \frac{P}{N}}
@@ -618,9 +706,9 @@ donde $ P $ es el porcentaje de trabajo paralelizable ($ 1-P $ es entonces el tr
 
 \bigskip
 
-Suponiendo que una aplicaci\'on requiere de un trabajo serial más un trabajo paralelizable; esta ley nos deja estimar la m\'axima ganancia posible
+Suponiendo que una aplicaci\'on requiere de un trabajo serial m\'as un trabajo paralelizable; esta ley nos deja estimar la m\'axima ganancia posible
 de modo que incluso teniendo infinitas unidades de c\'omputo la ganancia esta limitada como se muestra a continuaci\'on. Incluso en el caso de tener varias
-componentes aisladas en la parte paralela, esta ley nos ayuda a identificar el impacto al mejorar cada una de las partes.
+componentes aisladas en la parte paralela, esta ley nos permite identificar el impacto al mejorar cada una de las partes.
 
 \begin{figure}[H]
 \begin{center}
@@ -630,8 +718,9 @@ componentes aisladas en la parte paralela, esta ley nos ayuda a identificar el i
 \end{figure}
 
 La tabla anterior nos muestra que no importa la cantidad de unidades de procesamiento que sean utilizadas, en el caso de solo tener un 10\% de paralelismo
-en una aplicacion, la mejora nunca va a superar 1.10x la original. En el caso de tener un 95\%, la mejora nunca va a ser mejor a 20x. Es poco frecuente encontrar
-aplicaciones que sean completamente paralelizables, la mayoria solo muestra beneficios relevantes al ser escalada hasta 1024 procesadores.
+en una aplicaci\'on, la mejora nunca va a superar 1.10x la original. En el caso de tener un 95\%, la mejora nunca va a ser mejor a 20x. Es poco frecuente encontrar
+aplicaciones que sean completamente paralelizables, la mayor\'ia solo muestra
+beneficios relevantes al ser escalada hasta 1024 procesadores.
 
 \subsection{Ley de {\it Gustafson}}
 
@@ -646,7 +735,8 @@ decir asume un tama\~no de problema fijo.
 
 Al aplicar esta ley obtenemos que un problema con datos grandes o repetitivos en cantidades grandes puede ser
 eficientemente paralelizable. Nos es \'util para determinar el tama\~no de problema a utilizar cuando los recursos de c\'omputo son incrementados.
-En el mismo tiempo de ejecucion, el programa resuelve entonces problemas m\'as grandes.
+En el mismo tiempo de ejecuci\'on, el programa resuelve entonces problemas m\'as grandes.
+{\it strong scaling}.
 
 \begin{eqnarray}
 speedup(P) = P - \alpha . ( P - 1)
@@ -655,13 +745,14 @@ speedup(P) = P - \alpha . ( P - 1)
 donde $ P $ es el n\'umero de unidades de c\'omputo y $ \alpha $ el porcentaje de trabajo paralelizable.
 
 \begin{figure}[H]
+\label{fig:gustafson}
 \begin{center}
 \includegraphics[width=5cm]{gustafson.png}
 \caption{Tama\~no de Datos de Entrada}
 \end{center}
 \end{figure}
 
-Similarmente al cuadro anterior, podemos deducir que en el caso de un programa con s\'olo 10\% de paralelismo,
+Similarmente al cuadro anterior, podemos deducir \ref{fig:gustafson} que en el caso de un programa con s\'olo 10\% de paralelismo,
 al incrementar los recursos 64x s\'olo podemos incrementar el tama\~no del problema 7x. Sin embargo nos calcula
 un incremento de 61x en el caso de tener 95\% de paralelismo.
 
@@ -673,52 +764,19 @@ Esta m\'etrica nos permite rapidamente estimar la mejora posible al aplicar un a
 \bigskip
 
 Dado un c\'omputo paralelo con un speedup $ \phi $ en P procesadores, donde $ p > 1 $.
-La fraccion serial {\it Karp-Flatt} $ e $ es determinada experimentalmente, mientras menor sea $ e $ mayor se supone el nivel de paralelismo posible.
+La fracci\'on serial {\it Karp-Flatt} $ e $ es determinada experimentalmente, mientras menor sea $ e $
+mayor se supone el nivel de paralelismo posible.
 
-Para un problema de tama\~no fijo, la eficiencia tipicamente disminuye cuando el numero de procesadores aumenta.
-Se puede entonces determinar si esta disminucion es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema de arquitectura del sistema.
+Para un problema de tama\~no fijo, la eficiencia t\'ipicamente disminuye cuando
+el n\'umero de procesadores aumenta. Se puede entonces determinar si esta disminuci\'on
+es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema de
+arquitectura del sistema.
 
 \begin{eqnarray}
  e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} 
 \end{eqnarray}
 
-\section{Patrones de Dise\~no}
-
-Entre los patrones de dise\~no m\'as discutidos se encuentran: master/worker,
-pipeline, y work-stealing. En el dise\~no master/worker, un proceso dirige el
-trabajo de los dem\'as. En pipeline el trabajo se divide en etapas
-independendientes. En work-stealing cada trabajador obtiene independientemente el trabajo
-cuando se libera.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=10cm]{patterns.png}
-\caption{Patrones}
-\end{center}
-\end{figure}
-
-\subsection{Pipeline}
-
-Este dise\~no establece una divisi\'on del trabajo en etapas aisladas.
-
-Cada etapa puede ser computada al mismo tiempo, por lo que las unidades de trabajo que transitan las etapas pueden ser solapadas entre si.
-Aunque la cantidad de trabajo es el mismo, el solapamiento permite completar mas unidades de trabajo en N etapas al momento N+i con i=1.
-
-\subsection{Master/Worker}
-
-Maestro/Trabajador.
-
-Balanceo de carga.
-
-\subsection{Work-Stealing}
-
-Robo de Trabajo.
-
-Balanceo de carga automatico, sin importan si son unidades de c\'omputo heterogeneo.
-
-Intel Threading Building Blocks es un claro ejemplo.
-
-\chapter{Herramientas}
+\chapter{Herramientas de Soporte}
 
 Este cap\'itulo revisa las herramientas disponibles para soporte de an\'alisis
 de rendimiento de aplicaciones.
@@ -763,6 +821,8 @@ de dependencias.
 El perfil de ejecuci\'on muestra el tiempo individual y el tiempo acumulado en segundos
 de cada l\'inea de c\'odigo de la aplicaci\'on.
 
+Los binarios deben ser compilados con informaci\'on extra de depuraci\'on.
+
 {\tt time, cumulative seconds, self seconds, calls, self ms/call,
   total ms/call, name}
 
@@ -783,27 +843,36 @@ precisi\'on estad\'istica. muestreo. incompatibilidades.
 
 \subsection{Introducci\'on}
 
-OProfile  is a profiling system for systems running Linux 2.2, 2.4, and
-       2.6. Profiling runs transparently in the background  and  profile  data
-       can  be  collected at any time. OProfile makes use of the hardware per-
-       formance counters provided on Intel, AMD,  and  other  processors,  and
-       uses a timer-interrupt based mechanism on CPUs without counters.  OPro-
-       file can profile the whole system in high detail.
+{\it oprofile} analiza perfiles de rendimiento a nivel de nucleo del
+sistema operativo. Actua de forma transparente a nivel global. Utiliza
+contadores de hardware del CPU e utiliza interrupciones de un temporizador
+cuando no logra detectar soporte en hardware.
 
-historia. resumen. caracter\'isticas. 
+% TBD: http://stackoverflow.com/questions/1777556/alternatives-to-gprof/1779343#1779343
 
 \subsection{Procedimiento}
 
-ejecutar el profiler. ejecutar la aplicaci\'on. generar el resumen.
+Para obtener realizar un analisis se necesita:
 
-No se necesita el c\'odigo. C\'odigo anotado si hay s\'imbolos de depuraci\'on o
-{\it debugging}.
+\begin{enumerate}
 
-componentes del sistema.
+\item detener toda aplicacion o servicio no relevante en el sistema.
 
-contadores de performance.
+\item ejecutar el profiler
 
-costo adicional. overhead.
+\item ejecutar la aplicaci\'on
+
+\item generar el resumen
+
+\end{enumerate}
+
+La herramienta de por si no se necesita acceder al c\'odigo fuente de la aplicacion.
+Pero si esta disponible el c\'odigo correspondiente se muestra anotado con contadores
+si hay s\'imbolos de depuraci\'on en el binario {\it debugging}.
+
+Este m\'etodo tiene en cuenta todos los componentes del sistema.
+Se basa en la lectura de contadores del mismo procesador implementados en hardware.
+Aunque tiene un costo adicional inherente, el overhead es m\'inimo.
 
 \subsection{Contadores de Rendimiento}
 
@@ -811,15 +880,16 @@ Los registros de {\it hardware} implementando contadores m\'as utilizados son lo
 siguientes:
 
 \begin{enumerate}
-\item total processor cycles
-\item total instructions
-\item cycles stalled waiting for memory accesses
-\item floating point divide instructions
-\item L1 cache misses
-\item floating point instructions
-\item load instructions
-\item store instructions
+\item cantidad total de ciclos de procesador
+\item cantidad total de instrucciones ejecutadas
+\item cantidad de ciclos detenidos por espera de acceso a memoria
+\item cantidad de instrucciones de punto flotante
+\item cantidad de fallos de cache de nivel uno (L1)
+\item cantidad de instrucciones de carga y descarga
 \end{enumerate}
+
+Las herramientas propietarias suelen tener acceso a contadores m\'as especificos e
+incluso programables para funciones determinadas de medici\'on.
 
 \subsection{Ejemplos}
 
@@ -829,19 +899,23 @@ siguientes:
 
 Modificaciones controladas.
 
+% TBD: insert nice chart here.
+
 \bigskip
 
 Medir. Analizar. Optimizar. Comparar.
 
-0 - correr algunos benchmarks conocidos sobre el sistema a utilizar para poder entender sus capacidades maximas.
-1 - compilar con -pg -f -f para gprof gcov -g.
-2 - elegir tamano de entrada para que se estabilice el algoritmo.
-3 - medir muchas ejecuciones. calcular desviadcion que debe ser menos de 3 sigmas. tomar promedio como baseline.
-4 - escalar tamano de entrada para calcular porcentaje paralelo.
-5 - escalar cantidad de procesadores para calcular amdalah/gustafsin
-6 - medir utilizacion de los recursos
-7 - sacar profile de funciones con  gprof
-8 - sacar gcov de las funciones que mas tiempo utilizan
+\begin{enumerate}
+\item correr algunos benchmarks conocidos sobre el sistema a utilizar para poder entender sus capacidades maximas.
+\item compilar con -pg -f -f para gprof gcov -g.
+\item elegir tamano de entrada para que se estabilice el algoritmo.
+\item medir muchas ejecuciones. calcular desviaci\'on que debe ser menos de 3 sigmas. tomar promedio geom\'etrico como baseline.
+\item escalar tamano de entrada para calcular porcentaje paralelo.
+\item escalar cantidad de procesadores para calcular amdalah/gustafsin
+\item medir utilizaci\'on de los recursos
+\item sacar profile de funciones con gprof
+\item sacar gcov de las funciones que m\'as tiempo utilizan
+\end{enumerate}
 
 \section{Actividades}
 
@@ -870,35 +944,6 @@ Como optimizar? Librerias. Dependencias. Paralelizar.
 C\'omo comparar? Antes/Despues. Repeticiones. Para utilizar informaci\'on
 hist\'orica es preciso garantizar que el sistema siendo ejercitado es el mismo. Por ello es preferible ser cautos y ejecutar las dos versiones conjuntamente
 al momento de realizar las pruebas. 
-
-\chapter{Modelo}
-
-Este cap\'itulo propone la utilizaci\'on de un modelo por etapas para el desarrollo de aplicaciones de alto rendimiento.
-Se introduce la propuesta y la justificaci\'on de su utilizaci\'on para un mejor an\'alisis de rendimiento.
-
-\section{Definici\'on}
-
-Modelo por etapas. F\'acil de identificar donde realizar optimizaciones y la ganancia esperada.
-Cada etapa puede ejecutar partes seriales o paralelas de un programa.
-
-% TBD: insertar dibujo del modelo por etapas
-
-Este patr\'on de dise\~no tiene grandes beneficios adem\'as de su simplicidad. Checkpointing. Serial. Paralelo. Pareto.
-Aisla componentes del algoritmo.
-
-Visualizaci\'on directa.
-
-\section{An\'alisis}
-
- El c\'alculo de las leyes de amdalah y dem\'as es directo.
-
-\subsection{F\'ormulas}
-
-% TBD: insertar formulas asumiendo un modelo por etapas
-
-\bigskip
-
-F\'ormulas de tiempo de ejecuci\'on. amdalah.
 
 \chapter{Casos de Estudio}
 
@@ -931,8 +976,6 @@ claramente que la multiplicaci\'on de los elementos de la matriz consume el
 mayor tiempo de c\'omputo.
 
 \bigskip
-
-
 
 \bigskip
 
@@ -981,14 +1024,65 @@ pieza en el tablero que este en la mismo diagonal, fila o columna.
 Este problema suele resolverse utilizando recursi\'on.
 
 \begin{verbatim}
-int columns = 8;
-int column = 0;
-for (column = 0; column < columns; column++)
-   queen();
+#include <stdio.h>
+#include <stdlib.h>
 
-void queen() {
-   queen();
+static int *row = NULL;
+
+static int available(int i, int n)
+{
+        int j = 1;
+        while (row[i] != row[j] && abs(row[i] - row[j]) != (i - j) && j < n)
+                j++;
+        return ((i == j) ? 1 : 0);
 }
+
+static void show(int n)
+{
+        int i;
+        for (i = 1; i <= n; i++)
+                printf("row[\%d] = col[\%d]\n", i, row[i]);
+}
+
+static void queens(int i, int n)
+{
+        for (row[i] = 1; row[i] <= n; row[i]++) {
+                if (available(i, n)) {
+                        if (i == n) {
+                                show(n);
+                                exit(0);
+                        } else
+                                queens(i + 1, n);
+                }
+        }
+}
+
+int main()
+{
+        int n = atoi(getenv("QUEEN_N"));
+
+        row = malloc(sizeof(int)*n);
+        queens(1, n);
+        show(n);
+
+        return (0);
+}
+\end{verbatim}
+
+\begin{verbatim}
+Each sample counts as 0.01 seconds.
+  \%   cumulative   self              self     total
+ time   seconds   seconds    calls  ms/call  ms/call  name
+ 79.28      4.65     4.65                             available (queen.c:9 @ 400775)
+  6.01      5.01     0.35                             queens (queen.c:24 @ 4008d3)
+\end{verbatim}
+
+Contrastando el tiempo requerido de ejecucion entre la version original y la instrumentada,
+la diferencia fue 52.73 versus 49.61 segundos. Aproximadamente un 5.91 \%.
+
+\begin{verbatim}
+$ gcc -Wall -Wextra -O3 -g -pg queen.c
+$ QUEEN\_N=30 time ./a.out
 \end{verbatim}
 
 \section{Transformadas de {\it Fourier}}
@@ -1046,7 +1140,7 @@ Un algoritmo a\'un m\'as eficiente es el denominado {\it Goertzel}.
 
 \bigskip
 
-Este caso de aplicacion no demuestra como al conocer el algoritmo implementado se
+Este caso de aplicaci\'on no demuestra como al conocer el algoritmo implementado se
 facilita la tarea de buscar algoritmos optimizados para cada caso en particular.
 
 \chapter{Conclusiones}
@@ -1109,6 +1203,13 @@ varios ciclos de optimizaci\'on.
 Trabajo en conjunto con un alg\'un grupo de investigaci\'on cient\'ifica,
 realizando an\'alisis de rendimiento de aplicaciones ya existentes utilizadas
 para publicaci\'on de resultados de modelado o simulaci\'on.
+
+\section{Modelo en Etapas}
+
+Luego de realizar este analisis se llego a la conclusion de que seria muy util
+el tener una infrastructura ya lista para prototipar rapidamente una aplicacion.
+La mayoria de los desarrolladores solo necesitan concentrarse en el algoritmo a
+paralelizar y en la optimizacion de las etapas mas demandantes de computo.
 
 \begin{thebibliography}{9}
 
@@ -1282,6 +1383,11 @@ para publicaci\'on de resultados de modelado o simulaci\'on.
 \bibitem{gsl}
   Free Software Foundation (FSF), \emph{GNU Scientific Library (GSL)},
   {\tt http://www.gnu.org/software/gsl}.
+
+\bibitem{latency}
+	R. Garabato, A. More, V. Rosales,
+	\emph{Optimizing Ethernet Latency in Beowulf Clusters},
+	CLEI 2012.
 
 \end{thebibliography}
 
