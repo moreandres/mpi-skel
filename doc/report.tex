@@ -105,17 +105,11 @@ puede determinar que son los m\'as utilizados en el c\'omputo de aplicaciones de
 
 \section{Estado Actual}
 
-<<<<<<< .mine
-Actualmente existen numerosas herramientas para el an\'alisis de rendimiento.
-Las mismas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
-a nivel de {\it hardware}, pasando por m\'etricas en el n\'ucleo del sistema operativo, hasta la
-=======
 Actualmente existen numerosas y diversas herramientas para el an\'alisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
 a nivel de {\it hardware}, pasando por monitores de recursos dentro del n\'ucleo del sistema operativo,
-instrumentaci\'on autom\'atica de c\'odigo, y hasta la
->>>>>>> .r117
-simple utilizaci\'on del tiempo de ejecuci\'on de una aplicaci\'on o la comparaci\'on contra un trabajo de referencia.
+instrumentaci\'on autom\'atica de c\'odigo, y hasta la simple utilizaci\'on del tiempo de ejecuci\'on 
+de una aplicaci\'on o la comparaci\'on contra un trabajo de referencia.
 
 \bigskip
 
@@ -168,21 +162,14 @@ Algunos ejemplos de medida de rendimiento son:
 
 \begin{enumerate}
 \item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on,
-<<<<<<< .mine
-  una jerarqu\'ia de memorias o unidad de almacenamiento
-\item la cantidad de instrucciones, operaciones, datos o trabajo realizado
-=======
   una jerarqu\'ia de memorias o de la unidad de almacenamiento
-\item la cantidad de instrucciones, operaciones, datos o trabajo procesados
->>>>>>> .r117
+\item la cantidad de instrucciones, operaciones, datos o trabajo procesado
   por cierta unidad de tiempo
-<<<<<<< .mine
-\item rendimiento por unidad de energ\'ia utilizada
-\item rendimiento asociado al costo del equipamiento, incluyendo mantenimiento peri\'odico
-=======
+\item rendimiento asociado al costo del equipamiento, incluyendo mantenimiento
+ peri\'odico y/o personal dedicado
 \item rendimiento por unidad de energ\'ia o seg\'un el costo asociado a la compra
 y mantenimiento de un sistema de c\'omputo
->>>>>>> .r117
+
 \end{enumerate}
 
 Un m\'etodo de medici\'on de rendimiento indirecto consiste en medir el uso de
@@ -240,7 +227,15 @@ problem\'atica.
 
 \begin{equation}
 \label{eq:geomean}
-g = \sqrt[n]{x_{1} \ldots x_{n}}
+G = \sqrt[n]{x_{1} \ldots x_{n}}
+\end{equation}
+
+Esta cuenta puede ser muy costosa y requerir de una alta precisi\'on, por lo que se
+suele tomar el antilogaritmo del promedio de los logaritmos de los valores.
+
+\begin{equation}
+\label{eq:geomean-log}
+G = 10 ^{( log _{10} (x_{1}) + \ldots + log _{10} (x_{n}) ) / n}
 \end{equation}
 
 \bigskip
@@ -728,7 +723,7 @@ Esta m\'etrica nos permite rapidamente estimar la mejora posible al aplicar un a
 \bigskip
 
 Dado un c\'omputo paralelo con un speedup $ \phi $ en P procesadores, donde $ p > 1 $.
-La fracci\'on serial {\it Karp-Flatt} $ e $ es determinada experimentalmente, mientras menor sea $ e $
+La fracci\'on serial {\it Karp-Flatt} $ e $ \ref{eq:karp-flatt} es determinada experimentalmente, mientras menor sea $ e $
 mayor se supone el nivel de paralelismo posible.
 
 Para un problema de tama\~no fijo, la eficiencia t\'ipicamente disminuye cuando
@@ -737,6 +732,7 @@ es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema 
 arquitectura del sistema.
 
 \begin{eqnarray}
+\label{eq:karp-flatt}
  e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} 
 \end{eqnarray}
 
@@ -857,13 +853,57 @@ incluso programables para funciones determinadas de medici\'on.
 
 \subsection{Ejemplos}
 
+{\small
+\begin{verbatim}
+$ opreport --demangle=smart --symbols `which lyx`
+CPU: PIII, speed 863.195 MHz (estimated)
+Counted CPU_CLK_UNHALTED events (clocks processor is not halted) with a unit mask of 0x00 (No unit mask) count 50000
+vma      samples  \%           image name               symbol name
+081ec974 5016      3.1034     lyx                      _Rb_tree<unsigned short, pair<unsigned short const, int>,  unsigned short const>::find(unsigned short const&)
+00009f30 4154      2.5701     libpthread-0.10.so       __pthread_alt_unlock
+0810c4ec 3323      2.0559     lyx                      Paragraph::getFontSettings(BufferParams const&, int) const
+081319d8 3220      1.9922     lyx                      LyXText::getFont(Buffer const*, Paragraph*, int) const
+080e45d8 3011      1.8629     lyx                      LyXFont::realize(LyXFont const&)
+0000a120 2853      1.7652     libpthread-0.10.so       __pthread_alt_lock
+080e3d78 2623      1.6229     lyx                      LyXFont::LyXFont()
+00069a10 2467      1.5263     libstdc++.so.5.0.1       string::find(char const*, unsigned, unsigned) const
+0006a430 2274      1.4069     libstdc++.so.5.0.1       string::compare(char const*) const
+4201e850 2169      1.3420     libc-2.3.2.so            __GI_setlocale
+4207d870 1982      1.2263     libc-2.3.2.so            memcpy
+...
+\end{verbatim}
+
+\begin{verbatim}
+$ opannotate --source --output-dir=/home/moz/src/annotated `which oprofiled`
+$ vi /home/moz/src/annotated/home/moz/src/oprofile/daemon/opd_image.c # the annotated source output
+...
+               :static uint64_t pop_buffer_value(struct transient * trans)
+   254  2.4909 :{ /* pop_buffer_value total:   2105 20.6433 */
+               :        uint64_t val;
+               :
+   160  1.5691 :        if (!trans->remaining) {
+               :                fprintf(stderr, "BUG: popping empty buffer !\n");
+               :                exit(EXIT_FAILURE);
+               :        }
+               :
+               :        val = get_buffer_value(trans->buffer, 0);
+   123  1.2062 :        trans->remaining--;
+    65  0.6374 :        trans->buffer += kernel_pointer_size;
+               :        return val;
+   230  2.2556 :}
+...
+\end{verbatim}
+}
+
 \section{Vectorizaci\'on}
 
-Una forma de confirmar si el compilador esta vectorizando los ciclos de c\'omputo
-intensivo es utilizar las opciones provistas para ello. Esto es muy \'util para
-detectar si los cuellos de botella ya se encuentran optimizados o no.
+Una herramienta de bajo nivel para analizar rendimiento es el mismo compilador
+que deber\'ia estar vectorizando los ciclos de c\'omputo intensivo. Esto es muy
+\'util paradetectar si los cuellos de botella ya se encuentran optimizados o no.
 
-Por ejemplo en el caso de que el c\'odigo se recursivo se detalla lo siguiente:
+\bigskip
+
+Por ejemplo en el caso de que el c\'odigo sea recursivo se detalla lo siguiente:
 
 {\small
 \begin{verbatim}
@@ -984,6 +1024,42 @@ bottlenecks. entender algoritmo. buscar librer\'ia ya optimizada.
 
 Este cap\'itulo aplica el modelo propuesto en el cap\'itulo anterior. Varios ejemplos no triviales de aplicaciones de altas prestaciones son implementados
 y analizados utilizando los benchmarks y herramientas anteriormente presentadas.
+
+\section{Referencia}
+
+Antes de empezar tomamos algunos datos de referencia del sistema utilizado.
+Esto nos permite saber cuan lejos estan nuestras aplicaciones de lo que se
+puede obtener, tambi\'en nos permite esbozar algunas hip\'otesis \ref{table:pruebas}.
+
+% TBD: astor hardware plus software stack from latency paper, only 4 nodes
+
+% TBD: benchmark results from CLCK
+
+\begin{table}[H]
+\caption{Pruebas de Referencia}
+  \begin{center}
+    \begin{tabular}{|l|l|l|}\hline
+      {\bf Benchmark} & {\bf Valor} & {\bf Unidad} \\ \hline
+      dgemm & 70141 & mflops \\ \hline
+      stream & 5931.6635 & MB/s \\ \hline
+      hpl & 0.1217 & tflops \\ \hline
+      ping pong BW & 1183.68 & MB/s \\ \hline
+      ping ping latency & 4.49 & us \\ \hline
+    \end{tabular}
+    \end{center}
+ \label{table:pruebas}
+\end{table}
+
+\begin{verbatim}
+DGEMM, GFLOPS:   returned: '56.9715'
+FFT, GFLOPS      returned: '2.43038'
+HP Linpack, TFLOPS     returned: '0.057867'
+PTRANS, GB/s     returned: '1.01094'
+RandomAccess, GUPs/s    returned: '0.00417059'
+Ring Bandwidth, GB/s     returned: '1.0678'
+Ring Latency, us     returned: '3.68976'
+STREAM Triad, GB/s   returned: '6.19899'
+\end{verbatim}
 
 \section{Multiplicaci\'on de Matrices}
 
@@ -1137,7 +1213,7 @@ de c\'omputo.
 A continuaci\'on se muestra una comparaci\'on de diferentes m\'etodos, se
 demuestra claramente con este ejercicio la sofisticaci\'on de librer\'ias
 contra m\'etodos artesanales de optimizaci\'on. La siguiente es la versi\'on
-cl\'asica de una implementacion directa utilizando el algoritmo de
+cl\'asica de una implementaci\'on directa utilizando el algoritmo de
 {\it Cooley-Tukey}.
 
 \begin{verbatim}
@@ -1239,10 +1315,10 @@ para publicaci\'on de resultados de modelado o simulaci\'on.
 
 \section{Modelo en Etapas}
 
-Luego de realizar este analisis se llego a la conclusion de que seria muy util
-el tener una infrastructura ya lista para prototipar rapidamente una aplicacion.
-La mayoria de los desarrolladores solo necesitan concentrarse en el algoritmo a
-paralelizar y en la optimizacion de las etapas mas demandantes de computo.
+Luego de realizar este an\'alisis se llego a la conclusi\'on de que seria muy \'util
+el tener una infrastructura ya lista para prototipar r\'apidamente una aplicaci\'on.
+La mayor\'ia de los desarrolladores solo necesitan concentrarse en el algoritmo a
+paralelizar y en la optimizacion de las etapas mas demandantes de c\'omputo.
 
 \begin{thebibliography}{9}
 
