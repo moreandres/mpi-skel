@@ -4,6 +4,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage[spanish]{babel}
+\usepackage{listings}
 
 \begin{document}
 
@@ -655,10 +656,11 @@ la parte secuencial, algunas veces haciendo m\'as trabajo redundante pero en par
 
 \bigskip
 
-La ley de {\it Amdahl} puede ser entonces modelada de la siguiente forma:
+La ley de {\it Amdahl} \ref{eq:amdahl} puede ser entonces modelada de la siguiente forma:
 
 \begin{eqnarray}
-max speedup = \frac{1}{(1-P) + \frac{P}{N}}
+\label{eq:amdahl}
+S = \frac{1}{(1-P) + \frac{P}{N}}
 \end{eqnarray}
 
 donde $ P $ es el porcentaje de trabajo paralelizable ($ 1-P $ es entonces el trabajo en serie o secuencial), $ N $ es la cantidad de unidades de c\'omputo utilizadas.
@@ -684,7 +686,7 @@ beneficios relevantes al ser escalada hasta 1024 procesadores.
 \subsection{Ley de {\it Gustafson}}
 
 Desde un punto de vista m\'as general, la ley de {\it Gustafson}
-\cite{gustafson} establece que las aplicaciones que manejan problemas
+\cite{gustafson} \ref{eq:gustafson} establece que las aplicaciones que manejan problemas
 repetitivos con conjuntos de datos similares pueden ser f\'acilmente
 paralelizadas. En comparaci\'on, la ley anterior no escala el tama\~no o
 resoluci\'on de problema cuando se incrementa la potencia de c\'alculo, es
@@ -698,6 +700,7 @@ En el mismo tiempo de ejecuci\'on, el programa resuelve entonces problemas m\'as
 {\it strong scaling}.
 
 \begin{eqnarray}
+\label{eq:gustafson}
 speedup(P) = P - \alpha . ( P - 1)
 \end{eqnarray}
 
@@ -1031,9 +1034,21 @@ Antes de empezar tomamos algunos datos de referencia del sistema utilizado.
 Esto nos permite saber cuan lejos estan nuestras aplicaciones de lo que se
 puede obtener, tambi\'en nos permite esbozar algunas hip\'otesis \ref{table:pruebas}.
 
-% TBD: astor hardware plus software stack from latency paper, only 4 nodes
-
-% TBD: benchmark results from CLCK
+\begin{table}[H]
+    \caption{Compute Node Hardware and Software}
+    \centering
+    \begin{tabular}{|l|l|}\hline
+      {\bf Component} & {\bf Description} \\ \hline
+      Server Board & Intel(R) S5000PAL \\ \hline
+      CPU & Intel(R) Xeon(R) X5355 @ 2.66GHz \\ \hline
+      Ethernet controller & Intel(R) 80003ES2LAN (Copper) (rev 01) \\ \hline
+      RAM Memory & 4 GB DDR2 FB 667 MHz \\ \hline
+      Operating System & Red Hat Enterprise 5.5 (Tikanga) \\ \hline
+      Network Driver & Intel(R) PRO/1000 1.2.20-NAPI \\ \hline
+      Ethernet Switch & Hewlett Packard HPJ4904A \\ \hline
+    \end{tabular}
+    \label{table:testbed}
+\end{table}
 
 \begin{table}[H]
 \caption{Pruebas de Referencia}
@@ -1068,13 +1083,9 @@ campos de aplicaci\'on cient\'ifica como la resoluci\'on de ecuaciones
 lineales y la representaci\'on de grafos y espacios dimensionales. Por ello
 existe abundante material sobre el tema.
 
-\begin{verbatim}
-for (i = 0; i < n; i++)
-  for (j = 0; j < n; j++)
-    for (k = 0; k < n; k++)
-      c[i * n + j] += 
-        a[i * n + k] * b[k * n + j];
-\end{verbatim}
+{\small
+\lstinputlisting{mm.c}
+}
 
 Diferentes alternativas de implementaci\'on son discutidas en
 \cite{mm-matrixmultiplicationtool}.
