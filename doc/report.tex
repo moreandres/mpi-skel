@@ -17,7 +17,7 @@
   Director: Dr Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
 }
 
-\date{Abril de 2012}
+\date{Octubre de 2012}
 
 \maketitle
 
@@ -88,11 +88,7 @@ implementaci\'on, depuraci\'on y optimizaci\'on \cite{parallel-programming}.
 Frecuentemente el proceso de optimizaci\'on termina entonces siendo
 hecho de modo {\it ad-hoc}, sin conocimiento pleno de las herramientas disponibles y
 sus capacidades, y sin la utilizaci\'on de informaci\'on cuantitativa para dirigir los
-<<<<<<< .mine
-esfuerzos de mejora de rendimiento. Es frecuente la implementaci\'on directa
-=======
 esfuerzos de optimizaci\'on. Es incluso frecuente la implementaci\'on directa
->>>>>>> .r118
 de algoritmos en lugar de la utilizaci\'on de librer\'ias ya disponibles, optimizadas
 profundamente y con correctitud altamente comprobada.
 
@@ -898,15 +894,17 @@ $ vi /home/moz/src/annotated/home/moz/src/oprofile/daemon/opd_image.c # the anno
 \end{verbatim}
 }
 
-\section{Vectorizaci\'on}
+\section{Reporte de Vectorizaci\'on}
 
 Una herramienta de bajo nivel para analizar rendimiento es el mismo compilador
 que deber\'ia estar vectorizando los ciclos de c\'omputo intensivo. Esto es muy
-\'util paradetectar si los cuellos de botella ya se encuentran optimizados o no.
+\'util para detectar si los cuellos de botella ya se encuentran optimizados o no.
 
 \bigskip
 
 Por ejemplo en el caso de que el c\'odigo sea recursivo se detalla lo siguiente:
+No es posible vectorizar c\'odigo recursivo, por lo que puede ser un buen punto a
+optimizar.
 
 {\small
 \begin{verbatim}
