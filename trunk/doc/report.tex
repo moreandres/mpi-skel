@@ -17,7 +17,7 @@
   Director: Dr Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
 }
 
-\date{Octubre de 2012}
+\date{Diciembre de 2012}
 
 \maketitle
 
@@ -34,9 +34,7 @@
   Luego de la introducci\'on de terminolog\'ia y bases te\'oricas del
   an\'alisis cuantitativo de rendimiento, se resume la experiencia de utilizar
   herramientas para conocer donde se deber\'ia localizar los esfuerzos de
-  optimizaci\'on. Antes de concluir se propone un modelo para este tipo de
-  aplicaciones utilizando una abstracci\'on en etapas, cuya
-  utilizaci\'on simplifica el an\'alisis de rendimiento y gu\'ia el proceso de optimizaci\'on.
+  optimizaci\'on.
 
   \bigskip
 
@@ -70,8 +68,8 @@ En el \'area de c\'omputo de altas prestaciones los desarrolladores son los mism
 especialistas del dominio del problema a resolver. Las rutinas
 m\'as demandantes de c\'alculo son en su mayor\'ia cient\'ificas y su
 alta complejidad hace posible su correcta implementaci\'on s\'{o}lo por los mismos investigadores.
-Este hecho resulta en un reducido tiempo de an\'alisis de resultados
-e impacta directamente en la productividad de cualquier grupo de investigaci\'on y
+Este hecho resulta en un tiempo reducido de an\'alisis de resultados
+e impacta directamente en la productividad de los grupos de investigaci\'on y
 desarrollo.
 
 \bigskip
@@ -85,12 +83,12 @@ implementaci\'on, depuraci\'on y optimizaci\'on \cite{parallel-programming}.
 
 \bigskip
 
-Frecuentemente el proceso de optimizaci\'on termina entonces siendo
+Frecuentemente el proceso de optimizaci\'on termina siendo
 hecho de modo {\it ad-hoc}, sin conocimiento pleno de las herramientas disponibles y
 sus capacidades, y sin la utilizaci\'on de informaci\'on cuantitativa para dirigir los
 esfuerzos de optimizaci\'on. Es incluso frecuente la implementaci\'on directa
 de algoritmos en lugar de la utilizaci\'on de librer\'ias ya disponibles, optimizadas
-profundamente y con correctitud altamente comprobada.
+profundamente y con correctitud comprobada.
 
 \section{Alcance}
 
@@ -98,7 +96,7 @@ Este trabajo considera en particular a los sistemas de memoria distribu\'ida cor
 GNU/Linux, denominados sistemas Beowulf \cite{beowulf}. A trav\'es de las
 estad\'isticas mostradas por el Top500 \footnote{El Top500 es una lista actualizada de supercomputadoras
 de acuerdo al benchmark Linpack, disponible en {\tt http://www.top500.org}.}, se
-puede determinar que son los m\'as utilizados en el c\'omputo de aplicaciones de alto rendimiento.
+puede determinar que son los m\'as utilizados en el c\'omputo de aplicaciones de alto rendimiento en la actualidad.
 
 \section{Estado Actual}
 
@@ -106,12 +104,12 @@ Actualmente existen numerosas y diversas herramientas para el an\'alisis de rend
 Estas funcionan a diferentes niveles de abstracci\'on: desde contadores de eventos
 a nivel de {\it hardware}, pasando por monitores de recursos dentro del n\'ucleo del sistema operativo,
 instrumentaci\'on autom\'atica de c\'odigo, y hasta la simple utilizaci\'on del tiempo de ejecuci\'on 
-de una aplicaci\'on o la comparaci\'on contra un trabajo de referencia.
+de una aplicaci\'on o la comparaci\'on contra un trabajo sint\'etico de referencia.
 
 \bigskip
 
 Ademas de teor\'ia de an\'alisis del rendimiento, un desarrollador necesita
-(al menos) conocer de las siguientes herramientas:
+conocer de las herramientas listadas en la tabla \ref{table:tools}.
 
 \begin{table}[H]
     \caption{Herramientas de Soporte para Optimizaci\'on}
@@ -144,6 +142,7 @@ El cap\'itulo 5 concluye y el cap\'itulo 6 detalla posibles extensiones de este 
 \chapter{An\'alisis de Rendimiento}
 
 Este cap\'itulo introduce el concepto de rendimiento y teor\'ia b\'asica sobre su an\'alisis.
+Se revisa la utilizaci\'on de pruebas de referencia como pr\'actica recomendada.
 
 \section{Definici\'on}
 
@@ -183,6 +182,10 @@ vez ya que esto asegura resultados reproducibles y convergentes, sin efectos no 
 
 \bigskip
 
+Es muy importante tomar decisiones basadas en datos concretos y mantener la disciplina en ello,
+ya que en caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
+un r\'edito adecuado.
+
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=10cm]{cycle.png}
@@ -195,9 +198,9 @@ vez ya que esto asegura resultados reproducibles y convergentes, sin efectos no 
 En el caso de tener problemas de desviaci\'on en los resultados medidos, es aconsejable obtener un gran n\'umero de muestras y utilizar
 un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible. Sin embargo, es siempre preferible aumentar el tama\~no
 del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener as\'i un resultado m\'as estable.
-
-Un buen valor suele ser 3 sigmas \ref{fig:deviation}, suponiendo una distribucion normal de los resultados
-esto nos indica un conjunto estable de resultados.
+Suponiendo una distribuci\'on normal de resultados, se suelen controlar que haya menos de
+3 sigmas de diferencia. Se busca que la mayor\'ia de los resultados queden cerca
+de su promedio, como muestra \ref{fig:deviation}.
 
 \begin{figure}[H]
 \label{fig:deviation}
@@ -216,8 +219,8 @@ sistema de c\'omputo.
 
 \bigskip
 
-Para comparar rendimiento entre diferentes sistemas, es bueno utilizar
-la media geom\'etrica (\ref{eq:geomean}) en lugar de la aritm\'etica,
+Para comparar rendimiento entre diferentes sistemas, se recomienda utilizar
+la media geom\'etrica seg\'un la ecuaci\'on \ref{eq:geomean} en lugar de la aritm\'etica,
 ya que permite dimensionar la tendencia central de un valor t\'ipico en un conjunto
 de n\'umeros. Esto permite reducir el nivel de ruido introducido por una ejecuci\'on
 problem\'atica.
@@ -228,7 +231,8 @@ G = \sqrt[n]{x_{1} \ldots x_{n}}
 \end{equation}
 
 Esta cuenta puede ser muy costosa y requerir de una alta precisi\'on, por lo que se
-suele tomar el antilogaritmo del promedio de los logaritmos de los valores.
+suele tomar el antilogaritmo del promedio de los logaritmos de los valores siguiendo
+la ecuaci\'on \ref{eq:geomean-log}.
 
 \begin{equation}
 \label{eq:geomean-log}
@@ -238,28 +242,21 @@ G = 10 ^{( log _{10} (x_{1}) + \ldots + log _{10} (x_{n}) ) / n}
 \bigskip
 
 Los problemas a identificar inicialmente pueden ser: cuellos de botella,
-overhead, problemas de balanceo, contenci\'on o mal uso de recursos
+carga adicional, problemas de balanceo, contenci\'on o mal uso de recursos
 computacionales.
-
-\bigskip
-
-Es muy importante tomar decisiones basadas en datos concretos, ya que en
-caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
-un r\'edito adecuado.
 
 \section{Pruebas de Rendimiento}
 
-Para medir el rendimiento se utilizan pruebas de referencias denominadas
+Para medir el rendimiento se utilizan pruebas de referencia denominadas
 {\em benchmarks}; \'estas pueden ser aplicaciones sint\'eticas constru\'idas
-especialmente para ejercitar ciertos recursos computacionales, o pueden ser incluso
-aplicaciones del mundo real ejecutadas sobre un conjunto de datos prefijado para
-facilitar la comparaci\'on de resultados.
+especialmente para ejercitar ciertos recursos computacionales, o incluso
+aplicaciones del mundo real ejecutadas sobre un conjunto de datos prefijado.
 
 \bigskip
 
 Al tener valores de referencia se pueden caracterizar los sistemas de modo de predecir el rendimiento de una aplicaci\'on.
 Los valores a los que se llegan con un {\it benchmark} suelen ser m\'as pr\'acticos y
-comparables que los te\'oricos de acuerdo a condiciones ideales de los recursos.
+comparables que los te\'oricos de acuerdo a condiciones ideales de uso de recursos.
 Tambi\'en es posible garantizar que el sistema sigue en un mismo estado con el correr\
 del tiempo y los cambios de configuraciones en {\it hardware} o {\it software}.
 
@@ -270,14 +267,15 @@ reproducci\'on de resultados. Esto permite que sean utilizadas para realizar
 mediciones cuantitativas y as\'i realizar comparaciones de optimizaciones o
 entre sistemas de c\'omputo diferentes. Tambi\'en se pide que el tiempo de
 ejecuci\'on sea razonable y que el tama\~no del problema sea ajustable para
-poder seguir siendo \'util con el paso del tiempo y el avance de las
+poder mantener su utilidad con el paso del tiempo y el avance de las
 tecnolog\'ias.
 
 \bigskip
 
 A continuaci\'on se introducen algunas de las m\'as utilizadas para c\'omputo
-de altas prestaciones, y posteriormente algunos detalles espec\'ificos y ejemplos
-de sus datos de salida para ser utilizados de referencia.
+de altas prestaciones (listadas en la tabla \ref{table:benchmark-list}),
+y posteriormente algunos detalles espec\'ificos e instancias
+de sus datos de salida para ser utilizados a manera de ejemplo.
 
 \begin{table}[H]
     \caption{Benchmarks}
@@ -287,18 +285,20 @@ de sus datos de salida para ser utilizados de referencia.
       STREAM & Memoria & Ancho de banda sostenido \\ \hline
       Linpack & Procesador & Operaciones de punto flotante \\ \hline
       IMB Ping Pong & Red & Latencia y ancho de banda de comunicaci\'on \\ \hline
-      HPCC & Sistema & Completo \\ \hline
+      HPCC & Sistema & M\'ultiples componentes \\ \hline
         \end{tabular}
-  \label{benchmark-list}
+  \label{table:benchmark-list}
   \end{center}
 \end{table}
 
 \bigskip
 
-Los benchmarks pueden ser utilizados para diferentes prop\'ositos. Primero, los valores reportados son usados como referencia
-para contrastar rendimiento. Segundo, su desviaci\'on demuestra que algo ha cambiado en el sistema. Su no desviaci\'on que el sistema
-sigue saludable. Por \'ultimo, un benchmark sintetico implementando el computo que uno quiere realizar muestra el
-rendimiento m\'aximo a obtener.
+Los {\it benchmarks} pueden ser utilizados para diferentes prop\'ositos. Primero,
+los valores reportados son usados como referencia para contrastar rendimiento.
+Segundo, su desviaci\'on demuestra que algo ha cambiado en el sistema (por lo tanto
+su no desviaci\'on indica que el sistema sigue saludable). Por \'ultimo,
+un {\it benchmark} sintetico implementando el c\'omputo que uno quiere realizar
+muestra el rendimiento m\'aximo a obtener.
 
 \subsection{STREAM}
 
@@ -306,12 +306,12 @@ STREAM \cite{stream} es un {\it benchmark} sint\'etico a trav\'es de un simple
 programa que mide el ancho de banda de memoria sostenido en MB/s y el
 rendimiento de computaci\'on relativa de algunos vectores simples de c\'alculo.
 Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura
-a la memoria principal del sistema bajo an\'alisis.
+a la jerarqu\'ia de memoria principal del sistema bajo an\'alisis.
 
 \bigskip
 
-Dentro de una misma ejecuci\'on de este {\it benchmark}, se ejercitan diferentes
-operaciones en memoria. A continuaci\'on se resumen las operaciones ejercitadas.
+Dentro de una misma ejecuci\'on de este {\it benchmark} se ejercitan diferentes
+operaciones en memoria, listadas en la tabla \ref{table:stream}.
 
 \begin{table}[H]
 \caption{Operaciones del Benchmark STREAM}
@@ -322,10 +322,9 @@ operaciones en memoria. A continuaci\'on se resumen las operaciones ejercitadas.
       scale & $ \forall i $ $ b_{i} = c \times a_{i} $ & Multiplicaci\'on escalar \\ \hline
       add & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & Suma directa \\ \hline
       triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & Suma y multiplicaci\'on escalar \\ \hline
-    \end{tabular}
-    
+    \end{tabular} 
    \end{center}
- \label{stream}
+ \label{table:stream}
 \end{table}
 
 La salida en pantalla muestra entonces los diferentes tiempos conseguidos y la cantidad de informaci\'on transferida por unidad de tiempo.
@@ -356,11 +355,11 @@ Como \'ultimo paso, el programa valida tambi\'en la soluci\'on computada.
 Linpack \cite{linpack} es un conjunto de subrutinas {\it FORTRAN} que resuelven
 problemas de \'algebra lineal como ecuaciones lineales y multiplicaci\'on de
 matrices. High Performance Linpack (HPL) \cite{hpl} es una versi\'on portable del {\it benchmark} que incluye
-el paquete Linpack pero utilizando sistemas de memoria distribu\'ida.
+el paquete Linpack pero modificado para sistemas de memoria distribu\'ida.
 
 \bigskip
 
-Este benchmark es utilizado mundialmente para la comparaci\'on de la
+Este {\it benchmark} es utilizado mundialmente para la comparaci\'on de la
 velocidad de las supercomputadoras en el ranking TOP500. 
 Un gr\'afico del TOP500 de los \'ultimos a\~nos demuestra claramente la
 tendencia en crecimiento de rendimiento; tambi\'en la relaci\'on entre el primero,
@@ -483,8 +482,8 @@ Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes va
 \subsection{HPC Challenge}
 
 El {\it benchmark} HPC Challenge \cite{hpcc} (HPCC) est\'a compuesto internamente por un conjunto de
-varios {\it benchmarks}, entre ellos STREAM, HPL, Ping Pong, Transformadas de {\it Fourier}
-y otros.
+varios n\'ucleos de c\'omputo: entre ellos STREAM, HPL, Ping Pong, Transformadas de {\it Fourier}
+y otros ejercitando la red de comunicaci\'on.
 
 \bigskip
 
@@ -497,7 +496,9 @@ o simplemente la mayor capacidad de c\'omputo de operaciones flotantes posible.
 \bigskip
 
 Una analog\'ia interesante para entender como el {\it benchmark} se relaciona a diferentes n\'ucleos de c\'omputo
-se muestra a continuaci\'on.
+se muestra en la figura \ref{fig:locality}. Por ejemplo al tener un problema que
+utiliza principalmente acceso a memoria local, se puede suponer que un sistema con
+buenos resultados de STREAM va ser \'util.
 
 \bigskip
 
@@ -505,17 +506,21 @@ se muestra a continuaci\'on.
 \begin{center}
 \includegraphics[width=10cm]{locality.png}
 \caption{Localidad}
+\label{fig:locality}
 \end{center}
 \end{figure}
 
 \bigskip
 
-Para una mejor comparaci\'on de resultados de HPCC, se utilizan diagramas denominados {\it kiviats}.
+Para una mejor comparaci\'on de resultados de HPCC se utilizan diagramas
+denominados {\it kiviats}, se muestra un ejemplo en la figura \ref{fig:kiviat}.
+Se comparan entonces dos sistemas, uno con mejor rendimiento que el otro.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=10cm]{kiviat.png}
 \caption{Diagrama Kiviat}
+\label{fig:kiviat}
 \end{center}
 \end{figure}
 
@@ -638,7 +643,7 @@ Para ello existen algunas leyes frecuentemente utilizadas durante el an\'alisis 
 \subsection{Ley de {\it Amdahl}}
 
  La ley de {\it Amdahl} \cite{amdahl} dimensiona la mejora que puede obtenerse en un sistema de acuerdo a las mejoras logradas en sus
-componentes. Nos ayuda a establecer un l\'imite m\'aximo de mejora y a conocer de antemano cuales pueden ser los resultados de mejora.
+componentes. Nos ayuda a establecer un l\'imite m\'aximo de mejora y a estimar cuales pueden ser los resultados de mejora.
 
 \bigskip
 
@@ -648,11 +653,11 @@ secuencial. Frecuentemente el paralelismo solo afecta notariamente cuando es
 utilizado en un peque\~no n\'umero de procesadores, o cuando se aplica a problemas
 altamente escalables (embarrassingly parallel problems). Una vez paralelizado un
 programa, los esfuerzos suelen ser enfocados en como minimizar
-la parte secuencial, algunas veces haciendo m\'as trabajo redundante pero en paralelo.
+la parte secuencial, algunas veces haciendo m\'as trabajo redundante pero en forma paralela.
 
 \bigskip
 
-La ley de {\it Amdahl} \ref{eq:amdahl} puede ser entonces modelada de la siguiente forma:
+La ley de {\it Amdahl} puede ser entonces modelada con la ecuaci\'on \ref{eq:amdahl}.
 
 \begin{eqnarray}
 \label{eq:amdahl}
@@ -664,36 +669,30 @@ donde $ P $ es el porcentaje de trabajo paralelizable ($ 1-P $ es entonces el tr
 \bigskip
 
 Suponiendo que una aplicaci\'on requiere de un trabajo serial m\'as un trabajo paralelizable; esta ley nos deja estimar la m\'axima ganancia posible
-de modo que incluso teniendo infinitas unidades de c\'omputo la ganancia esta limitada como se muestra a continuaci\'on. Incluso en el caso de tener varias
-componentes aisladas en la parte paralela, esta ley nos permite identificar el impacto al mejorar cada una de las partes.
+de modo que incluso teniendo infinitas unidades de c\'omputo la ganancia esta limitada como se muestra a continuaci\'on.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=5cm]{amdahl.png}
+\includegraphics[width=7cm]{amdahl.png}
 \caption{Mejora M\'axima}
+\label{fig:amdahl}
 \end{center}
 \end{figure}
 
-La tabla anterior nos muestra que no importa la cantidad de unidades de procesamiento que sean utilizadas, en el caso de solo tener un 10\% de paralelismo
-en una aplicaci\'on, la mejora nunca va a superar 1.10x la original. En el caso de tener un 95\%, la mejora nunca va a ser mejor a 20x. Es poco frecuente encontrar
-aplicaciones que sean completamente paralelizables, la mayor\'ia solo muestra
-beneficios relevantes al ser escalada hasta 1024 procesadores.
+La figura \ref{fig:amdahl} muestra que no importa la cantidad de unidades de
+procesamiento que sean utilizadas, en el caso de tener solo un 10\% de paralelismo
+en una aplicaci\'on, la mejora nunca va a superar 1.10x la original.
+En el caso de tener un 95\%, la mejora no puede ser mejor a 20x.
 
 \subsection{Ley de {\it Gustafson}}
 
 Desde un punto de vista m\'as general, la ley de {\it Gustafson}
-\cite{gustafson} \ref{eq:gustafson} establece que las aplicaciones que manejan problemas
+\cite{gustafson} (computada mediante la ecuaci\'on \ref{eq:gustafson})
+establece que las aplicaciones que manejan problemas
 repetitivos con conjuntos de datos similares pueden ser f\'acilmente
 paralelizadas. En comparaci\'on, la ley anterior no escala el tama\~no o
 resoluci\'on de problema cuando se incrementa la potencia de c\'alculo, es
 decir asume un tama\~no de problema fijo. 
-
-\bigskip
-
-Al aplicar esta ley obtenemos que un problema con datos grandes o repetitivos en cantidades grandes puede ser
-eficientemente paralelizable. Nos es \'util para determinar el tama\~no de problema a utilizar cuando los recursos de c\'omputo son incrementados.
-En el mismo tiempo de ejecuci\'on, el programa resuelve entonces problemas m\'as grandes.
-{\it strong scaling}.
 
 \begin{eqnarray}
 \label{eq:gustafson}
@@ -702,15 +701,21 @@ speedup(P) = P - \alpha . ( P - 1)
 
 donde $ P $ es el n\'umero de unidades de c\'omputo y $ \alpha $ el porcentaje de trabajo paralelizable.
 
+\bigskip
+
+Al aplicar esta ley obtenemos que un problema con datos grandes o repetitivos en cantidades grandes puede ser
+eficientemente paralelizable. Nos es \'util para determinar el tama\~no de problema a utilizar cuando los recursos de c\'omputo son incrementados.
+En el mismo tiempo de ejecuci\'on, el programa resuelve entonces problemas m\'as grandes.
+
 \begin{figure}[H]
-\label{fig:gustafson}
 \begin{center}
-\includegraphics[width=5cm]{gustafson.png}
+\includegraphics[width=7cm]{gustafson.png}
 \caption{Tama\~no de Datos de Entrada}
+\label{fig:gustafson}
 \end{center}
 \end{figure}
 
-Similarmente al cuadro anterior, podemos deducir \ref{fig:gustafson} que en el caso de un programa con s\'olo 10\% de paralelismo,
+Similarmente al cuadro anterior, podemos deducir de la figura \ref{fig:gustafson} que en el caso de un programa con s\'olo 10\% de paralelismo,
 al incrementar los recursos 64x s\'olo podemos incrementar el tama\~no del problema 7x. Sin embargo nos calcula
 un incremento de 61x en el caso de tener 95\% de paralelismo.
 
@@ -721,19 +726,21 @@ Esta m\'etrica nos permite rapidamente estimar la mejora posible al aplicar un a
 
 \bigskip
 
-Dado un c\'omputo paralelo con un speedup $ \phi $ en P procesadores, donde $ p > 1 $.
-La fracci\'on serial {\it Karp-Flatt} $ e $ \ref{eq:karp-flatt} es determinada experimentalmente, mientras menor sea $ e $
+Dado un c\'omputo paralelo con una mejora de rendimiento $ \phi $ en $ P $
+procesadores, donde $ P > 1 $. La fracci\'on serial {\it Karp-Flatt}
+representada con $ e $ y calculada seg\'un la ecuaci\'on \ref{eq:karp-flatt}
+es determinada experimentalmente, mientras menor sea $ e $
 mayor se supone el nivel de paralelismo posible.
-
-Para un problema de tama\~no fijo, la eficiencia t\'ipicamente disminuye cuando
-el n\'umero de procesadores aumenta. Se puede entonces determinar si esta disminuci\'on
-es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema de
-arquitectura del sistema.
 
 \begin{eqnarray}
 \label{eq:karp-flatt}
  e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} 
 \end{eqnarray}
+
+Para un problema de tama\~no fijo, la eficiencia t\'ipicamente disminuye cuando
+el n\'umero de procesadores aumenta. Se puede entonces determinar si esta disminuci\'on
+es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema de
+arquitectura del sistema.
 
 \chapter{Herramientas de Soporte}
 
@@ -750,16 +757,16 @@ tiempo de ejecuci\'on.
 
 % TBD: insert nice chart here, get inspired from wikipedia clasifications
 
-\section{gprof y gcov}
+\section{GNU Profilers}
 
-Esta herramienta extrae el perfil din\'amico de una aplicaci\'on, en tiempo
-de ejecuci\'on. Se instrumenta la aplicacion con una opci\'on espec\'ifica que
-incluye informacion de uso de las diferentes partes del programa y los
+Estas herramientas extraen el perfil din\'amico de una aplicaci\'on, en tiempo
+de ejecuci\'on. Se instrumenta la aplicaci\'on con una opci\'on espec\'ifica que
+incluye informaci\'on de uso de las diferentes partes del programa y los
 recursos del sistema como procesador y memoria.
 
 \bigskip
 
-La aplicaci\'on debe ejecutarse con un conjunto de datos dado. El conjunto de
+La aplicaci\'on debe ejecutarse con un conjunto de datos prefijado. El conjunto de
 datos debe ser representativo y debe tambi\'en ejercitar la aplicaci\'on por
 una cantidad de tiempo suficiente como para intensificar el uso de los
 recursos. Los datos del perfil de una ejecuci\'on son luegos obtenidos en la
@@ -785,7 +792,7 @@ Los binarios deben ser compilados con informaci\'on extra de depuraci\'on.
 {\tt time, cumulative seconds, self seconds, calls, self ms/call,
   total ms/call, name}
 
-\subsection{Gr\'afico de llamadas}
+\subsection{Gr\'afico de Llamadas}
 
 index, \% time, self, children, called, name
 
