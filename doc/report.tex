@@ -17,7 +17,7 @@
   Director: Dr Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
 }
 
-\date{Diciembre de 2012}
+\date{Octubre de 2013}
 
 \maketitle
 
@@ -116,12 +116,12 @@ conocer de las herramientas listadas en la tabla \ref{table:tools}.
     \centering
     \begin{tabular}{|l|l|}\hline
       {\bf Herramienta} & {\bf Descripci\'on} \\ \hline
-      gprof & muestra informaci\'on de perfil de llamadas a funciones \\ \hline
-      oprofile & muestra informaci\'on de perfil de sistema \\ \hline
-      stream & benchmark de jerarquia de memoria \\ \hline
-      hpl & benchmark de capacidad de c\'omputo \\ \hline
-      imb pingpong & benchmark de latencia y ancho de banda \\ \hline
-      hpcc & conjunto de benchmarks \\ \hline
+      gprof & Muestra informaci\'on de perfil de llamadas a funciones \\ \hline
+      oprofile & Muestra informaci\'on de perfil de sistema \\ \hline
+      stream & Benchmark de jerarquia de memoria \\ \hline
+      hpl & Benchmark de capacidad de c\'omputo \\ \hline
+      imb pingpong & Benchmark de latencia y ancho de banda \\ \hline
+      hpcc & Conjunto de benchmarks \\ \hline
     \end{tabular}
     \label{table:tools}
 \end{table}
@@ -158,13 +158,12 @@ Algunos ejemplos de medida de rendimiento son:
 
 \begin{enumerate}
 \item el ancho de banda y la latencia m\'inima de un canal de comunicaci\'on,
-  una jerarqu\'ia de memorias o de la unidad de almacenamiento
+  una jerarqu\'ia de memorias o de la unidad de almacenamiento.
 \item la cantidad de instrucciones, operaciones, datos o trabajo procesado
-  por cierta unidad de tiempo
+  por cierta unidad de tiempo.
 \item rendimiento asociado al costo del equipamiento, incluyendo mantenimiento
- peri\'odico y/o personal dedicado
-\item rendimiento por unidad de energ\'ia o seg\'un el costo asociado a la compra
-y mantenimiento de un sistema de c\'omputo
+ peri\'odico, personal dedicado y gastos propios del uso cotidiano.
+\item rendimiento por unidad de energ\'ia consumida (electricidad).
 
 \end{enumerate}
 
@@ -177,30 +176,23 @@ archivos temporales e incluso el ancho de banda de red utilizado durante la comu
 \section{T\'ecnicas de An\'alisis}
 
 El procedimiento de mejora general usualmente consiste en ciclos iterativos de medir, localizar, optimizar,
-comparar. Es muy importante mantener la disciplina en realizar un cambio a la
+comparar (Figura \ref{fig:cycle}). Es muy importante mantener la disciplina en realizar un cambio a la
 vez ya que esto asegura resultados reproducibles y convergentes, sin efectos no deseados.
-
-\bigskip
-
-Es muy importante tomar decisiones basadas en datos concretos y mantener la disciplina en ello,
-ya que en caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener
-un r\'edito adecuado.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=10cm]{cycle.png}
 \caption{An\'alisis Iterativo}
+\label{fig:cycle}
 \end{center}
 \end{figure}
 
+A la hora de tomar decisiones, éstas deben estar basadas en datos concretos, ya que en caso contrario se podr\'ia estar trabajando en lugares donde no se va a obtener un r\'edito adecuado.
+
 \bigskip
 
-En el caso de tener problemas de desviaci\'on en los resultados medidos, es aconsejable obtener un gran n\'umero de muestras y utilizar
-un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible. Sin embargo, es siempre preferible aumentar el tama\~no
-del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener as\'i un resultado m\'as estable.
-Suponiendo una distribuci\'on normal de resultados, se suelen controlar que haya menos de
-3 sigmas de diferencia. Se busca que la mayor\'ia de los resultados queden cerca
-de su promedio, como muestra \ref{fig:deviation}.
+En el caso de tener problemas de desviaci\'on en los resultados medidos, es aconsejable obtener un gran n\'umero de muestras y utilizar un valor promedio para asegurarse de evitar errores de medici\'on tanto como sea posible. Tambi\'en es preferible aumentar el tama\~no del problema a resolver, o la definici\'on de los resultados para ejercitar por m\'as tiempo y tener as\'i un resultado m\'as estable.
+Suponiendo una distribuci\'on normal de resultados, se suelen controlar que haya menos de 3 sigmas de diferencia. Se busca que la mayor\'ia de los resultados queden cerca de su promedio, como muestra la Figura \ref{fig:deviation}.
 
 \begin{figure}[H]
 \label{fig:deviation}
@@ -219,10 +211,8 @@ sistema de c\'omputo.
 
 \bigskip
 
-Para comparar rendimiento entre diferentes sistemas, se recomienda utilizar
-la media geom\'etrica seg\'un la ecuaci\'on \ref{eq:geomean} en lugar de la aritm\'etica,
-ya que permite dimensionar la tendencia central de un valor t\'ipico en un conjunto
-de n\'umeros. Esto permite reducir el nivel de ruido introducido por una ejecuci\'on
+Para comparar se recomienda utilizar la media geom\'etrica seg\'un la ecuaci\'on \ref{eq:geomean} en lugar de la aritm\'etica, ya que permite dimensionar la tendencia central de un valor t\'ipico en un conjunto
+de n\'umeros. Esto permite reducir el impacto de ruido introducido por una ejecuci\'on
 problem\'atica.
 
 \begin{equation}
@@ -241,15 +231,9 @@ G = 10 ^{( log _{10} (x_{1}) + \ldots + log _{10} (x_{n}) ) / n}
 
 \bigskip
 
-Los problemas a identificar inicialmente pueden ser: cuellos de botella,
-carga adicional, problemas de balanceo, contenci\'on o mal uso de recursos
-computacionales.
-
 \section{Pruebas de Rendimiento}
 
-Para medir el rendimiento se utilizan pruebas de referencia denominadas
-{\em benchmarks}; \'estas pueden ser aplicaciones sint\'eticas constru\'idas
-especialmente para ejercitar ciertos recursos computacionales, o incluso
+Para medir el rendimiento se utilizan pruebas de referencia denominadas {\em benchmarks}; \'estas pueden ser aplicaciones sint\'eticas constru\'idas especialmente para ejercitar ciertos recursos computacionales, o bien
 aplicaciones del mundo real ejecutadas sobre un conjunto de datos prefijado.
 
 \bigskip
@@ -258,7 +242,7 @@ Al tener valores de referencia se pueden caracterizar los sistemas de modo de pr
 Los valores a los que se llegan con un {\it benchmark} suelen ser m\'as pr\'acticos y
 comparables que los te\'oricos de acuerdo a condiciones ideales de uso de recursos.
 Tambi\'en es posible garantizar que el sistema sigue en un mismo estado con el correr\
-del tiempo y los cambios de configuraciones en {\it hardware} o {\it software}.
+del tiempo y despu\'es de cambios de configuraciones en {\it hardware} o {\it software}.
 
 \bigskip
 
@@ -298,7 +282,7 @@ los valores reportados son usados como referencia para contrastar rendimiento.
 Segundo, su desviaci\'on demuestra que algo ha cambiado en el sistema (por lo tanto
 su no desviaci\'on indica que el sistema sigue saludable). Por \'ultimo,
 un {\it benchmark} sintetico implementando el c\'omputo que uno quiere realizar
-muestra el rendimiento m\'aximo a obtener.
+muestra el rendimiento m\'aximo posible a obtener en la pr\'actica.
 
 \subsection{STREAM}
 
@@ -441,8 +425,7 @@ c\'omputo con diferentes tama\~nos de mensajes. \cite{latency}.
 
 \bigskip
 
-Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on a trav\'es de mensajes con datos grandes.
-Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, es decir transmitiendo mensajes sin datos.
+Para obtener el m\'aximo ancho de banda disponible, se ejercita la comunicaci\'on a trav\'es de mensajes con datos grandes. Para obtener la m\'inima latencia, se ejercita la comunicaci\'on con mensajes vac\'ios, es decir transmitiendo mensajes sin dato alguno.
 
 {\small
 \begin{verbatim}
@@ -696,7 +679,7 @@ decir asume un tama\~no de problema fijo.
 
 \begin{eqnarray}
 \label{eq:gustafson}
-speedup(P) = P - \alpha . ( P - 1)
+speedup(P) = P - \alpha \times ( P - 1)
 \end{eqnarray}
 
 donde $ P $ es el n\'umero de unidades de c\'omputo y $ \alpha $ el porcentaje de trabajo paralelizable.
