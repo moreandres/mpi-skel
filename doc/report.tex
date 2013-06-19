@@ -5,6 +5,11 @@
 \usepackage{hyperref}
 \usepackage[spanish]{babel}
 \usepackage{listings}
+\usepackage{enumitem}
+
+\lstset{language=C, frame=tlrb, basicstyle=\scriptsize, breaklines=true, numberbychapter=false,numbers=left}
+\setlist[enumerate]{noitemsep}
+\setlist[itemize]{noitemsep}
 
 \begin{document}
 
@@ -732,13 +737,13 @@ de rendimiento de aplicaciones.
 
 \section{Herramientas}
 
-Se recomienda un proceso de aplicaci\'on gradual empezando por herramientas generales de alto nivel que analizan la aplicaci\'on como un todo; terminando con detalles complejos de granularidad m\'as fina en componentes particulares del sistema. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un an\'alisis complejo desde un principio.
+Se recomienda un proceso de aplicaci\'on gradual empezando por herramientas generales de alto nivel que analizan la aplicaci\'on como un todo; terminando con herramientas de bajo nivel que proveen detalles complejos de granularidad m\'as fina en componentes particulares del sistema. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un an\'alisis complejo y extensivo desde un principio.
 
 \begin{table}[H]
 \caption{Aplicaci\'on Gradual de Herramientas}
 \begin{tabular}{|l|l|} \hline
 {\bf Caracter\'istica} & {\bf Herramientas} \\ \hline
-Capacidad del sistema & HPCC \\ \hline
+Capacidad del sistema & Benchmark HPCC \\ \hline
 Medici\'on de ejecuci\'on & {\tt time}, {\tt gettimeofday()}, {\tt MPI\_WTIME()} \\ \hline
 Perfil de ejecuci\'on & {\tt gprof} \\ \hline
 Comportamiento de la aplicaci\'on & {\tt gprof} \\ \hline
@@ -750,12 +755,48 @@ Contadores en {\it hardware} & oprofile, PAPI \\ \hline
 \label{table:tools}
 \end{table}
 
-\section{Profilers}
+Primero se establece una l\'inea de comparaci\'on al ejecutar una prueba de rendimiento del sistema, HPCC brinda un conjunto de m\'etricas muy completo. Segundo se utilizan herramientas para medir el tiempo de ejecuci\'on de la aplicaci\'on sobre diferentes escenarios. time permite una ejecuci\'on directa sin modificaci\'on de c\'odigo, {\tt gettimeofday()} requiere modificaci\'on de c\'odigo pero puede ser utilizados con mayor libertad dentro de la aplicaci\'on.  
+En el caso de estar utilizando la librer\'ia MPI {\tt MPI\_WTime()} y la herramienta VAMPIR\footnote{\tt http://www.vampir.eu/} proveen soporte especifico para analisis de rendimiento.
+Tercero se dimensiona el comportamiento de la aplicaci\'on mediante un perfil de ejecuci\'on y un an\'alisis de cuello de botella utilizando {\tt gprof}. Cuarto se analiza el comportamiento del sistema ejecutando la aplicacion mediante {\tt oprofile}. Quinto se revisa el reporte del compilador para comprobar que se esten vectorizando los ciclos de c\'alculo m\'as intensivos. Por último, se analiza el comportamiento de las unidades de c\'omputo utilizando soporte de {\it hardware} mediante herramientas como {\tt oprofile} y {\it Performance Application Programming Interface} (PAPI) \footnote{\tt http://icl.cs.utk.edu/papi/}.
 
-Estas herramientas extraen el perfil din\'amico de una aplicaci\'on, en tiempo
-de ejecuci\'on. Se instrumenta la aplicaci\'on con una opci\'on espec\'ifica que
-incluye informaci\'on de uso de las diferentes partes del programa y los
-recursos del sistema como procesador y memoria.
+\section{Tiempo de Ejecuci\'on}
+
+time versus /usr/bin/time
+gettimeofday() versus clock(3)
+
+\subsection{Ejemplo: {\tt time(1)}}
+
+\begin{lstlisting} 
+$ /usr/bin/time -v ./program
+Command being timed: "./program"
+User time (seconds): 0.00
+System time (seconds): 0.00
+Percent of CPU this job got: 0%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 3808
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 289
+Voluntary context switches: 1
+Involuntary context switches: 1
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+\end{lstlisting}
+
+\section{Perfil de Ejecuci\'on de Aplicaci\'on}
+
+Estas herramientas denominadas {\it profilers} extraen el perfil din\'amico de una aplicaci\'on en tiempo de ejecuci\'on. 
+Se instrumenta la aplicaci\'on con una opci\'on espec\'ifica que incluye informaci\'on de uso de las diferentes partes del programa y los recursos del sistema como por ejemplo procesador y memoria.
 
 \bigskip
 
@@ -775,54 +816,60 @@ utilizado por cada funci\'on en llamadas sucesivas. Las funciones recursivas
 son manejadas de manera especial ya que imposibilitan el armado de relaciones
 de dependencias.
 
-\subsection{Perfil de Ejecuci\'on}
+\subsection{Ejemplo: {\tt gprof}}
 
-El perfil de ejecuci\'on muestra el tiempo individual y el tiempo acumulado en segundos
-de cada l\'inea de c\'odigo de la aplicaci\'on.
-
-Los binarios deben ser compilados con informaci\'on extra de depuraci\'on.
-
-{\tt time, cumulative seconds, self seconds, calls, self ms/call,
-  total ms/call, name}
-
-\subsection{Gr\'afico de Llamadas}
-
-index, \% time, self, children, called, name
-
+El perfil de ejecuci\'on muestra el tiempo individual y el tiempo acumulado en segundos de cada l\'inea de c\'odigo de la aplicaci\'on. Los binarios deben ser compilados con informaci\'on extra de depuraci\'on, en el caso de {\tt gcc}, las opciones necesarias son {\tt -g -pg}. Si {\tt -g} no se encuentra presente entonces no se provee el reporte detallado por l\'inea de ejecuci\'on. Esto permite identificar donde se esta gastando tiempo durante la ejecuci\'on.
 La herramienta tambi\'en muestra un cuadro de las llamadas entre funciones realizadas por el programa.
 Esto permite visualizar el esquema de dependencias durante la ejecuci\'on.
 
-\subsection{Comportamiento}
+\begin{lstlisting} 
+$ gcc -g -pg program.c -o program
+$ ./program
+$ gprof program
+...
+\end{lstlisting}
 
-precisi\'on estad\'istica. muestreo. incompatibilidades.
+\begin{lstlisting} 
+Flat profile:
+Each sample counts as 0.01 seconds.
+% cumulative self self total
+time seconds seconds calls us/call us/call name
+37.50 0.15 0.15 48000 3.12 3.12 Life::neighbor_count(int, int)
+...
+\end{lstlisting}
 
-\subsection{Ejemplos}
+\begin{lstlisting} 
+Call graph
+granularity: each sample hit covers 4 byte(s) for 2.50% of 0.40 seconds
+index % time    self  children    called     name
+      0.02 0.15 12/12 main [2]
+[1] 42.5 0.02 0.15 12 Life::update(void) [1]
+      0.15 0.00 48000/48000 Life::neighbor_count(int, int) [4]
+--
+          0.00    0.17       1/1           _start [3]
+[2]     42.5    0.00    0.17       1         main [2]
+          0.02    0.15      12/12          Life::update(void) [1]
+          0.00    0.00      12/12          Life::print(void) [13]
+          0.00    0.00      12/12          to_continue(void) [14]
+          0.00    0.00       1/1           instructions(void) [16]
+          0.00    0.00       1/1           Life::initialize(void) [15]
+--
+\end{lstlisting}
 
-\section{oprofile}
+\section{Perfil de Ejecuci\'on de Sistema}
 
-\subsection{Introducci\'on}
-
-{\it oprofile} analiza perfiles de rendimiento a nivel de nucleo del
+Un {\it profiler} a nivel de sistema analiza perfiles de rendimiento a nivel de n\'ucleo del
 sistema operativo. Actua de forma transparente a nivel global. Utiliza
-contadores de hardware del CPU e utiliza interrupciones de un temporizador
-cuando no logra detectar soporte en hardware.
+contadores de {\it hardware} del CPU e utiliza interrupciones de un temporizador
+cuando no logra detectar soporte espec\'ifico en {\it hardware}.
 
-% TBD: http://stackoverflow.com/questions/1777556/alternatives-to-gprof/1779343#1779343
-
-\subsection{Procedimiento}
-
-Para obtener realizar un analisis se necesita:
+Para obtener realizar un an\'alisis se necesita:
 
 \begin{enumerate}
-
-\item detener toda aplicacion o servicio no relevante en el sistema.
-
+\item detener toda aplicaci\'on o servicio no relevante en el sistema.
 \item ejecutar el profiler
-
 \item ejecutar la aplicaci\'on
-
 \item generar el resumen
-
 \end{enumerate}
 
 La herramienta de por si no se necesita acceder al c\'odigo fuente de la aplicacion.
@@ -832,8 +879,6 @@ si hay s\'imbolos de depuraci\'on en el binario {\it debugging}.
 Este m\'etodo tiene en cuenta todos los componentes del sistema.
 Se basa en la lectura de contadores del mismo procesador implementados en hardware.
 Aunque tiene un costo adicional inherente, el overhead es m\'inimo.
-
-\subsection{Contadores de Rendimiento}
 
 Los registros de {\it hardware} implementando contadores m\'as utilizados son los
 siguientes:
@@ -850,49 +895,76 @@ siguientes:
 Las herramientas propietarias suelen tener acceso a contadores m\'as especificos e
 incluso programables para funciones determinadas de medici\'on.
 
-\subsection{Ejemplos}
+\subsection{Ejemplo: {\tt perf}}
 
-{\small
-\begin{verbatim}
-$ opreport --demangle=smart --symbols `which lyx`
-CPU: PIII, speed 863.195 MHz (estimated)
-Counted CPU_CLK_UNHALTED events (clocks processor is not halted) with a unit mask of 0x00 (No unit mask) count 50000
-vma      samples  \%           image name               symbol name
-081ec974 5016      3.1034     lyx                      _Rb_tree<unsigned short, pair<unsigned short const, int>,  unsigned short const>::find(unsigned short const&)
-00009f30 4154      2.5701     libpthread-0.10.so       __pthread_alt_unlock
-0810c4ec 3323      2.0559     lyx                      Paragraph::getFontSettings(BufferParams const&, int) const
-081319d8 3220      1.9922     lyx                      LyXText::getFont(Buffer const*, Paragraph*, int) const
-080e45d8 3011      1.8629     lyx                      LyXFont::realize(LyXFont const&)
-0000a120 2853      1.7652     libpthread-0.10.so       __pthread_alt_lock
-080e3d78 2623      1.6229     lyx                      LyXFont::LyXFont()
-00069a10 2467      1.5263     libstdc++.so.5.0.1       string::find(char const*, unsigned, unsigned) const
-0006a430 2274      1.4069     libstdc++.so.5.0.1       string::compare(char const*) const
-4201e850 2169      1.3420     libc-2.3.2.so            __GI_setlocale
-4207d870 1982      1.2263     libc-2.3.2.so            memcpy
-...
-\end{verbatim}
+En kernel más viejos que 2.6, oprofile \footnote{\tt http://oprofile.sourceforge.net/} sino perf \footnote{\tt https://perf.wiki.kernel.org}.
 
-\begin{verbatim}
-$ opannotate --source --output-dir=/home/moz/src/annotated `which oprofiled`
-$ vi /home/moz/src/annotated/home/moz/src/oprofile/daemon/opd_image.c # the annotated source output
+low overhead as they avoid system calls. una orden de magnitud al menos. mayor informacion.
+
+\begin{lstlisting}
+$ perf report
+# Events: 1K cycles
+# Overhead Command Shared Object Symbol
+28.15% firefox-bin libxul.so [.] 0xd10b45
+4.45% swapper  [kernel.kallsyms] [k] mwait_idle_with_hints
+4.26% swapper  [kernel.kallsyms] [k] read_hpet
+2.13% firefox-bin  firefox-bin [.] 0x1e3d
+1.40% unity-panel-ser  libglib-2.0.so.0.2800.6 [.] 0x886f1
 ...
-               :static uint64_t pop_buffer_value(struct transient * trans)
-   254  2.4909 :{ /* pop_buffer_value total:   2105 20.6433 */
-               :        uint64_t val;
-               :
-   160  1.5691 :        if (!trans->remaining) {
-               :                fprintf(stderr, "BUG: popping empty buffer !\n");
-               :                exit(EXIT_FAILURE);
-               :        }
-               :
-               :        val = get_buffer_value(trans->buffer, 0);
-   123  1.2062 :        trans->remaining--;
-    65  0.6374 :        trans->buffer += kernel_pointer_size;
-               :        return val;
-   230  2.2556 :}
+\end{lstlisting}
+
+\begin{lstlisting}
+ Percent |   Source code & Disassembly of program
+         :   Disassembly of section .text:
+         :   08048484 <main>:
+         :   #include <string.h>
+         :   #include <unistd.h>
+         :   #include <sys/time.h>
+         :
+         :   int main(int argc, char **argv)
+         :   {
+    0.00 :    8048484:       55                      push   %ebp
+    0.00 :    8048485:       89 e5                   mov    %esp,%ebp
 ...
-\end{verbatim}
-}
+    0.00 :    8048530:       eb 0b                   jmp    804853d <main+0xb9>
+         :                           count++;
+   14.22 :    8048532:       8b 44 24 2c             mov    0x2c(%esp),%eax
+    0.00 :    8048536:       83 c0 01                add    $0x1,%eax
+   14.78 :    8048539:       89 44 24 2c             mov    %eax,0x2c(%esp)
+         :           memcpy(&tv_end, &tv_now, sizeof(tv_now));
+         :           tv_end.tv_sec += strtol(argv[1], NULL, 10);
+         :           while (tv_now.tv_sec < tv_end.tv_sec ||
+         :                  tv_now.tv_usec < tv_end.tv_usec) {
+         :                   count = 0;
+         :                   while (count < 100000000UL)
+   14.78 :    804853d:       8b 44 24 2c             mov    0x2c(%esp),%eax
+   56.23 :    8048541:       3d ff e0 f5 05          cmp    $0x5f5e0ff,%eax
+    0.00 :    8048546:       76 ea                   jbe    8048532 <main+0xae>
+...
+\end{lstlisting}
+
+\begin{lstlisting}
+perf stat -B dd if=/dev/zero of=/dev/null count=1000000
+
+1000000+0 records in
+1000000+0 records out
+512000000 bytes (512 MB) copied, 0.956217 s, 535 MB/s
+
+ Performance counter stats for 'dd if=/dev/zero of=/dev/null count=1000000':
+
+            5,099 cache-misses             #      0.005 M/sec (scaled from 66.58%)
+          235,384 cache-references         #      0.246 M/sec (scaled from 66.56%)
+        9,281,660 branch-misses            #      3.858 %     (scaled from 33.50%)
+      240,609,766 branches                 #    251.559 M/sec (scaled from 33.66%)
+    1,403,561,257 instructions             #      0.679 IPC   (scaled from 50.23%)
+    2,066,201,729 cycles                   #   2160.227 M/sec (scaled from 66.67%)
+              217 page-faults              #      0.000 M/sec
+                3 CPU-migrations           #      0.000 M/sec
+               83 context-switches         #      0.000 M/sec
+       956.474238 task-clock-msecs         #      0.999 CPUs
+
+       0.957617512  seconds time elapsed
+\end{lstlisting}
 
 \section{Reporte de Vectorizaci\'on}
 
@@ -900,11 +972,21 @@ Una herramienta de bajo nivel para analizar rendimiento es el mismo compilador
 que deber\'ia estar vectorizando los ciclos de c\'omputo intensivo. Esto es muy
 \'util para detectar si los cuellos de botella ya se encuentran optimizados o no.
 
-\bigskip
+\begin{lstlisting}
+$ gcc -c -O3 -ftree-vectorizer-verbose=1 ex.c
+ex.c:7: note: LOOP VECTORIZED.
+ex.c:3: note: vectorized 1 loops in function.
+$ gcc -c -O3 -ftree-vectorizer-verbose=2 ex.c
+ex.c:10: note: not vectorized: complicated access pattern.
+ex.c:10: note: not vectorized: complicated access pattern.
+ex.c:7: note: LOOP VECTORIZED.
+ex.c:3: note: vectorized 1 loops in function.
+$ gcc -c -O3 -fdump-tree-vect-details ex.c
+...
+\end{lstlisting}
 
-Por ejemplo en el caso de que el c\'odigo sea recursivo se detalla lo siguiente:
 No es posible vectorizar c\'odigo recursivo, por lo que puede ser un buen punto a
-optimizar.
+optimizar. Por ejemplo en el caso de que el c\'odigo sea recursivo se detalla lo siguiente:
 
 {\small
 \begin{verbatim}
@@ -1018,6 +1100,10 @@ $ gprof -l
 \end{verbatim}
 
 bottlenecks. entender algoritmo. buscar librer\'ia ya optimizada.
+
+\item utilizar el profiler a nivel de sistema
+
+\item comprobar vectorizaciones
 
 \end{enumerate}
 
