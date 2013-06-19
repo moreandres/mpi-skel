@@ -730,17 +730,27 @@ arquitectura del sistema.
 Este cap\'itulo revisa las herramientas disponibles para soporte de an\'alisis
 de rendimiento de aplicaciones.
 
-\section{Taxonom\'ia}
+\section{Herramientas}
 
-Existen diferentes alternativas sobre el modo de extraer informaci\'on de
-caracter\'isticas relacionadas con el rendimiento de una aplicaci\'on.
-Estos m\'etodos pueden clasificarse como din\'amicos o est\'aticos.
-Tambi\'en pueden clasificarse como aplicables en tiempo de compilaci\'on o
-tiempo de ejecuci\'on.
+Se recomienda un proceso de aplicaci\'on gradual empezando por herramientas generales de alto nivel que analizan la aplicaci\'on como un todo; terminando con detalles complejos de granularidad m\'as fina en componentes particulares del sistema. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un an\'alisis complejo desde un principio.
 
-% TBD: insert nice chart here, get inspired from wikipedia clasifications
+\begin{table}[H]
+\caption{Aplicaci\'on Gradual de Herramientas}
+\begin{tabular}{|l|l|} \hline
+{\bf Caracter\'istica} & {\bf Herramientas} \\ \hline
+Capacidad del sistema & HPCC \\ \hline
+Medici\'on de ejecuci\'on & {\tt time}, {\tt gettimeofday()}, {\tt MPI\_WTIME()} \\ \hline
+Perfil de ejecuci\'on & {\tt gprof} \\ \hline
+Comportamiento de la aplicaci\'on & {\tt gprof} \\ \hline
+Comportamiento de librer\'ias & valgrind, MPI vampir. \\ \hline
+Comportamiento del sistema & oprofile \\ \hline
+Vectorizaci\'on & gcc \\ \hline
+Contadores en {\it hardware} & oprofile, PAPI \\ \hline
+\end{tabular}
+\label{table:tools}
+\end{table}
 
-\section{GNU Profilers}
+\section{Profilers}
 
 Estas herramientas extraen el perfil din\'amico de una aplicaci\'on, en tiempo
 de ejecuci\'on. Se instrumenta la aplicaci\'on con una opci\'on espec\'ifica que
