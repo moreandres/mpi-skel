@@ -221,7 +221,7 @@ G = \sqrt[n]{x_{1} \ldots x_{n}}
 \end{equation}
 
 Esta cuenta puede ser muy costosa y requerir de una alta precisión, por lo que se
-suele tomar el antilogaritmo del promedio de los logaritmos de los valores siguiendo
+suele tomar el anti-logaritmo del promedio de los logaritmos de los valores siguiendo
 la ecuación \ref{eq:geomean-log}.
 
 \begin{equation}
@@ -281,7 +281,7 @@ Los {\it benchmarks} pueden ser utilizados para diferentes propósitos. Primero,
 los valores reportados son usados como referencia para contrastar rendimiento.
 Segundo, su desviación demuestra que algo ha cambiado en el sistema (por lo tanto
 su no desviación indica que el sistema sigue saludable). Por último,
-un {\it benchmark} sintetico implementando el cómputo que uno quiere realizar
+un {\it benchmark} sintético implementando el cómputo que uno quiere realizar
 muestra el rendimiento máximo posible a obtener en la práctica.
 
 \subsection{STREAM}
@@ -339,7 +339,7 @@ Como último paso, el programa valida también la solución computada.
 Linpack \cite{linpack} es un conjunto de subrutinas {\it FORTRAN} que resuelven
 problemas de álgebra lineal como ecuaciones lineales y multiplicación de
 matrices. High Performance Linpack (HPL) \cite{hpl} es una versión portable del {\it benchmark} que incluye
-el paquete Linpack pero modificado para sistemas de memoria distribuída.
+el paquete Linpack pero modificado para sistemas de memoria distribuida.
 
 \bigskip
 
@@ -412,14 +412,14 @@ Finished      1 tests with the following results:
 \bigskip
 
 Existe cierta controversia de que no es una buena forma de ejercitar un
-sistema de cómputo distribuído ya que no implica uso significativo de la
+sistema de cómputo distribuido ya que no implica uso significativo de la
 red, sólo procesamiento intensivo de aritmética de punto flotante
 sobre la jerarquía local de memoria.
 
 \subsection{Intel MPI Benchmarks}
 
 Es un conjunto de {\it benchmarks} cuyo objetivo es ejercitar las funciones
-más importantes del estandar para librerías de paso de mensajes (MPI, por sus siglas en inglés) \cite{mpi}.
+más importantes del estándar para librerías de paso de mensajes (MPI, por sus siglas en inglés) \cite{mpi}.
 El más conocido es el popular ping-pong, el cual ejercita la transmisión de mensajes ida y vuelta entre dos nodos de
 cómputo con diferentes tamaños de mensajes. \cite{latency}.
 
@@ -616,7 +616,7 @@ End of HPC Challenge tests.
 
 Una vez obtenida una implementación eficiente, la única alternativa para mejorar el rendimiento es explotar el paralelismo que
 ofrecen los sistemas de cómputo. Este paralelismo se puede explotar a diferentes niveles, desde instrucciones que ejecutan una misma operación a varios
-datos a la vez (vectorización), pasando por la utilización de varias unidades de cómputo hasta la utilizacion de unidades de cómputo en diferentes sistemas para distribuir el trabajo.
+datos a la vez (vectorización), pasando por la utilización de varias unidades de cómputo hasta la utilización de unidades de cómputo en diferentes sistemas para distribuir el trabajo.
 
 \bigskip
 
@@ -632,7 +632,7 @@ componentes. Nos ayuda a establecer un límite máximo de mejora y a estimar cua
 
 La mejora de un programa utilizando procesamiento múltiple en cómputo paralelo
 está limitado por el tiempo necesario para completar su fracción serial o
-secuencial. Frecuentemente el paralelismo solo afecta notariamente cuando es
+secuencial. Frecuentemente el paralelismo solo afecta notoriamente cuando es
 utilizado en un pequeño número de procesadores, o cuando se aplica a problemas
 altamente escalables (embarrassingly parallel problems). Una vez paralelizado un
 programa, los esfuerzos suelen ser enfocados en como minimizar
@@ -705,7 +705,7 @@ un incremento de 61x en el caso de tener 95\% de paralelismo.
 \subsection{Métrica de {\it Karp-Flatt}}
 
 Esta métrica es utilizada para medir el grado de paralelismo de una aplicación \cite{karp-flatt}.
-Esta métrica nos permite rapidamente estimar la mejora posible al aplicar un alto nivel de paralelismo.
+Esta métrica nos permite rápidamente estimar la mejora posible al aplicar un alto nivel de paralelismo.
 
 \bigskip
 
@@ -751,8 +751,8 @@ Contadores en {\it hardware} & oprofile, PAPI \\ \hline
 \end{table}
 
 Primero se establece una línea de comparación al ejecutar una prueba de rendimiento del sistema, HPCC brinda un conjunto de métricas muy completo. Segundo se utilizan herramientas para medir el tiempo de ejecución de la aplicación sobre diferentes escenarios. time permite una ejecución directa sin modificación de código, {\tt gettimeofday()} requiere modificación de código pero puede ser utilizados con mayor libertad dentro de la aplicación.  
-En el caso de estar utilizando la librería MPI {\tt MPI\_WTime()} y la herramienta VAMPIR\footnote{\tt http://www.vampir.eu/} proveen soporte especifico para analisis de rendimiento.
-Tercero se dimensiona el comportamiento de la aplicación mediante un perfil de ejecución y un análisis de cuello de botella utilizando {\tt gprof}. Cuarto se analiza el comportamiento del sistema ejecutando la aplicacion mediante {\tt oprofile}. Quinto se revisa el reporte del compilador para comprobar que se esten vectorizando los ciclos de cálculo más intensivos. Por último, se analiza el comportamiento de las unidades de cómputo utilizando soporte de {\it hardware} mediante herramientas como {\tt oprofile} y {\it Performance Application Programming Interface} (PAPI) \footnote{\tt http://icl.cs.utk.edu/papi/}.
+En el caso de estar utilizando la librería MPI {\tt MPI\_WTime()} y la herramienta VAMPIR\footnote{\tt http://www.vampir.eu/} proveen soporte especifico para análisis de rendimiento.
+Tercero se dimensiona el comportamiento de la aplicación mediante un perfil de ejecución y un análisis de cuello de botella utilizando {\tt gprof}. Cuarto se analiza el comportamiento del sistema ejecutando la aplicación mediante {\tt oprofile}. Quinto se revisa el reporte del compilador para comprobar que se estén vectorizando los ciclos de cálculo más intensivos. Por último, se analiza el comportamiento de las unidades de cómputo utilizando soporte de {\it hardware} mediante herramientas como {\tt oprofile} y {\it Performance Application Programming Interface} (PAPI) \footnote{\tt http://icl.cs.utk.edu/papi/}.
 
 \section{Tiempo de Ejecución}
 
@@ -798,7 +798,7 @@ Se instrumenta la aplicación con una opción específica que incluye informaci�
 La aplicación debe ejecutarse con un conjunto de datos prefijado. El conjunto de
 datos debe ser representativo y debe también ejercitar la aplicación por
 una cantidad de tiempo suficiente como para intensificar el uso de los
-recursos. Los datos del perfil de una ejecución son luegos obtenidos en la
+recursos. Los datos del perfil de una ejecución son luego obtenidos en la
 forma de un archivo de datos, luego se procede a procesar los datos acumulados
 con un analizador respectivo.
 
@@ -854,7 +854,7 @@ index % time    self  children    called     name
 \section{Perfil de Ejecución de Sistema}
 
 Un {\it profiler} a nivel de sistema analiza perfiles de rendimiento a nivel de núcleo del
-sistema operativo. Actua de forma transparente a nivel global. Utiliza
+sistema operativo. Actúa de forma transparente a nivel global. Utiliza
 contadores de {\it hardware} del CPU e utiliza interrupciones de un temporizador
 cuando no logra detectar soporte específico en {\it hardware}.
 
@@ -867,13 +867,13 @@ Para obtener realizar un análisis se necesita:
 \item generar el resumen
 \end{enumerate}
 
-La herramienta de por si no se necesita acceder al código fuente de la aplicacion.
+La herramienta de por si no se necesita acceder al código fuente de la aplicación.
 Pero si esta disponible el código correspondiente se muestra anotado con contadores
 si hay símbolos de depuración en el binario {\it debugging}.
 
 Este método tiene en cuenta todos los componentes del sistema.
 Se basa en la lectura de contadores del mismo procesador implementados en hardware.
-Aunque tiene un costo adicional inherente, el overhead es mínimo.
+Aunque tiene un costo adicional inherente, la sobrecarga es mínimo.
 
 Los registros de {\it hardware} implementando contadores más utilizados son los
 siguientes:
@@ -887,14 +887,14 @@ siguientes:
 \item cantidad de instrucciones de carga y descarga
 \end{enumerate}
 
-Las herramientas propietarias suelen tener acceso a contadores más especificos e
+Las herramientas propietarias suelen tener acceso a contadores más específicos e
 incluso programables para funciones determinadas de medición.
 
 \subsection{Ejemplo: {\tt perf}}
 
 En kernel más viejos que 2.6, oprofile \footnote{\tt http://oprofile.sourceforge.net/} sino perf \footnote{\tt https://perf.wiki.kernel.org}.
 
-low overhead as they avoid system calls. una orden de magnitud al menos. mayor informacion.
+low overhead as they avoid system calls. una orden de magnitud al menos. mayor información.
 
 \begin{lstlisting}
 $ perf report
@@ -1022,7 +1022,7 @@ $ cat hpcout.inf
 \item ¿La latencia y ancho de banda de la red es la esperada?
 \end{enumerate}
 
-\item Comprobar variación de resultados para conocer la estabilidad de los mismos. La desviación estandar debe ser menor a 3 sigmas. Usar el promedio geométrico como referencia para comparaciones futuras.
+\item Comprobar variación de resultados para conocer la estabilidad de los mismos. La desviación estándar debe ser menor a 3 sigmas. Usar el promedio geométrico como referencia para comparaciones futuras.
 
 \begin{lstlisting}
 $ for i in `seq 1 32`; do /usr/bin/time -v ./app >> time.log; done
@@ -1079,8 +1079,8 @@ $ gprof --flat-profile --graph --annotated-source app
 \end{lstlisting}
 
 \begin{enumerate}
-\item ¿Como esta disenada la aplicacion? ¿Que dependencias en librerias externas tiene?
-\item ¿Implementa algun nucleo de computo conocido del tipo BLAS?
+\item ¿Como esta diseñada la aplicación? ¿Que dependencias en librerías externas tiene?
+\item ¿Implementa algún núcleo de computo conocido del tipo BLAS?
 \item ¿Donde se concentra la mayor cantidad de tiempo de computo?
 \end{enumerate}
 
@@ -1106,7 +1106,7 @@ Esto nos permite saber cuan lejos están nuestras aplicaciones de lo que se
 puede obtener, también nos permite esbozar algunas hipótesis \ref{table:pruebas}.
 
 \begin{table}[H]
-    \caption{Compute Node Hardware and Software}
+    \caption{Hardware y software de cada nodo de cómputo}
     \centering
     \begin{tabular}{|l|l|}\hline
       {\bf Component} & {\bf Description} \\ \hline
@@ -1398,7 +1398,7 @@ para publicación de resultados de modelado o simulación.
 \section{Modelo en Etapas}
 
 Luego de realizar este análisis se llego a la conclusión de que seria muy útil
-el tener una infrastructura ya lista para prototipar rápidamente una aplicación.
+el tener una infraestructura ya lista para prototipar rápidamente una aplicación.
 La mayoría de los desarrolladores solo necesitan concentrarse en el algoritmo a
 paralelizar y en la optimizacion de las etapas mas demandantes de cómputo.
 
