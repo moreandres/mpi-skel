@@ -1111,24 +1111,21 @@ $ gcc -Wall -Wextra -O3 --report-loop
 Este capítulo aplica el modelo propuesto en el capítulo anterior. Varios ejemplos no triviales de aplicaciones de altas prestaciones son implementados
 y analizados utilizando los benchmarks y herramientas anteriormente presentadas.
 
-\section{Referencia}
+\section{Rendimiento de Referencia}
 
-Antes de empezar tomamos algunos datos de referencia del sistema utilizado.
-Esto nos permite saber cuan lejos están nuestras aplicaciones de lo que se
-puede obtener, también nos permite esbozar algunas hipótesis \ref{table:testbed}
-\ref{table:pruebas}.
+El sistema utilizado es el mismo para todos los casos de prueba. A continuación se muestra su configuración de hardware y software (Tabla \ref{table:testbed}), además del resultado del rendimiento según HPCC (Tabla \ref{table:pruebas}).
 
 \begin{table}[H]
     \caption{Hardware y software de cada nodo de cómputo}
     \centering
     \begin{tabular}{|l|l|}\hline
       {\bf Component} & {\bf Description} \\ \hline
-      Server Board & Intel(R) S5000PAL \\ \hline
-      CPU & Intel(R) Xeon(R) X5355 @ 2.66GHz \\ \hline
-      Ethernet controller & Intel(R) 80003ES2LAN (Copper) (rev 01) \\ \hline
+      Server Board & Intel\textregistered S5000PAL Server Board\\ \hline
+      CPU & Intel\textregistered Xeon\textregistered X5355 2.66GHz 4 way 8MB L2 \\ \hline
+      Ethernet controller & Intel\textregistered 80003ES2LAN (Copper) (rev 01) \\ \hline
       RAM Memory & 4 GB DDR2 FB 667 MHz \\ \hline
       Operating System & Red Hat Enterprise 5.5 (Tikanga) \\ \hline
-      Network Driver & Intel(R) PRO/1000 1.2.20-NAPI \\ \hline
+      Network Driver & Intel\textregistered PRO/1000 1.2.20-NAPI \\ \hline
       Ethernet Switch & Hewlett Packard HPJ4904A \\ \hline
     \end{tabular}
     \label{table:testbed}
@@ -1136,7 +1133,7 @@ puede obtener, también nos permite esbozar algunas hipótesis \ref{table:testbe
 
 \begin{table}[H]
 \caption{Pruebas de Referencia}
-  \begin{center}
+  \centering
     \begin{tabular}{|l|l|l|}\hline
       {\bf Benchmark} & {\bf Valor} & {\bf Unidad} \\ \hline
       dgemm & 70141 & mflops \\ \hline
@@ -1145,24 +1142,28 @@ puede obtener, también nos permite esbozar algunas hipótesis \ref{table:testbe
       ping pong BW & 1183.68 & MB/s \\ \hline
       ping pong latency & 4.49 & us \\ \hline
     \end{tabular}
-    \end{center}
  \label{table:pruebas}
 \end{table}
+
+Un cálculo rápido de rendimiento teórico versus real.
+
+Cada core de la familia de procesadores 5000 realiza 2 FLOPS por ciclo. Pero al utilizar registros de 128 bits con instrucciones SSE puede realizar 4 FLOPS por ciclo al vectorizarse.
+
+La ecuación \ref{eq:flops} muestra entonces el rendimiento máximo teórico de cada procesador. Cada servidor posee dos procesadores entonces tiene un máximo teórico de $ 42.56 \times 2 = 85.12 $ no tan lejos de los $ 70.141 $ medidos.
+
+\begin{equation}
+\label{eq:flops}
+CORES \times CICLOS \times FLOPS = 4 \times 2.66 \times 4 = 42.56 MFLOPS
+\end{equation}
 
 \section{Multiplicación de Matrices}
 
 La multiplicación de matrices es una operación fundamental en múltiples
 campos de aplicación científica como la resolución de ecuaciones
 lineales y la representación de grafos y espacios dimensionales. Por ello
-existe abundante material sobre el tema. Diferentes alternativas de implementación son demostradas en
-\cite{mm-matrixmultiplicationtool}.
+existe abundante material sobre el tema. 
 
-
-{\small
-\lstinputlisting{mm.c}
-}
-
-\bigskip
+{\small \lstinputlisting{mm.c} }
 
 El código fuente de una implementación simplista se encuentra adjuntado en
 el apéndice. Al aplicar las herramientas vistas previamente se identifica
@@ -1171,9 +1172,16 @@ mayor tiempo de cómputo.
 
 \bigskip
 
-A continuación se muestra una comparación de diferentes métodos, se
-demuestra claramente con este ejercicio la sofisticación de librerías
-contra métodos artesanales de optimización.
+Diferentes alternativas de implementación son demostradas en \cite{mm-matrixmultiplicationtool}. A continuación se muestra una comparación de diferentes métodos, se demuestra claramente que utilizar una librería como BLAS tiene grandes beneficios contra varios intentos de optimización (Figura \ref{fig:mm}).
+
+\begin{figure}[H]
+\label{fig:mm}
+\begin{center}
+\includegraphics[width=8cm]{mm.png}
+\caption{Comparación de Implementaciones}
+\end{center}
+\end{figure}
+
 
 \section{Distribución de Calor en Dos Dimensiones}
 
