@@ -9,7 +9,7 @@
 \usepackage{enumitem}
 \usepackage[utf8]{inputenc}
 
-\lstset{language=bash, frame=tlrb, basicstyle=\scriptsize, breaklines=true, numberbychapter=false,numbers=left}
+\lstset{language=c, frame=tlrb, basicstyle=\scriptsize, breaklines=true, numberbychapter=false,numbers=left}
 \setlist[enumerate]{noitemsep}
 \setlist[itemize]{noitemsep}
 
@@ -939,26 +939,22 @@ $ perf report
 \end{lstlisting}
 
 \begin{lstlisting}
-perf stat -B dd if=/dev/zero of=/dev/null count=1000000
+$ perf stat -B program
 
-1000000+0 records in
-1000000+0 records out
-512000000 bytes (512 MB) copied, 0.956217 s, 535 MB/s
+Performance counter stats for 'program':
 
- Performance counter stats for 'dd if=/dev/zero of=/dev/null count=1000000':
+           5,099 cache-misses  0.005 M/sec (scaled from 66.58%)
+         235,384 cache-references 0.246 M/sec (scaled from 66.56%)
+       9,281,660 branch-misses 3.858 %     (scaled from 33.50%)
+     240,609,766 branches 251.559 M/sec (scaled from 33.66%)
+   1,403,561,257 instructions  0.679 IPC   (scaled from 50.23%)
+   2,066,201,729 cycles 2160.227 M/sec (scaled from 66.67%)
+             217 page-faults 0.000 M/sec
+               3 CPU-migrations 0.000 M/sec
+              83 context-switches 0.000 M/sec
+      956.474238 task-clock-msecs 0.999 CPUs
 
-            5,099 cache-misses             #      0.005 M/sec (scaled from 66.58%)
-          235,384 cache-references         #      0.246 M/sec (scaled from 66.56%)
-        9,281,660 branch-misses            #      3.858 %     (scaled from 33.50%)
-      240,609,766 branches                 #    251.559 M/sec (scaled from 33.66%)
-    1,403,561,257 instructions             #      0.679 IPC   (scaled from 50.23%)
-    2,066,201,729 cycles                   #   2160.227 M/sec (scaled from 66.67%)
-              217 page-faults              #      0.000 M/sec
-                3 CPU-migrations           #      0.000 M/sec
-               83 context-switches         #      0.000 M/sec
-       956.474238 task-clock-msecs         #      0.999 CPUs
-
-       0.957617512  seconds time elapsed
+      0.957617512  seconds time elapsed
 \end{lstlisting}
 
 \section{Reporte de Vectorización}
@@ -1005,6 +1001,8 @@ Este capítulo detalla las actividades necesarias para realizar análisis de ren
 
 \section{Paso a Paso}
 
+A continuación se muestran los pasos a realizar, junto con preguntas que guían el análisis de rendimiento de una aplicación.
+
 \subsection{Pruebas de Referencia}
 
 \begin{enumerate}
@@ -1029,9 +1027,9 @@ $ for i in `seq 1 32`; do /usr/bin/time -v ./app >> time.log; done
 \end{lstlisting}
 
 \begin{enumerate}
-\item ¿ Son los resultados son reproducibles?
-\item ¿ La desviación estándar es menor que 3?
-\item ¿ Cuál es el promedio geométrico a ser usado en comparaciones futuras?
+\item ¿Son los resultados son reproducibles?
+\item ¿La desviación estándar es menor que 3?
+\item ¿Cuál es el promedio geométrico a ser usado en comparaciones futuras?
 \end{enumerate}
 
 \item Escalar tamaño del problema para calcular porcentaje de ejecución en paralelo.
@@ -1079,18 +1077,32 @@ $ gprof --flat-profile --graph --annotated-source app
 \end{lstlisting}
 
 \begin{enumerate}
-\item ¿Como esta diseñada la aplicación? ¿Que dependencias en librerías externas tiene?
-\item ¿Implementa algún núcleo de computo conocido del tipo BLAS?
-\item ¿Donde se concentra la mayor cantidad de tiempo de computo?
+\item ¿Cómo esta diseñada la aplicación?
+\item ¿Que dependencias en librerías externas tiene?
+\item ¿Dónde se concentra la mayor cantidad de tiempo de cómputo?
+\item ¿Implementa algún núcleo de computo conocido encuadrado dentro de librerías optimizadas como BLAS?
 \end{enumerate}
 
-\item utilizar el profiler a nivel de sistema
+\item Utilizar el profiler a nivel de sistema
 
-\item comprobar vectorizaciones
+\begin{lstlisting}
+$ prof record
+$ prof report
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{enumerate}
+\item ¿Cómo se comporta el sistema durante la ejecución de la aplicación?
+\end{enumerate}
+
+\item Comprobar vectorizaciones
+
+\begin{lstlisting}
 $ gcc -Wall -Wextra -O3 --report-loop
-\end{verbatim}
+\end{lstlisting}
+
+\begin{enumerate}
+\item ¿Hay ciclos que no pueden ser vectorizados?
+\end{enumerate}
 
 \end{enumerate}
 
@@ -1103,7 +1115,8 @@ y analizados utilizando los benchmarks y herramientas anteriormente presentadas.
 
 Antes de empezar tomamos algunos datos de referencia del sistema utilizado.
 Esto nos permite saber cuan lejos están nuestras aplicaciones de lo que se
-puede obtener, también nos permite esbozar algunas hipótesis \ref{table:pruebas}.
+puede obtener, también nos permite esbozar algunas hipótesis \ref{table:testbed}
+\ref{table:pruebas}.
 
 \begin{table}[H]
     \caption{Hardware y software de cada nodo de cómputo}
@@ -1130,36 +1143,24 @@ puede obtener, también nos permite esbozar algunas hipótesis \ref{table:prueba
       stream & 5931.6635 & MB/s \\ \hline
       hpl & 0.1217 & tflops \\ \hline
       ping pong BW & 1183.68 & MB/s \\ \hline
-      ping ping latency & 4.49 & us \\ \hline
+      ping pong latency & 4.49 & us \\ \hline
     \end{tabular}
     \end{center}
  \label{table:pruebas}
 \end{table}
-
-\begin{verbatim}
-DGEMM, GFLOPS:   returned: '56.9715'
-FFT, GFLOPS      returned: '2.43038'
-HP Linpack, TFLOPS     returned: '0.057867'
-PTRANS, GB/s     returned: '1.01094'
-RandomAccess, GUPs/s    returned: '0.00417059'
-Ring Bandwidth, GB/s     returned: '1.0678'
-Ring Latency, us     returned: '3.68976'
-STREAM Triad, GB/s   returned: '6.19899'
-\end{verbatim}
 
 \section{Multiplicación de Matrices}
 
 La multiplicación de matrices es una operación fundamental en múltiples
 campos de aplicación científica como la resolución de ecuaciones
 lineales y la representación de grafos y espacios dimensionales. Por ello
-existe abundante material sobre el tema.
+existe abundante material sobre el tema. Diferentes alternativas de implementación son demostradas en
+\cite{mm-matrixmultiplicationtool}.
+
 
 {\small
 \lstinputlisting{mm.c}
 }
-
-Diferentes alternativas de implementación son discutidas en
-\cite{mm-matrixmultiplicationtool}.
 
 \bigskip
 
@@ -1176,7 +1177,7 @@ contra métodos artesanales de optimización.
 
 \section{Distribución de Calor en Dos Dimensiones}
 
-\begin{verbatim}
+\begin{lstlisting}
   for (j = 1; j < matrix_height - 1; j++) {
     for (i = 1; i < grid_length - 1; i++) {
       
@@ -1193,9 +1194,9 @@ contra métodos artesanales de optimización.
       }
     }
   }
-\end{verbatim}
+\end{lstlisting}
 
-La salida del cálculo puede graficarse fácilmente con {\it gnuplot}.
+Un gráfico de la salida del cálculo puede ser hecho fácilmente con {\it gnuplot}.
 
 \begin{figure}[H]
 \begin{center}
@@ -1210,11 +1211,16 @@ El dilema trata en el problema de posicionar en un tablero de ajedrez ocho
 reinas sin que alguna amenace a las demás. Una reina amenaza a cualquier otra
 pieza en el tablero que este en la mismo diagonal, fila o columna.
 
-\bigskip
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=7cm]{queen.png}
+\caption{Solución simétrica del problema de las 8 reinas}
+\end{center}
+\end{figure}
 
 Este problema suele resolverse utilizando recursión.
 
-\begin{verbatim}
+\begin{lstlisting}
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -1258,23 +1264,23 @@ int main()
 
         return (0);
 }
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{lstlisting}
 Each sample counts as 0.01 seconds.
-  \%   cumulative   self              self     total
- time   seconds   seconds    calls  ms/call  ms/call  name
- 79.28      4.65     4.65                             available (queen.c:9 @ 400775)
-  6.01      5.01     0.35                             queens (queen.c:24 @ 4008d3)
-\end{verbatim}
+%   cumulative   self              self     total
+time seconds   seconds    calls  ms/call  ms/call  name
+79.28 4.65 4.65 available (queen.c:9 @ 400775)
+6.01 5.01 0.35 queens (queen.c:24 @ 4008d3)
+\end{lstlisting}
 
 Contrastando el tiempo requerido de ejecución entre la versión original y la instrumentada,
 la diferencia fue 52.73 versus 49.61 segundos. Aproximadamente un 5.91 \%.
 
-\begin{verbatim}
+\begin{lstlisting}
 $ gcc -Wall -Wextra -O3 -g -pg queen.c
-$ QUEEN\_N=30 time ./a.out
-\end{verbatim}
+$ QUEEN_N=30 time ./a.out
+\end{lstlisting}
 
 \section{Transformadas de {\it Fourier}}
 
@@ -1298,7 +1304,7 @@ contra métodos artesanales de optimización. La siguiente es la versión
 clásica de una implementación directa utilizando el algoritmo de
 {\it Cooley-Tukey}.
 
-\begin{verbatim}
+\begin{lstlisting}
 int i, k;
 float arg, sign = -1.0;
 
@@ -1310,9 +1316,9 @@ for (i = 0; i <= length/2; i++) {
         cos[i] += input[k] * cos(arg);
     }
 }
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{lstlisting}
 int i;
 
 for (i = 0; i <= length / 2; i++) {
@@ -1324,7 +1330,7 @@ for (i = 0; i <= length / 2; i++) {
 
     phase[i] = 180.0 * atan2(sine[i], cosine[i]) / M_PI - 90.0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 Una implementación más eficiente es la denominada {\it Fast Fourier Transform}.
 Un algoritmo aún más eficiente es el denominado {\it Goertzel}.
@@ -1340,8 +1346,7 @@ Este trabajo aporta el estado del arte del análisis de rendimiento en
 aplicaciones de cómputo de altas prestaciones. Discute, clasifica y detalla
 diferentes opciones en herramientas de soporte. Se demuestra su aplicación
 en varios problemas simples pero suficientemente interesantes. Propone un
-proceso y un modelo simple de implementación para dimensionar las
-optimizaciones posibles.
+proceso de análisis de rendimiento gradual e iterativo.
 
 \bigskip
 
@@ -1356,17 +1361,11 @@ Es preciso realizar un análisis del comportamiento y del uso de los recursos an
 empezar a optimizar una aplicación. Muchas veces las mejoras no son significativas si no
 son realizadas en el lugar correcto.
 
-\bigskip
-
-El utilizar un mismo modelo para implementar las aplicaciones abre muchas puertas para
-la automatización, comparación y estudio de técnicas de optimización que no pueden
-ser siempre aplicadas sin reestructurar las aplicaciones.
-
 \chapter{Trabajo Futuro}
 
 \section{Infraestructura de Soporte para Análisis}
 
-Este trabajo fue realizado como un primer paso a una implementación práctica del método propuesto,
+Este estudio puede ser tomado como trabajo previo de una implementación práctica del método propuesto,
 incluyendo soporte automático para al utilización de las herramientas y la generación integrada de
 reportes de análisis de rendimiento.
 
