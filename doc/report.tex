@@ -15,6 +15,8 @@
 
 \begin{document}
 
+\renewcommand{\tablename}{Tabla}
+
 \title{Universidad Nacional de La Plata\\Facultad de Informática\\ \bigskip
   Especialización en Cómputo de Altas Prestaciones\\ \bigskip % Grid?
   Herramientas para el Soporte de Análisis de Rendimiento}
@@ -34,15 +36,7 @@
 
   \bigskip
 
-  Luego de la introducción de terminología y bases teóricas del análisis cuantitativo de rendimiento, se resume la experiencia de utilizar herramientas para conocer donde se debería localizar los esfuerzos de optimización.
-
-  \bigskip
-
-  Este trabajo resume la experiencia que debe atravesar cualquier
-  individuo en busca de las diferentes alternativas para el análisis de
-  rendimiento; incluyendo la selección de herramientas de soporte y la
-  definición de un procedimiento sistemático para la aplicación iterativa
-  de las mismas.
+  Luego de la introducción de terminología y bases teóricas del análisis cuantitativo de rendimiento, se resume la experiencia de utilizar herramientas para conocer dónde se deberían localizar los esfuerzos de optimización.  Este trabajo resume la experiencia que debe atravesar cualquier investigador en busca de las diferentes alternativas para el análisis de rendimiento; incluyendo la selección de herramientas de soporte y la definición de un procedimiento sistemático para la aplicación iterativa de las mismas.
 
   \bigskip
 
@@ -93,7 +87,7 @@ profundamente y con correctitud comprobada.
 \section{Alcance}
 
 Este trabajo considera en particular a los sistemas de memoria distribuida corriendo sobre
-GNU/Linux, denominados sistemas Beowulf \cite{beowulf}. A través de las
+GNU/Linux, inicialmente denominados sistemas Beowulf \cite{beowulf}. A través de las
 estadísticas mostradas por el Top500 \footnote{El Top500 es una lista actualizada de super-computadoras
 de acuerdo al benchmark Linpack, disponible en {\tt http://www.top500.org}.}, se
 puede determinar que son los más utilizados en el cómputo de aplicaciones de alto rendimiento en la actualidad.
@@ -102,12 +96,7 @@ puede determinar que son los más utilizados en el cómputo de aplicaciones de a
 
 Actualmente existen numerosas y diversas herramientas para el análisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracción: desde contadores de eventos
-a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo,
-instrumentación automática de código, y hasta la simple utilización del tiempo de ejecución 
-de una aplicación o la comparación contra un trabajo sintético de referencia.
-
-\bigskip
-
+a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo, instrumentación automática de código, y hasta la simple utilización del tiempo de ejecución de una aplicación o la comparación contra un trabajo sintético de referencia.
 Ademas de teoría de análisis del rendimiento, un desarrollador necesita
 conocer de las herramientas listadas en la tabla \ref{table:tools}.
 
@@ -153,6 +142,99 @@ El rendimiento debe ser evaluado entonces de forma cuantificable, utilizando alg
 métrica en particular de modo de poder comparar relativamente dos sistemas o
 el comportamiento de un mismo sistema bajo una configuración distinta.
 
+\section{Teoría}
+
+Una vez obtenida una implementación eficiente, la única alternativa para mejorar el rendimiento es explotar el paralelismo que
+ofrecen los sistemas de cómputo. Este paralelismo se puede explotar a diferentes niveles, desde instrucciones que ejecutan una misma operación a varios
+datos a la vez (vectorización), pasando por la utilización de varias unidades de cómputo hasta la utilización de unidades de cómputo en diferentes sistemas para distribuir el trabajo. El cálculo de las mejoras posibles de rendimiento, cómo priorizarlas y la estimación de su límite máximo es una tarea compleja. Para ello existen algunas leyes frecuentemente utilizadas durante el análisis de rendimiento.
+
+\subsection{Ley de {\it Amdahl}}
+
+ La ley de {\it Amdahl} \cite{amdahl} dimensiona la mejora que puede obtenerse en un sistema de acuerdo a las mejoras logradas en sus componentes. Nos ayuda a establecer un límite máximo de mejora y a estimar cuales pueden ser los resultados de mejora.
+
+\bigskip
+
+La mejora de un programa utilizando cómputo paralelo está limitado por el tiempo necesario para completar su fracción serial o secuencial. Frecuentemente, el paralelismo sólo afecta notoriamente cuando es utilizado en un pequeño número de procesadores, o cuando se aplica a problemas altamente escalables ({\it Embarrassingly Parallel Problems}). Una vez paralelizado un programa, los esfuerzos suelen ser enfocados en cómo minimizar la parte secuencial, algunas veces haciendo más trabajo redundante pero en forma paralela.
+
+\bigskip
+
+La ley de {\it Amdahl} se calcula mediante la Ecuación \ref{eq:amdahl}.
+
+\begin{eqnarray}
+\label{eq:amdahl}
+S = \frac{1}{(1 - P) + \frac{P}{N}}
+\end{eqnarray}
+
+donde $ P $ es el porcentaje de trabajo paralelizable ($ 1-P $ es entonces el trabajo en serie o secuencial), y $ N $ es la cantidad de unidades de cómputo utilizadas.
+
+\bigskip
+
+Suponiendo que una aplicación requiere de un trabajo serial más un trabajo paralelizable; esta ley nos deja estimar la máxima ganancia posible de modo que incluso teniendo infinitas unidades de cómputo la ganancia está limitada como se muestra a continuación.
+
+\begin{table}[H]
+\caption{Mejora Máxima}
+\centering
+\includegraphics[width=7cm]{amdahl.png}
+
+\label{fig:amdahl}
+\end{table}
+
+La Tabla \ref{fig:amdahl} muestra que no importa la cantidad de unidades de
+procesamiento que sean utilizadas, en el caso de tener solo un 10\% de paralelismo
+en una aplicación, la mejora nunca va a superar 1.10x la original.
+En el caso de tener un 95\%, la mejora no puede ser mejor a 20x.
+
+\subsection{Ley de {\it Gustafson}}
+
+Desde un punto de vista más general, la ley de {\it Gustafson}
+\cite{gustafson} (computada mediante la Ecuación \ref{eq:gustafson})
+establece que las aplicaciones que manejan problemas
+repetitivos con conjuntos de datos similares pueden ser fácilmente
+paralelizadas. En comparación, la ley anterior no escala el tamaño o
+resolución de problema cuando se incrementa la potencia de cálculo, es
+decir asume un tamaño de problema fijo. 
+
+\begin{eqnarray}
+\label{eq:gustafson}
+speedup(P) = P - \alpha \times ( P - 1)
+\end{eqnarray}
+
+donde $ P $ es el número de unidades de cómputo y $ \alpha $ el porcentaje de trabajo paralelizable.
+
+\bigskip
+
+Al aplicar esta ley obtenemos que un problema con datos grandes o repetitivos en cantidades grandes puede ser eficientemente paralelizable. Nos es útil para determinar el tamaño de problema a utilizar cuando los recursos de cómputo son incrementados.
+En el mismo tiempo de ejecución, el programa resuelve entonces problemas más grandes.
+
+\begin{table}[H]
+\caption{Tamaño de Datos de Entrada}
+\label{fig:gustafson}
+\centering
+\includegraphics[width=7cm]{gustafson.png}
+\end{table}
+
+Similarmente al cuadro anterior, podemos deducir de la Tabla \ref{fig:gustafson} que en el caso de un programa con sólo $ 10\% $ de paralelismo, al incrementar los recursos 64x sólo podemos incrementar el tamaño del problema $ 7x $. Sin embargo nos calcula
+un incremento de $ 61x $ en el caso de tener $ 95\% $ de paralelismo.
+
+\subsection{Métrica de {\it Karp-Flatt}}
+
+Esta métrica es utilizada para medir el grado de paralelismo de una aplicación \cite{karp-flatt}. Esta métrica nos permite rápidamente estimar la mejora posible al aplicar un alto nivel de paralelismo.
+
+\bigskip
+
+Dado un cómputo paralelo con una mejora de rendimiento $ \psi $ en $ P $
+procesadores, donde $ P > 1 $. La fracción serial {\it Karp-Flatt} representada con $ e $ y calculada según la Ecuación \ref{eq:karp-flatt} es determinada experimentalmente, mientras menor sea $ e $ mayor se supone el nivel de paralelismo posible.
+
+\begin{eqnarray}
+\label{eq:karp-flatt}
+ e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} 
+\end{eqnarray}
+
+Para un problema de tamaño fijo, la eficiencia típicamente disminuye cuando
+el número de procesadores aumenta. Se puede entonces determinar si esta disminución
+es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema de
+arquitectura del sistema.
+
 \section{Métricas}
 
 Algunos ejemplos de medida de rendimiento son:
@@ -183,12 +265,12 @@ vez ya que esto asegura resultados reproducibles y convergentes, sin efectos no 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=10cm]{cycle.png}
-\caption{Análisis Iterativo}
+\caption{Optimización Iterativa}
 \label{fig:cycle}
 \end{center}
 \end{figure}
 
-A la hora de tomar decisiones, éstas deben estar basadas en datos concretos, ya que en caso contrario se podría estar trabajando en lugares donde no se va a obtener un rédito adecuado.
+A la hora de tomar decisiones, éstas deben estar basadas en datos concretos, ya que en caso contrario se podría estar trabajando sin llegar a obtener un rédito adecuado.
 
 \bigskip
 
@@ -198,8 +280,8 @@ Suponiendo una distribución normal de resultados, se suelen controlar que haya 
 \begin{figure}[H]
 \label{fig:deviation}
 \begin{center}
-\includegraphics[width=10cm]{deviation.png}
-\caption{Desviación Normal}
+\includegraphics[width=8cm]{deviation.png}
+\caption{Desviación de valores en una distribución normal (Wikipedia)}
 \end{center}
 \end{figure}
 
@@ -212,34 +294,29 @@ sistema de cómputo.
 
 \bigskip
 
-Para comparar se recomienda utilizar la media geométrica según la ecuación \ref{eq:geomean} en lugar de la aritmética, ya que permite dimensionar la tendencia central de un valor típico en un conjunto
-de números. Esto permite reducir el impacto de ruido introducido por una ejecución
-problemática.
+Para comparar es recomendable utilizar la media geométrica según la Ecuación \ref{eq:geomean} en lugar de la aritmética (\cite{geomean}), ya que permite dimensionar la tendencia central de un valor típico en un conjunto de números. Esto permite reducir el impacto de ruido introducido por una ejecución problemática.
 
 \begin{equation}
 \label{eq:geomean}
 G = \sqrt[n]{x_{1} \ldots x_{n}}
 \end{equation}
 
-Esta cuenta puede ser muy costosa y requerir de una alta precisión, por lo que se
-suele tomar el anti-logaritmo del promedio de los logaritmos de los valores siguiendo
-la ecuación \ref{eq:geomean-log}.
+Ya que se necesita conocer la raíz n-ésima (para un $ n $ posiblemente muy grande), es una operación ineficiente ya que se implementa con métodos numéricos de aproximación
+siguiendo el método de {\it Newton} (\cite{nroot}). En cambio se suele tomar el anti-logaritmo del promedio de los logaritmos de los valores siguiendo la ecuación \ref{eq:geomean-log}.
 
 \begin{equation}
 \label{eq:geomean-log}
 G = 10 ^{( log _{10} (x_{1}) + \ldots + log _{10} (x_{n}) ) / n}
 \end{equation}
 
-\bigskip
+\chapter{Herramientas de Soporte}
+
+Este capítulo revisa las herramientas disponibles para soporte de análisis
+de rendimiento de aplicaciones.
 
 \section{Pruebas de Rendimiento}
 
-Para medir el rendimiento se utilizan pruebas de referencia denominadas {\em benchmarks}; éstas pueden ser aplicaciones sintéticas construídas especialmente para ejercitar ciertos recursos computacionales, o bien
-aplicaciones del mundo real ejecutadas sobre un conjunto de datos prefijado.
-
-\bigskip
-
-Al tener valores de referencia se pueden caracterizar los sistemas de modo de predecir el rendimiento de una aplicación.
+Para medir el rendimiento se utilizan pruebas de referencia ({\em benchmarks}); éstas pueden ser aplicaciones sintéticas construidas específicamente, o bien aplicaciones del mundo real computando un problema prefijado. Al tener valores de referencia se pueden caracterizar los sistemas de modo de predecir el rendimiento de una aplicación.
 Los valores a los que se llegan con un {\it benchmark} suelen ser más prácticos y
 comparables que los teóricos de acuerdo a condiciones ideales de uso de recursos.
 También es posible garantizar que el sistema sigue en un mismo estado con el correr\
@@ -287,20 +364,11 @@ muestra el rendimiento máximo posible a obtener en la práctica.
 
 \subsection{STREAM}
 
-STREAM \cite{stream} es un {\it benchmark} sintético a través de un simple
-programa que mide el ancho de banda de memoria sostenido en MB/s y el
-rendimiento de computación relativa de algunos vectores simples de cálculo.
-Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura
-a la jerarquía de memoria principal del sistema bajo análisis.
-
-\bigskip
-
-Dentro de una misma ejecución de este {\it benchmark} se ejercitan diferentes
-operaciones en memoria, listadas en la tabla \ref{table:stream}.
+STREAM \cite{stream} es un {\it benchmark} sintético que mide el ancho de banda de memoria sostenido en MB/s y el rendimiento de computación relativa de algunos vectores simples de cálculo. Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura a la jerarquía de memoria principal del sistema bajo análisis. Dentro de una misma ejecución de este {\it benchmark} se ejercitan diferentes operaciones en memoria, listadas en la tabla \ref{table:stream}.
 
 \begin{table}[H]
 \caption{Operaciones del Benchmark STREAM}
-  \begin{center}
+  \centering
     \begin{tabular}{|l|l|l|}\hline
       {\bf Función} & {\bf Operación} & {\bf Descripción} \\ \hline
       copy & $ \forall i $ $ b_{i} = a_{i} $ & Copia simple \\ \hline
@@ -308,7 +376,6 @@ operaciones en memoria, listadas en la tabla \ref{table:stream}.
       add & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & Suma directa \\ \hline
       triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & Suma y multiplicación escalar \\ \hline
     \end{tabular} 
-   \end{center}
  \label{table:stream}
 \end{table}
 
@@ -351,10 +418,10 @@ tendencia en crecimiento de rendimiento; también la relación entre el primero,
 el último y la suma de todos los sistemas en la lista.
 
 \begin{figure}[H]
-\begin{center}
-\includegraphics[width=10cm]{top500.png}
-\caption{Indicadores Históricos del Top500}
-\end{center}
+\centering
+\includegraphics[width=12cm]{top500.png}
+\caption{Rendimiento Agregado del Top500 {\tt (http://www.top500.org})}
+\label{fig:top500}
 \end{figure}
 
 Este {\it benchmark} requiere conocimiento avanzado para una correcta configuración,
@@ -475,14 +542,11 @@ Este benchmark muestra diferentes resultados que son representativos
 y puestos en consideración de acuerdo al tipo de aplicación en discusión.
 La mejor máquina depende de la aplicación específica a ejecutar, ya que algunas
 aplicaciones necesitan mejor ancho de banda de memoria, mejor canal de comunicación, o
-o simplemente la mayor capacidad de cómputo de operaciones flotantes posible.
+simplemente la mayor capacidad de cómputo de operaciones flotantes posible.
 
 \bigskip
 
-Una analogía interesante para entender como el {\it benchmark} se relaciona a diferentes núcleos de cómputo
-se muestra en la figura \ref{fig:locality}. Por ejemplo al tener un problema que
-utiliza principalmente acceso a memoria local, se puede suponer que un sistema con
-buenos resultados de STREAM va ser útil.
+Una analogía interesante para entender cómo el {\it benchmark} se relaciona con diferentes núcleos de cómputo se muestra en la figura \ref{fig:locality}. Por ejemplo al tener un problema que utiliza principalmente acceso a memoria local, se puede suponer que un sistema con buenos resultados de STREAM va ser útil.
 
 \bigskip
 
@@ -497,12 +561,12 @@ buenos resultados de STREAM va ser útil.
 \bigskip
 
 Para una mejor comparación de resultados de HPCC se utilizan diagramas
-denominados {\it kiviats}, se muestra un ejemplo en la figura \ref{fig:kiviat}.
-Se comparan entonces dos sistemas, uno con mejor rendimiento que el otro.
+denominados {\it kiviats}, un ejemplo se muestra en la figura \ref{fig:kiviat}.
+Los resultados están normalizados hacia uno de los sistemas, y se puede identificar mejor rendimiento en FLOPs por poseer mejores DGEMM y HPL en comparación.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=10cm]{kiviat.png}
+\includegraphics[width=12cm]{kiviat.png}
 \caption{Diagrama Kiviat}
 \label{fig:kiviat}
 \end{center}
@@ -613,124 +677,6 @@ End of HPC Challenge tests.
 \end{verbatim}
 }
 
-\section{Teoría}
-
-Una vez obtenida una implementación eficiente, la única alternativa para mejorar el rendimiento es explotar el paralelismo que
-ofrecen los sistemas de cómputo. Este paralelismo se puede explotar a diferentes niveles, desde instrucciones que ejecutan una misma operación a varios
-datos a la vez (vectorización), pasando por la utilización de varias unidades de cómputo hasta la utilización de unidades de cómputo en diferentes sistemas para distribuir el trabajo.
-
-\bigskip
-
-El cálculo de las mejoras posibles de rendimiento, como priorizarlas y la estimación de su límite máximo es una tarea compleja.
-Para ello existen algunas leyes frecuentemente utilizadas durante el análisis de rendimiento.
-
-\subsection{Ley de {\it Amdahl}}
-
- La ley de {\it Amdahl} \cite{amdahl} dimensiona la mejora que puede obtenerse en un sistema de acuerdo a las mejoras logradas en sus
-componentes. Nos ayuda a establecer un límite máximo de mejora y a estimar cuales pueden ser los resultados de mejora.
-
-\bigskip
-
-La mejora de un programa utilizando procesamiento múltiple en cómputo paralelo
-está limitado por el tiempo necesario para completar su fracción serial o
-secuencial. Frecuentemente el paralelismo solo afecta notoriamente cuando es
-utilizado en un pequeño número de procesadores, o cuando se aplica a problemas
-altamente escalables (embarrassingly parallel problems). Una vez paralelizado un
-programa, los esfuerzos suelen ser enfocados en como minimizar
-la parte secuencial, algunas veces haciendo más trabajo redundante pero en forma paralela.
-
-\bigskip
-
-La ley de {\it Amdahl} puede ser entonces modelada con la ecuación \ref{eq:amdahl}.
-
-\begin{eqnarray}
-\label{eq:amdahl}
-S = \frac{1}{(1-P) + \frac{P}{N}}
-\end{eqnarray}
-
-donde $ P $ es el porcentaje de trabajo paralelizable ($ 1-P $ es entonces el trabajo en serie o secuencial), $ N $ es la cantidad de unidades de cómputo utilizadas.
-
-\bigskip
-
-Suponiendo que una aplicación requiere de un trabajo serial más un trabajo paralelizable; esta ley nos deja estimar la máxima ganancia posible
-de modo que incluso teniendo infinitas unidades de cómputo la ganancia esta limitada como se muestra a continuación.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=7cm]{amdahl.png}
-\caption{Mejora Máxima}
-\label{fig:amdahl}
-\end{center}
-\end{figure}
-
-La figura \ref{fig:amdahl} muestra que no importa la cantidad de unidades de
-procesamiento que sean utilizadas, en el caso de tener solo un 10\% de paralelismo
-en una aplicación, la mejora nunca va a superar 1.10x la original.
-En el caso de tener un 95\%, la mejora no puede ser mejor a 20x.
-
-\subsection{Ley de {\it Gustafson}}
-
-Desde un punto de vista más general, la ley de {\it Gustafson}
-\cite{gustafson} (computada mediante la ecuación \ref{eq:gustafson})
-establece que las aplicaciones que manejan problemas
-repetitivos con conjuntos de datos similares pueden ser fácilmente
-paralelizadas. En comparación, la ley anterior no escala el tamaño o
-resolución de problema cuando se incrementa la potencia de cálculo, es
-decir asume un tamaño de problema fijo. 
-
-\begin{eqnarray}
-\label{eq:gustafson}
-speedup(P) = P - \alpha \times ( P - 1)
-\end{eqnarray}
-
-donde $ P $ es el número de unidades de cómputo y $ \alpha $ el porcentaje de trabajo paralelizable.
-
-\bigskip
-
-Al aplicar esta ley obtenemos que un problema con datos grandes o repetitivos en cantidades grandes puede ser
-eficientemente paralelizable. Nos es útil para determinar el tamaño de problema a utilizar cuando los recursos de cómputo son incrementados.
-En el mismo tiempo de ejecución, el programa resuelve entonces problemas más grandes.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=7cm]{gustafson.png}
-\caption{Tamaño de Datos de Entrada}
-\label{fig:gustafson}
-\end{center}
-\end{figure}
-
-Similarmente al cuadro anterior, podemos deducir de la figura \ref{fig:gustafson} que en el caso de un programa con sólo 10\% de paralelismo,
-al incrementar los recursos 64x sólo podemos incrementar el tamaño del problema 7x. Sin embargo nos calcula
-un incremento de 61x en el caso de tener 95\% de paralelismo.
-
-\subsection{Métrica de {\it Karp-Flatt}}
-
-Esta métrica es utilizada para medir el grado de paralelismo de una aplicación \cite{karp-flatt}.
-Esta métrica nos permite rápidamente estimar la mejora posible al aplicar un alto nivel de paralelismo.
-
-\bigskip
-
-Dado un cómputo paralelo con una mejora de rendimiento $ \phi $ en $ P $
-procesadores, donde $ P > 1 $. La fracción serial {\it Karp-Flatt}
-representada con $ e $ y calculada según la ecuación \ref{eq:karp-flatt}
-es determinada experimentalmente, mientras menor sea $ e $
-mayor se supone el nivel de paralelismo posible.
-
-\begin{eqnarray}
-\label{eq:karp-flatt}
- e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} 
-\end{eqnarray}
-
-Para un problema de tamaño fijo, la eficiencia típicamente disminuye cuando
-el número de procesadores aumenta. Se puede entonces determinar si esta disminución
-es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema de
-arquitectura del sistema.
-
-\chapter{Herramientas de Soporte}
-
-Este capítulo revisa las herramientas disponibles para soporte de análisis
-de rendimiento de aplicaciones.
-
 \section{Herramientas}
 
 Se recomienda un proceso de aplicación gradual empezando por herramientas generales de alto nivel que analizan la aplicación como un todo; terminando con herramientas de bajo nivel que proveen detalles complejos de granularidad más fina en componentes particulares del sistema. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un análisis complejo y extensivo desde un principio. Una lista de las herramientas más conocidas se muestra en \ref{table:tooling}.
@@ -757,7 +703,7 @@ Tercero se dimensiona el comportamiento de la aplicación mediante un perfil de 
 
 \section{Tiempo de Ejecución}
 
-\subsection{Tiempo de Ejecución Global}
+\subsection{Tiempo de ejecución global}
 
 La granularidad de el método de medición de tiempo es importante.
 
@@ -769,7 +715,7 @@ Para medir el tiempo de ejecución de un comando en consola se utiliza {\tt time
 
 No hace falta instrumentar el código ni el binario. Siempre disponible.
 
-\subsection{TBD}
+\subsection{Interfaz al reloj del sistema}
 
 {\tt gettimeofday(3)}
 {\tt clock(3)}
@@ -1529,6 +1475,16 @@ para publicación de resultados de modelado o simulación.
 	R. Garabato, A. More, V. Rosales,
 	\emph{Optimizing Ethernet Latency in Beowulf Clusters},
 	CLEI 2012.
+
+\bibitem{geomean}
+	Fleming, Philip J. and Wallace, John J.,
+	\emph{How not to lie with statistics: the correct way to summarize benchmark results},
+	Communications ACM March 1986.
+
+\bibitem{nroot}
+	Atkinson, Kendall E.,
+	\emph{An introduction to numerical analysis (2nd ed.)},
+	New York: Wiley 1989
 
 \end{thebibliography}
 
