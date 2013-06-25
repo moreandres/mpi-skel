@@ -36,7 +36,7 @@
 
   \bigskip
 
-  Luego de la introducción de terminología y bases teóricas del análisis cuantitativo de rendimiento, se resume la experiencia de utilizar herramientas para conocer dónde se deberían localizar los esfuerzos de optimización.  Este trabajo resume la experiencia que debe atravesar cualquier investigador en busca de las diferentes alternativas para el análisis de rendimiento; incluyendo la selección de herramientas de soporte y la definición de un procedimiento sistemático para la aplicación iterativa de las mismas.
+  Luego de la introducción de terminología y bases teóricas del análisis cuantitativo de rendimiento, se resume la experiencia de utilizar herramientas para conocer dónde se deberían localizar los esfuerzos de optimización.  Este trabajo resume la experiencia que debe atravesar cualquier investigador en busca de las diferentes alternativas para el análisis de rendimiento; incluyendo la selección de herramientas de soporte y la definición de un procedimiento sistemático de optimización iterativo.
 
   \bigskip
 
@@ -50,7 +50,7 @@
 
 \tableofcontents
 
-\chapter{Introducción}
+\chapter{Introducción}\label{chap:intro}
 
 Este capítulo introduce este trabajo y su alcance. Luego de revisar la
 motivación de esta investigación, se resume el estado actual del análisis
@@ -97,7 +97,7 @@ puede determinar que son los más utilizados en el cómputo de aplicaciones de a
 Actualmente existen numerosas y diversas herramientas para el análisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracción: desde contadores de eventos
 a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo, instrumentación automática de código, y hasta la simple utilización del tiempo de ejecución de una aplicación o la comparación contra un trabajo sintético de referencia.
-Ademas de teoría de análisis del rendimiento, un desarrollador necesita
+Además de teoría de análisis del rendimiento, un desarrollador necesita
 conocer de las herramientas listadas en la tabla \ref{table:tools}.
 
 \begin{table}[H]
@@ -123,16 +123,14 @@ El resto del documento explica teoría introductoria sobre el análisis del rend
 
 \bigskip
 
-El capítulo 2 discute el análisis de rendimiento, sus
-principios y teoría. El capítulo 3 detalla las herramientas más
-utilizadas. El capítulo 4 ejemplifica la aplicación de las herramientas
-para obtener información de análisis a través de un proceso sistemático.
-El capítulo 5 concluye y el capítulo 6 detalla posibles extensiones de este trabajo.
+El capítulo \ref{chapter:analysis} discute el análisis de rendimiento, sus
+principios y teoría. El capítulo \ref{chapter:tools} detalla las herramientas más
+utilizadas. El capítulo \ref{chapter:procedure} aplica las herramientas revisadas a través de un proceso sistemático. El capítulo \ref{chapter:cases} ejemplifica la aplicación del proceso con algunos núcleos de computo. El capítulo \ref{chapter:conclusions} concluye y el capítulo \ref{chapter:future} detalla posibles extensiones de este trabajo.
 
-\chapter{Análisis de Rendimiento}
+\chapter{Análisis de Rendimiento}\label{chapter:analysis}
 
 Este capítulo introduce el concepto de rendimiento y teoría básica sobre su análisis.
-Se revisa la utilización de pruebas de referencia como práctica recomendada.
+Se revisa la utilización de pruebas de referencia como base de comparación.
 
 \section{Definición}
 
@@ -150,7 +148,7 @@ datos a la vez (vectorización), pasando por la utilización de varias unidades 
 
 \subsection{Ley de {\it Amdahl}}
 
- La ley de {\it Amdahl} \cite{amdahl} dimensiona la mejora que puede obtenerse en un sistema de acuerdo a las mejoras logradas en sus componentes. Nos ayuda a establecer un límite máximo de mejora y a estimar cuales pueden ser los resultados de mejora.
+ La ley de {\it Amdahl} \cite{amdahl} dimensiona la mejora que puede obtenerse en un sistema de acuerdo a las mejoras logradas en sus componentes. Nos ayuda a establecer un límite máximo de mejora y a estimar cuales pueden ser los resultados de una optimización.
 
 \bigskip
 
@@ -180,9 +178,9 @@ Suponiendo que una aplicación requiere de un trabajo serial más un trabajo par
 \end{table}
 
 La Tabla \ref{fig:amdahl} muestra que no importa la cantidad de unidades de
-procesamiento que sean utilizadas, en el caso de tener solo un 10\% de paralelismo
-en una aplicación, la mejora nunca va a superar 1.10x la original.
-En el caso de tener un 95\%, la mejora no puede ser mejor a 20x.
+procesamiento que sean utilizadas, en el caso de tener solo un $ 10\% $ de paralelismo
+en una aplicación, la mejora nunca va a superar $ 1.10x $ la original.
+En el caso de tener un $ 95\% $, la mejora no puede ser mayor a $ 20x $.
 
 \subsection{Ley de {\it Gustafson}}
 
@@ -309,7 +307,7 @@ siguiendo el método de {\it Newton} (\cite{nroot}). En cambio se suele tomar el
 G = 10 ^{( log _{10} (x_{1}) + \ldots + log _{10} (x_{n}) ) / n}
 \end{equation}
 
-\chapter{Herramientas de Soporte}
+\chapter{Herramientas de Soporte}\label{chapter:tools}
 
 Este capítulo revisa las herramientas disponibles para soporte de análisis
 de rendimiento de aplicaciones.
@@ -341,7 +339,7 @@ de sus datos de salida para ser utilizados a manera de ejemplo.
 
 \begin{table}[H]
     \caption{Benchmarks}
-    \begin{center}
+    \centering
     \begin{tabular}{|l|l|l|}\hline
       {\bf Benchmark} & {\bf Componente} & {\bf Descripción} \\ \hline
       STREAM & Memoria & Ancho de banda sostenido \\ \hline
@@ -350,7 +348,6 @@ de sus datos de salida para ser utilizados a manera de ejemplo.
       HPCC & Sistema & Múltiples componentes \\ \hline
         \end{tabular}
   \label{table:benchmark-list}
-  \end{center}
 \end{table}
 
 \bigskip
@@ -952,7 +949,7 @@ queen.c:22: note: vectorized 0 loops in function.
 queen.c:35: note: vectorized 0 loops in function.
 \end{lstlisting}
 
-\chapter{Procedimiento de Análisis}
+\chapter{Procedimiento de Análisis}\label{chapter:procedure}
 
 Este capítulo detalla las actividades necesarias para realizar análisis de rendimiento. También propone un procedimiento sistemático iterativo de aplicación de las actividades junto a la utilización de herramientas.
 
@@ -1073,9 +1070,9 @@ $ gcc -Wall -Wextra -O3 --report-loop
 
 \end{enumerate}
 
-\chapter{Casos de Estudio}
+\chapter{Casos de Estudio}\label{chapter:cases}
 
-Este capítulo aplica el modelo propuesto en el capítulo anterior. Varios ejemplos no triviales de aplicaciones de altas prestaciones son implementados
+Este capítulo aplica el procedimiento propuesto en el capítulo anterior. Varios ejemplos no triviales de aplicaciones de altas prestaciones son implementados
 y analizados utilizando los benchmarks y herramientas anteriormente presentadas.
 
 \section{Rendimiento de Referencia}
@@ -1256,7 +1253,7 @@ $ gcc -Wall -Wextra -O3 -g -pg queen.c
 $ QUEEN_N=30 time ./a.out
 \end{lstlisting}
 
-\chapter{Conclusiones}
+\chapter{Conclusiones}\label{chapter:conclusions}
 
 Este trabajo aporta el estado del arte del análisis de rendimiento en
 aplicaciones de cómputo de altas prestaciones. Discute, clasifica y detalla
@@ -1278,7 +1275,7 @@ empezar a optimizar una aplicación. Muchas veces las mejoras no son significati
 
 Este trabajo soporta los primeros pasos de análisis de rendimiento para expertos del dominio resolviendo problemas específicos utilizando computación de altas prestaciones.
 
-\chapter{Trabajo Futuro}
+\chapter{Trabajo Futuro}\label{chapter:future}
 
 \section{Infraestructura de Soporte para Análisis}
 
