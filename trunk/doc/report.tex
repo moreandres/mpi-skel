@@ -13,6 +13,8 @@
 \setlist[enumerate]{noitemsep}
 \setlist[itemize]{noitemsep}
 
+\bibliographystyle{plain}
+
 \begin{document}
 
 \renewcommand{\tablename}{Tabla}
@@ -70,10 +72,10 @@ desarrollo.
 
 Con mayor impacto que en otras áreas de la computación, el código
 optimizado correctamente puede ejecutarse órdenes de magnitud mejor que una implementación
-directa \cite{mm-matrixmultiplicationtool}. Además, se utiliza
+directa \cite{mm-tool}. Además, se utiliza
 programación en paralelo para obtener una mejor utilización de la
 capacidad de cómputo disponible; aumentando por lo tanto la complejidad de
-implementación, depuración y optimización \cite{parallel-programming}.
+implementación, depuración y optimización \cite{is-parallel-programming-hard}.
 
 \bigskip
 
@@ -87,7 +89,7 @@ profundamente y con correctitud comprobada.
 \section{Alcance}
 
 Este trabajo considera en particular a los sistemas de memoria distribuida corriendo sobre
-GNU/Linux, inicialmente denominados sistemas Beowulf \cite{beowulf}. A través de las
+GNU/Linux, inicialmente denominados sistemas Beowulf \cite{beowulf-parallel-workstation}. A través de las
 estadísticas mostradas por el Top500 \footnote{El Top500 es una lista actualizada de super-computadoras
 de acuerdo al benchmark Linpack, disponible en {\tt http://www.top500.org}.}, se
 puede determinar que son los más utilizados en el cómputo de aplicaciones de alto rendimiento en la actualidad.
@@ -117,11 +119,13 @@ conocer de las herramientas listadas en la tabla \ref{table:tools}.
 
 % Estudios similares? Papers?
 
+Existen también múltiples esfuerzos similares hacia una infrastructura o proceso general de análisis de rendimiento.
+
 \section{Organización del Contenido}
 
 El capítulo \ref{chapter:analysis} discute el análisis de rendimiento, sus
 principios y teoría. El capítulo \ref{chapter:tools} detalla las herramientas más
-utilizadas. El capítulo \ref{chapter:procedure} aplica las herramientas revisadas a través de un proceso sistemático. El capítulo \ref{chapter:cases} ejemplifica la aplicación del proceso con algunos núcleos de computo. El capítulo \ref{chapter:conclusions} concluye y el capítulo \ref{chapter:future} detalla posibles extensiones de este trabajo.
+utilizadas. El capítulo \ref{chapter:procedure} aplica las herramientas revisadas a través de un proceso sistemático. El capítulo \ref{chapter:cases} ejemplifica la aplicación del proceso con algunos núcleos de computo. El capítulo \ref{chapter:conclusions} concluye y detalla posibles extensiones de este trabajo.
 
 \chapter{Análisis de Rendimiento}\label{chapter:analysis}
 
@@ -288,7 +292,7 @@ sistema de cómputo.
 
 \bigskip
 
-Para comparar es recomendable utilizar la media geométrica según la Ecuación \ref{eq:geomean} en lugar de la aritmética (\cite{geomean}), ya que permite dimensionar la tendencia central de un valor típico en un conjunto de números. Esto permite reducir el impacto de ruido introducido por una ejecución problemática.
+Para comparar es recomendable utilizar la media geométrica según la Ecuación \ref{eq:geomean} en lugar de la aritmética (\cite{how-not-to-lie}), ya que permite dimensionar la tendencia central de un valor típico en un conjunto de números. Esto permite reducir el impacto de ruido introducido por una ejecución problemática.
 
 \begin{equation}
 \label{eq:geomean}
@@ -296,7 +300,7 @@ G = \sqrt[n]{x_{1} \ldots x_{n}}
 \end{equation}
 
 Ya que se necesita conocer la raíz n-ésima (para un $ n $ posiblemente muy grande), es una operación ineficiente ya que se implementa con métodos numéricos de aproximación
-siguiendo el método de {\it Newton} (\cite{nroot}). En cambio se suele tomar el anti-logaritmo del promedio de los logaritmos de los valores siguiendo la ecuación \ref{eq:geomean-log}.
+siguiendo el método de {\it Newton} (\cite{numerical-analysis}). En cambio se suele tomar el anti-logaritmo del promedio de los logaritmos de los valores siguiendo la ecuación \ref{eq:geomean-log}.
 
 \begin{equation}
 \label{eq:geomean-log}
@@ -480,7 +484,7 @@ sobre la jerarquía local de memoria.
 \subsection{Intel MPI Benchmarks}
 
 Es un conjunto de {\it benchmarks} cuyo objetivo es ejercitar las funciones
-más importantes del estándar para librerías de paso de mensajes (MPI, por sus siglas en inglés) \cite{mpi}.
+más importantes del estándar para librerías de paso de mensajes (MPI, por sus siglas en inglés) \cite{mpi-standard}.
 El más conocido es el popular ping-pong, el cual ejercita la transmisión de mensajes ida y vuelta entre dos nodos de
 cómputo con diferentes tamaños de mensajes. \cite{latency}.
 
@@ -915,7 +919,7 @@ Performance counter stats for 'program':
       0.957617512  seconds time elapsed
 \end{lstlisting}
 
-Este punto de análisis requiere conocimiento avanzado de como funciona un CPU, su acceso a memoria y los costos de las diferentes instrucciones soportadas. \cite{hennessy-patterson} \cite{intel}.
+Este punto de análisis requiere conocimiento avanzado de como funciona un CPU, su acceso a memoria y los costos de las diferentes instrucciones soportadas. \cite{hennessy} \cite{intel-optimization}.
 
 \section{Reporte de Vectorización}
 
@@ -1132,7 +1136,7 @@ mayor tiempo de cómputo.
 
 \bigskip
 
-Diferentes alternativas de implementación son demostradas en \cite{mm-matrixmultiplicationtool}. A continuación se muestra una comparación de diferentes métodos, se demuestra claramente que utilizar una librería como BLAS tiene grandes beneficios contra varios intentos de optimización (Figura \ref{fig:mm}).
+Diferentes alternativas de implementación son demostradas en \cite{mm-tool}. A continuación se muestra una comparación de diferentes métodos, se demuestra claramente que utilizar una librería como BLAS tiene grandes beneficios contra varios intentos de optimización (Figura \ref{fig:mm}).
 
 \begin{figure}[H]
 \label{fig:mm}
@@ -1271,214 +1275,19 @@ empezar a optimizar una aplicación. Muchas veces las mejoras no son significati
 
 Este trabajo soporta los primeros pasos de análisis de rendimiento para expertos del dominio resolviendo problemas específicos utilizando computación de altas prestaciones.
 
-\chapter{Trabajo Futuro}\label{chapter:future}
-
-\section{Infraestructura de Soporte para Análisis}
-
 Este estudio puede ser tomado como trabajo previo de una implementación práctica del método propuesto,
 incluyendo soporte automático para al utilización de las herramientas y la generación integrada de
-reportes de análisis de rendimiento.
-
-\section{Herramientas Adicionales de Soporte}
-
-La implementación de nuevas tecnologías para el análisis de rendimiento
+reportes de análisis de rendimiento. La implementación de nuevas tecnologías para el análisis de rendimiento
 es incesante y continua, los siguientes proyectos están ampliamente
 relacionados con este estudio.
-
-\begin{itemize}
-\item Proyecto A: descripción del proyecto A.
-\item Proyecto B: descripción del proyecto B.
-\item Proyecto C: descripción del proyecto C.
-\end{itemize}
-
-\section{Aplicación en el Mundo Real}
 
 La utilización de estas ideas en una aplicación del mundo real es materia
 pendiente, otra posibilidad es reimplementar desde cero alguna aplicación
 científica en colaboración con algún grupo de investigación y realizar
-varios ciclos de optimización.
-
-\bigskip
-
-Trabajo en conjunto con un algún grupo de investigación científica,
+varios ciclos de optimización. Trabajo en conjunto con un algún grupo de investigación científica,
 realizando análisis de rendimiento de aplicaciones ya existentes utilizadas
 para publicación de resultados de modelado o simulación.
 
-\begin{thebibliography}{9}
-
-\bibitem{mm-matrixmultiplicationtool}
-  A. More,
-  \emph{A Case Study on High Performance Matrix Multiplication},
-  2008.
-
-\bibitem{parallel-programming}
-  Paul E. McKenney,
-  \emph{Is Parallel Programming Hard, And, If So, What Can You Do About It?},
-  January, 2011.
-
-\bibitem{beowulf}
-  T. Sterling, D. Savarese, D. J. Becker, J. E. Dorband, U. A. Ranawake,
-  and C. V. Packer,
-  \emph{Beowulf: A parallel workstation for scientific computation},
-  1995.
-
-\bibitem{mpi}
-  Message Passing Interface Forum,
-  \emph{MPI: A Message-Passing Interface Standard},
-  2.2,
-  2009.
-
-\bibitem{openmp}
-  OpenMP Architecture Review Board,
-  \emph{OpenMP Application Program Interface}.
-  3.0,
-  2008.
-
-\bibitem{tinetti}
-  Fernando G Tinetti,
-  \emph{Cómputo Paralelo en Redes Locales de Computadoras},
-  2004.
-
-\bibitem{gprof}
-  Susan L. Graham,  Peter B. Kessler,  Marshall K. McKusick,
-  \emph{gprof: A Call Graph Execution Profiler},
-  1982.
-   
-\bibitem{hennessy-patterson}
-  John. L. Hennesy, David A. Patterson,
-  \emph{Computer Architecture: A Quantitative Approach, 3rd Edition},
-  2002.
-
-\bibitem{intel}
-  Intel Press,
-  \emph{Intel64 and IA-32 Architectures Software Developer's Manual - Volume
-    3B: System Programming Guide, Part 2},
-  March 2010.
-
-\bibitem{what}
-  Ulrich Deeper,
-  \emph{What Every Programmer Should Know About Memory},
-  November 2007.
-
-\bibitem{patterns}
-  G. Mattson, B.A. Sanders and B.L. Massingill, 
-  \emph{Patterns for Parallel Programming, Addison-Wesley},
-  2004.
-  
-\bibitem{automatic-performance-analysis}
-  T. Margalef, J. Jorba, O. Morajko, A. Morajko, E. Luque,
-  \emph{Different approaches to automatic performance analysis of distributed
-    applications},
-  2004.
-  
-\bibitem{capturing-performance-knowledge}
-  K. Huck, O. Hernandez, V. Bui, S. Chandrasekaran, B. Chapman, A. Malony,
-  L McInnes, B. Norris,
-  \emph{Capturing performance knowledge for automated analysis},
-  2008.
-  
-\bibitem{automatic-openmp-mpi-analysis}
-  F. Wolf, B. Mohr,
-  \emph{Automatic performance analysis of hybrid MPI/OpenMP applications},
-  2003.
-  
-\bibitem{intro-software-performance}
-  C. Smith,
-  \emph{Introduction to software performance engineering: origins and
-    outstanding problems},
-  2007.
-
-\bibitem{future-software-performance}
-  M. Woodside, G. Franks, D. Petriu,
-  \emph{The Future of Software Performance Engineering},
-  2007.
-
-\bibitem{critical-overview}
-  J. Browne,
-  \emph{A critical overview of computer performance evaluation},
-  1976.
-
-\bibitem{hpctoolkit}
-  Rice University,
-  \emph{HPC Toolkit}, {\tt http://hpctoolkit.org}.
-       
-\bibitem{papi}
-  University of Tennessee,
-  \emph{Performance Application Programming Interface},
-       {\tt http://icl.cs.utk.edu/papi}.
-       
-\bibitem{amdahl}
-  G. M. Amdahl,
-  \emph{Validity of single-processor approach to achieving large-scale
-    computing capability},
-  Proceedings of AFIPS Conference, Reston, VA. 1967. pp. 483-485.
-  
-\bibitem{twelve-ways}
-  D. Bailey, \emph{Twelve Ways to Fool the Masses When Giving Performance
-    Results on Parallel Computers},
-  RNR Technical Report, RNR-90-020, NASA Ames Research Center, 1991.
-  
-\bibitem{gustafson}
-  J. L. Gustafson,
-  \emph{Reevaluating Amdahl's Law}, CACM, 31(5), 1988. pp. 532-533.
-  
-\bibitem{karp-flatt}
-  A. H. Karp and H. P. Flatt,
-  \emph{Measuring Parallel Processor Performance},
-  Communication of the ACM Volume 33 Number 5, May 1990.
-  
-\bibitem{myth}
-  {Lee, Victor W. and Kim, Changkyu and Chhugani, Jatin and Deisher, Michael
-    and Kim, Daehyun and Nguyen, Anthony D. and Satish, Nadathur and
-    Smelyanskiy, Mikhail and Chennupaty}, Srinivas, and Hammarlund, Per and
-  Singhal, Ronak and Dubey, Pradeep,
-  \emph{Debunking the 100X GPU vs. CPU myth: an evaluation of throughput
-    computing on CPU and GPU},
-  2010.
-  
-\bibitem{stream}
-  John D. McCalpin,
-  \emph{A Survey of Memory Bandwidth and Machine Balance in Current High
-    Performance Computers},
-  1995.
-  
-\bibitem{counters}
-  Dong H. Ahn and Jeffrey S. Vetter,
-  \emph{Scalable Analysis Techniques for Microprocessor Performance Counter
-    Metrics},
-  2002.
-  
-\bibitem{linpack}
-  J. Dongarra, J. Bunch, C. Moler and G. W. Stewart, 
-  \emph{LINPACK Users Guide},
-  1979.
-  
-\bibitem{hpl}
-  A. Petitet, R. C. Whaley, J. Dongarra and A. Cleary, 
-  \emph{HPL - A Portable Implementation of the High-Performance Linpack
-    Benchmark for Distributed-Memory Computers}, {\tt http://www.netlib.org/benchmark/hpl}
-  2008.
-
-\bibitem{hpcc}
-  Dongarra, J., Luszczek, P.,
-  \emph{Introduction to the HPC Challenge Benchmark Suite}, ICL Technical Report,
-  2005.  
-  
-\bibitem{latency}
-	R. Garabato, A. More, V. Rosales,
-	\emph{Optimizing Ethernet Latency in Beowulf Clusters},
-	CLEI 2012.
-
-\bibitem{geomean}
-	Fleming, Philip J. and Wallace, John J.,
-	\emph{How not to lie with statistics: the correct way to summarize benchmark results},
-	Communications ACM March 1986.
-
-\bibitem{nroot}
-	Atkinson, Kendall E.,
-	\emph{An introduction to numerical analysis (2nd ed.)},
-	New York: Wiley 1989
-
-\end{thebibliography}
+\bibliography{report}
 
 \end{document}
