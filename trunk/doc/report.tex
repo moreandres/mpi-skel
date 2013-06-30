@@ -20,7 +20,7 @@
 \renewcommand{\tablename}{Tabla}
 
 \title{Universidad Nacional de La Plata\\Facultad de Informática\\ \bigskip
-  Especialización en Cómputo de Altas Prestaciones\\ \bigskip % Grid?
+  Especialización en Cómputo de Altas Prestaciones y Tecnología Grid\\ \bigskip
   Herramientas para el Soporte de Análisis de Rendimiento}
 
 \author{
@@ -279,7 +279,7 @@ Suponiendo una distribución normal de resultados, se suelen controlar que haya 
 \label{fig:deviation}
 \begin{center}
 \includegraphics[width=8cm]{deviation.png}
-\caption{Desviación de valores en una distribución normal (Wikipedia)}
+\caption{Desviación de valores en una distribución normal [Wikipedia]}
 \end{center}
 \end{figure}
 
@@ -417,7 +417,7 @@ el último y la suma de todos los sistemas en la lista.
 \begin{figure}[H]
 \centering
 \includegraphics[width=12cm]{top500.png}
-\caption{Rendimiento Agregado del Top500 {\tt (http://www.top500.org})}
+\caption{Rendimiento Agregado del Top500 [Top500])}
 \label{fig:top500}
 \end{figure}
 
@@ -564,7 +564,7 @@ Los resultados están normalizados hacia uno de los sistemas, y se puede identif
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=12cm]{kiviat.png}
-\caption{Diagrama Kiviat}
+\caption{Diagrama Kiviat [Top500]}
 \label{fig:kiviat}
 \end{center}
 \end{figure}
@@ -1109,11 +1109,9 @@ El sistema utilizado es el mismo para todos los casos de prueba. A continuación
  \label{table:pruebas}
 \end{table}
 
-Un cálculo rápido de rendimiento teórico versus real.
-
-Cada core de la familia de procesadores 5000 realiza 2 FLOPS por ciclo. Pero al utilizar registros de 128 bits con instrucciones SSE puede realizar 4 FLOPS por ciclo al vectorizarse.
-
-La ecuación \ref{eq:flops} muestra entonces el rendimiento máximo teórico de cada procesador. Cada servidor posee dos procesadores entonces tiene un máximo teórico de $ 42.56 \times 2 = 85.12 $ no tan lejos de los $ 70.141 $ medidos.
+En comparación del rendimiento teórico contra el real cada {\it core} de la familia de procesadores 5000 realiza 2 FLOPs por ciclo,
+al vectorizarse el cómputo y utilizar registros de 128 bits con instrucciones SSE puede realizar 4 FLOPs por ciclo.
+La ecuación \ref{eq:flops} muestra que si cada servidor posee dos procesadores entonces tiene un máximo teórico de $ 42.56 \times 2 = 85.12 $, por lo cual los $ 70.141 $ medidos corresponden.
 
 \begin{equation}
 \label{eq:flops}
@@ -1129,14 +1127,10 @@ existe abundante material sobre el tema.
 
 {\small \lstinputlisting{mm.c} }
 
-El código fuente de una implementación simplista se encuentra adjuntado en
-el apéndice. Al aplicar las herramientas vistas previamente se identifica
-claramente que la multiplicación de los elementos de la matriz consume el
-mayor tiempo de cómputo.
-
-\bigskip
-
-Diferentes alternativas de implementación son demostradas en \cite{mm-tool}. A continuación se muestra una comparación de diferentes métodos, se demuestra claramente que utilizar una librería como BLAS tiene grandes beneficios contra varios intentos de optimización (Figura \ref{fig:mm}).
+Al aplicar las herramientas vistas previamente se identifica claramente que la multiplicación de los elementos de la matriz consume el
+mayor tiempo de cómputo. Diferentes alternativas de implementación son demostradas en \cite{mm-tool}. 
+A continuación se muestra una comparación de diferentes métodos,
+se demuestra claramente que utilizar una librería como BLAS tiene grandes beneficios contra varios intentos de optimización (Figura \ref{fig:mm}).
 
 \begin{figure}[H]
 \label{fig:mm}
@@ -1146,8 +1140,10 @@ Diferentes alternativas de implementación son demostradas en \cite{mm-tool}. A 
 \end{center}
 \end{figure}
 
-
 \section{Distribución de Calor en Dos Dimensiones}
+
+Otro problema interesante es la simulación de transferencia de calor en un plano.
+Se utiliza una grilla donde cada punto transfiere calor a sus vecinos.
 
 \begin{lstlisting}
   for (j = 1; j < matrix_height - 1; j++) {
@@ -1168,13 +1164,13 @@ Diferentes alternativas de implementación son demostradas en \cite{mm-tool}. A 
   }
 \end{lstlisting}
 
-Un gráfico de la salida del cálculo puede ser hecho fácilmente con {\it gnuplot}.
+Un gráfico de la salida del cálculo es mostrado en la Figura \ref{fig:heat}.
 
 \begin{figure}[H]
-\begin{center}
+\centering
 \includegraphics[width=10cm]{heat2d.png}
-\caption{heat2d}
-\end{center}
+\caption{Simulación de Transferencia de Calor}
+\label{fig:heat}
 \end{figure}
 
 \section{Problema de las Ocho Reinas}
@@ -1186,7 +1182,7 @@ pieza en el tablero que este en la mismo diagonal, fila o columna.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=7cm]{queen.png}
-\caption{Solución simétrica del problema de las 8 reinas}
+\caption{Solución simétrica del problema de las 8 reinas [Wikipedia]}
 \end{center}
 \end{figure}
 
@@ -1255,6 +1251,13 @@ $ QUEEN_N=30 time ./a.out
 
 \chapter{Conclusiones}\label{chapter:conclusions}
 
+La optimización del rendimiento de una aplicación es algo no trivial.
+Es preciso realizar un análisis del comportamiento y del uso de los recursos antes de
+empezar a optimizar una aplicación. Muchas veces las mejoras no son significativas si no son realizadas en el lugar correcto.
+
+\bigskip
+
+Este trabajo soporta los primeros pasos de análisis de rendimiento para expertos del dominio resolviendo problemas específicos utilizando computación de altas prestaciones.
 Este trabajo aporta el estado del arte del análisis de rendimiento en
 aplicaciones de cómputo de altas prestaciones. Discute, clasifica y detalla
 diferentes opciones en herramientas de soporte. Se demuestra su aplicación
@@ -1263,30 +1266,12 @@ proceso de análisis de rendimiento gradual e iterativo.
 
 \bigskip
 
-La optimización del rendimiento de una aplicación es algo no trivial, requiere de mucha disciplina y del manejo de datos que identifiquen las partes a mejorar fehacientemente.
-Existen diferentes niveles de abstracción en los cuales una aplicación puede ser analizada con el fin de encontrar puntos de mejora. 
-
-\bigskip
-
-Es preciso realizar un análisis del comportamiento y del uso de los recursos antes de
-empezar a optimizar una aplicación. Muchas veces las mejoras no son significativas si no son realizadas en el lugar correcto.
-
-\bigskip
-
-Este trabajo soporta los primeros pasos de análisis de rendimiento para expertos del dominio resolviendo problemas específicos utilizando computación de altas prestaciones.
-
 Este estudio puede ser tomado como trabajo previo de una implementación práctica del método propuesto,
-incluyendo soporte automático para al utilización de las herramientas y la generación integrada de
-reportes de análisis de rendimiento. La implementación de nuevas tecnologías para el análisis de rendimiento
-es incesante y continua, los siguientes proyectos están ampliamente
-relacionados con este estudio.
-
-La utilización de estas ideas en una aplicación del mundo real es materia
+incluyendo soporte automático para la aplicación de las herramientas y la generación integrada de
+reportes de rendimiento. La utilización de estas ideas en una aplicación del mundo real es materia
 pendiente, otra posibilidad es reimplementar desde cero alguna aplicación
 científica en colaboración con algún grupo de investigación y realizar
-varios ciclos de optimización. Trabajo en conjunto con un algún grupo de investigación científica,
-realizando análisis de rendimiento de aplicaciones ya existentes utilizadas
-para publicación de resultados de modelado o simulación.
+varios ciclos de optimización.
 
 \bibliography{report}
 
