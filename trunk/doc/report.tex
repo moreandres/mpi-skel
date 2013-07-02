@@ -13,7 +13,7 @@
 \setlist[enumerate]{noitemsep}
 \setlist[itemize]{noitemsep}
 
-\bibliographystyle{plain}
+\bibliographystyle{unsrt}
 
 \begin{document}
 
@@ -38,15 +38,15 @@
 
   \bigskip
 
-  Luego de la introducción de terminología y bases teóricas del análisis cuantitativo de rendimiento, se resume la experiencia de utilizar herramientas para conocer dónde se deberían localizar los esfuerzos de optimización.  Este trabajo resume la experiencia que debe atravesar cualquier investigador en busca de las diferentes alternativas para el análisis de rendimiento; incluyendo la selección de herramientas de soporte y la definición de un procedimiento sistemático de optimización iterativo.
+  Este trabajo contribuye con un resumen de la teoría de análisis de rendimiento más una descripción de los herramientas de soporte 
+  disponibles en el momento. Se propone también un proceso para analizar el rendimiento, ejemplificando su aplicación a un conjunto de núcleos de
+  cómputo no triviales.
+
+\bigskip
+
+  Luego de la introducción de terminología y bases teóricas del análisis cuantitativo de rendimiento, se detalla la experiencia de utilizar herramientas para conocer dónde se deberían localizar los esfuerzos de optimización.  Este trabajo resume la experiencia que debe atravesar cualquier investigador en busca de las diferentes alternativas para el análisis de rendimiento; incluyendo la selección de herramientas de soporte y la definición de un procedimiento sistemático de optimización.
 
   \bigskip
-
-  Este trabajo contribuye entonces con un resumen de las teoría del análisis del
-  rendimiento más una descripción de los herramientas de soporte 
-  disponibles en el momento. Se propone también un proceso para analizar el
-  rendimiento, ejemplificando su aplicación a un conjunto de núcleos de
-  cómputo no triviales.
 
 \end{abstract}
 
@@ -54,8 +54,7 @@
 
 \chapter{Introducción}\label{chap:intro}
 
-Este capítulo introduce este trabajo y su alcance. Luego de revisar la
-motivación de esta investigación, se resume el estado actual del análisis
+Este capítulo introduce este trabajo y su alcance. Luego de revisar la motivación de esta investigación y su alcance, se resume el estado actual del análisis
 del rendimiento y se detalla el contenido restante del informe.
 
 \section{Motivación}
@@ -64,8 +63,8 @@ En el área de cómputo de altas prestaciones los desarrolladores son los mismos
 especialistas del dominio del problema a resolver. Las rutinas
 más demandantes de cálculo son en su mayoría científicas y su
 alta complejidad hace posible su correcta implementación sólo por los mismos investigadores.
-Este hecho resulta en un tiempo reducido de análisis de resultados
-e impacta directamente en la productividad de los grupos de investigación y
+Estas cuestiones resultan en un tiempo reducido de análisis de resultados
+e impactan directamente en la productividad de los grupos de investigación y
 desarrollo.
 
 \bigskip
@@ -89,48 +88,46 @@ profundamente y con correctitud comprobada.
 \section{Alcance}
 
 Este trabajo considera en particular a los sistemas de memoria distribuida corriendo sobre
-GNU/Linux, inicialmente denominados sistemas Beowulf \cite{beowulf-parallel-workstation}. A través de las
+{\it software} libre GNU/Linux, inicialmente denominados sistemas Beowulf \cite{beowulf-parallel-workstation}. A través de las
 estadísticas mostradas por el Top500 \footnote{El Top500 es una lista actualizada de super-computadoras
-de acuerdo al benchmark Linpack, disponible en {\tt http://www.top500.org}.}, se
+de acuerdo al benchmark {\it Linpack}, disponible en {\tt http://www.top500.org}.}, se
 puede determinar que son los más utilizados en el cómputo de aplicaciones de alto rendimiento en la actualidad.
 
 \section{Estado Actual}
 
 Actualmente existen numerosas y diversas herramientas para el análisis de rendimiento.
 Estas funcionan a diferentes niveles de abstracción: desde contadores de eventos
-a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo, instrumentación automática de código, y hasta la simple utilización del tiempo de ejecución de una aplicación o la comparación contra un trabajo sintético de referencia.
-Además de teoría de análisis del rendimiento, un desarrollador necesita
-conocer de las herramientas listadas en la tabla \ref{table:tools}.
+a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo, instrumentación de código, y hasta la simple utilización del tiempo de ejecución de una aplicación o la comparación contra un trabajo similar de referencia.
+Para poder analizar del rendimiento un desarrollador aplica las herramientas listadas en la tabla \ref{table:tools}.
 
 \begin{table}[H]
     \caption{Herramientas de Soporte para Optimización}
     \centering
     \begin{tabular}{|l|l|}\hline
       {\bf Herramienta} & {\bf Descripción} \\ \hline
-      gprof & Muestra información de perfil de llamadas a funciones \\ \hline
-      oprofile & Muestra información de perfil de sistema \\ \hline
-      stream & Benchmark de jerarquía de memoria \\ \hline
-      hpl & Benchmark de capacidad de cómputo \\ \hline
-      imb pingpong & Benchmark de latencia y ancho de banda \\ \hline
-      hpcc & Conjunto de benchmarks \\ \hline
+      {\tt gprof} & Muestra información de perfil de llamadas a funciones \\ \hline
+      {\tt perf} & Muestra información de perfil de sistema \\ \hline
+      {\it STREAM} & Benchmark de jerarquía de memoria \\ \hline
+      HPL & Benchmark de capacidad de cómputo \\ \hline
+      IMB Ping Pong & Benchmark de latencia y ancho de banda de red \\ \hline
+      HPCC & Paquete de benchmarks \\ \hline
     \end{tabular}
     \label{table:tools}
 \end{table}
 
-% Estudios similares? Papers?
-
-Existen también múltiples esfuerzos similares hacia una infrastructura o proceso general de análisis de rendimiento.
+Las pruebas de rendimiento como STREAM, HPL, IMB Ping Pong y HPCC permiten conocer el estado del sistema y los límites de rendimiento en la práctica.
+Los perfiles de ejecucion de aplicaciones y sistema permiten conocer como se utilizan los recursos del sistema para llevar a cabo las instrucciones de cada programa.
 
 \section{Organización del Contenido}
 
-El capítulo \ref{chapter:analysis} discute el análisis de rendimiento, sus
-principios y teoría. El capítulo \ref{chapter:tools} detalla las herramientas más
+El siguiente capítulo discute el análisis de rendimiento, sus
+principios y teoría básica. El capítulo \ref{chapter:tools} detalla las herramientas más
 utilizadas. El capítulo \ref{chapter:procedure} aplica las herramientas revisadas a través de un proceso sistemático. El capítulo \ref{chapter:cases} ejemplifica la aplicación del proceso con algunos núcleos de computo. El capítulo \ref{chapter:conclusions} concluye y detalla posibles extensiones de este trabajo.
 
 \chapter{Análisis de Rendimiento}\label{chapter:analysis}
 
 Este capítulo introduce el concepto de rendimiento y teoría básica sobre su análisis.
-Se revisa la utilización de pruebas de referencia como base de comparación.
+Además ejemplifica las actividades a realizar durante el análisis.
 
 \section{Definición}
 
@@ -140,11 +137,15 @@ El rendimiento debe ser evaluado entonces de forma cuantificable, utilizando alg
 métrica en particular de modo de poder comparar relativamente dos sistemas o
 el comportamiento de un mismo sistema bajo una configuración distinta.
 
-\section{Teoría}
+\section{Paralelismo}
 
 Una vez obtenida una implementación eficiente, la única alternativa para mejorar el rendimiento es explotar el paralelismo que
-ofrecen los sistemas de cómputo. Este paralelismo se puede explotar a diferentes niveles, desde instrucciones que ejecutan una misma operación a varios
-datos a la vez (vectorización), pasando por la utilización de varias unidades de cómputo hasta la utilización de unidades de cómputo en diferentes sistemas para distribuir el trabajo. El cálculo de las mejoras posibles de rendimiento, cómo priorizarlas y la estimación de su límite máximo es una tarea compleja. Para ello existen algunas leyes frecuentemente utilizadas durante el análisis de rendimiento.
+ofrecen los sistemas de cómputo. Este paralelismo se puede explotar a diferentes niveles, desde instrucciones especiales que ejecutan sobre varios
+datos a la vez (vectorización), hasta la utilización de múltiples sistemas para distribuir el trabajo.
+
+\bigskip
+
+ El cálculo de las mejoras posibles de rendimiento, cómo priorizarlas y la estimación de su límite máximo es una tarea compleja. Para ello existen algunas leyes fundamentales utilizadas durante el análisis de rendimiento.
 
 \subsection{Ley de {\it Amdahl}}
 
@@ -152,22 +153,21 @@ datos a la vez (vectorización), pasando por la utilización de varias unidades 
 
 \bigskip
 
-La mejora de un programa utilizando cómputo paralelo está limitado por el tiempo necesario para completar su fracción serial o secuencial. Frecuentemente, el paralelismo sólo afecta notoriamente cuando es utilizado en un pequeño número de procesadores, o cuando se aplica a problemas altamente escalables ({\it Embarrassingly Parallel Problems}). Una vez paralelizado un programa, los esfuerzos suelen ser enfocados en cómo minimizar la parte secuencial, algunas veces haciendo más trabajo redundante pero en forma paralela.
+La mejora de un programa utilizando cómputo paralelo está limitado por el tiempo necesario para completar su fracción serial o secuencial. En la mayoría de los casos, el paralelismo sólo impacta notoriamente cuando es utilizado en un pequeño número de procesadores, o cuando se aplica a problemas altamente escalables ({\it Embarrassingly Parallel Problems}). Una vez paralelizado un programa, los esfuerzos suelen ser enfocados en cómo minimizar la parte secuencial, algunas veces haciendo más trabajo redundante pero en forma paralela.
 
 \bigskip
 
-La ley de {\it Amdahl} se calcula mediante la Ecuación \ref{eq:amdahl}.
+Suponiendo que una aplicación requiere de un trabajo serial más un trabajo paralelizable, la ley de {\it Amdahl} calcula la ganancia ($ S $) mediante la Ecuación \ref{eq:amdahl}.
+Donde $ P $ es el porcentaje de trabajo paralelizable, ($ 1-P $) es entonces el trabajo en serie o secuencial, y $ N $ la cantidad de unidades de cómputo a utilizar.
 
 \begin{eqnarray}
 \label{eq:amdahl}
 S = \frac{1}{(1 - P) + \frac{P}{N}}
 \end{eqnarray}
 
-donde $ P $ es el porcentaje de trabajo paralelizable ($ 1-P $ es entonces el trabajo en serie o secuencial), y $ N $ es la cantidad de unidades de cómputo utilizadas.
-
-\bigskip
-
-Suponiendo que una aplicación requiere de un trabajo serial más un trabajo paralelizable; esta ley nos deja estimar la máxima ganancia posible de modo que incluso teniendo infinitas unidades de cómputo la ganancia está limitada como se muestra a continuación.
+Esta ley nos establece que incluso teniendo infinitas unidades de cómputo la ganancia está limitada.
+La Tabla \ref{fig:amdahl} muestra que no importa la cantidad de unidades de
+procesamiento que sean utilizadas.
 
 \begin{table}[H]
 \caption{Mejora Máxima}
@@ -177,8 +177,7 @@ Suponiendo que una aplicación requiere de un trabajo serial más un trabajo par
 \label{fig:amdahl}
 \end{table}
 
-La Tabla \ref{fig:amdahl} muestra que no importa la cantidad de unidades de
-procesamiento que sean utilizadas, en el caso de tener solo un $ 10\% $ de paralelismo
+Por ejemplo, en el caso de tener solo un $ 10\% $ de paralelismo
 en una aplicación, la mejora nunca va a superar $ 1.10x $ la original.
 En el caso de tener un $ 95\% $, la mejora no puede ser mayor a $ 20x $.
 
@@ -238,13 +237,13 @@ arquitectura del sistema.
 Algunos ejemplos de medida de rendimiento son:
 
 \begin{enumerate}
-\item el ancho de banda y la latencia mínima de un canal de comunicación,
+\item El ancho de banda y la latencia mínima de un canal de comunicación,
   una jerarquía de memorias o de la unidad de almacenamiento.
-\item la cantidad de instrucciones, operaciones, datos o trabajo procesado
+\item La cantidad de instrucciones, operaciones, datos o trabajo procesado
   por cierta unidad de tiempo.
-\item rendimiento asociado al costo del equipamiento, incluyendo mantenimiento
+\item El rendimiento asociado al costo del equipamiento, incluyendo mantenimiento
  periódico, personal dedicado y gastos propios del uso cotidiano.
-\item rendimiento por unidad de energía consumida (electricidad).
+\item El rendimiento por unidad de energía consumida (electricidad).
 
 \end{enumerate}
 
