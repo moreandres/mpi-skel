@@ -742,6 +742,19 @@ $ /usr/bin/time -v ./script.sh
 \subsection{Reloj del sistema}
 
 {\tt gettimeofday(3)}
+
+\begin{lstlisting}
+double wtime(void)
+{
+  double sec;
+  struct timeval tv;
+  
+  gettimeofday(&tv,NULL);
+  sec = tv.tv_sec + tv.tv_usec/1000000.0;
+  return sec;
+}
+\end{lstlisting}
+
 {\tt clock(3)}
 
 Por otra parte clock() se comporta de manera especial al utilizar multithreading.
@@ -978,16 +991,20 @@ queen.c:35: note: vectorized 0 loops in function.
 
 \chapter{Procedimiento de Análisis}\label{chapter:procedure}
 
-Este capítulo detalla las actividades necesarias para realizar análisis de rendimiento. También propone un procedimiento sistemático iterativo de aplicación de las actividades junto a la utilización de herramientas.
+Este capítulo propone un procedimiento sistemático de análisis.
 
 \section{Proceso}
 
+La Figura \ref{fig:procedure} muestra a grandes rasgos las etapas del proceso.
+Primero se establece una línea base de rendimiento del sistema utilizando pruebas conocidas.
+Luego se procede a trabajar en etapas iterativas asegurando en cada paso la estabilidad de los resultados, una correcta utilización de recursos y
+utilizando un perfil de ejecución se procede a optimizar. Luego de comprobar la mejora, se vuelve a empezar el ciclo.
+
 \begin{figure}[H]
 \label{fig:procedure}
-\begin{center}
+\centering
 \includegraphics[width=5cm]{procedure.png}
 \caption{Procedimiento de Análisis}
-\end{center}
 \end{figure}
 
 \section{Paso a Paso}
@@ -1006,8 +1023,9 @@ $ cat hpcout.inf
 \end{lstlisting}
 
 \begin{enumerate}
-\item ¿Los resultados reflejan los esperados según las capacidades del sistema?
-\item ¿Los FLOPS obtenidos se aproximan al rendimiento de un sistema similar o a la regla de $ CORES \times CLOCK \times FLOPS/CYCLE $ ?
+\item ¿Los resultados reflejan las capacidades del sistema?
+\item ¿Los FLOPS se aproximan al rendimiento de un sistema similar?
+\item ¿El rendimiento es $ CORES \times CLOCK \times FLOPS/CYCLE $ ?
 \item ¿La latencia y ancho de banda de la red es la esperada?
 \end{enumerate}
 
@@ -1018,24 +1036,26 @@ $ for i in `seq 1 32`; do /usr/bin/time -v ./app >> time.log; done
 \end{lstlisting}
 
 \begin{enumerate}
-\item ¿Son los resultados son reproducibles?
+\item ¿Son los resultados reproducibles?
 \item ¿La desviación estándar es menor que 3?
-\item ¿Cuál es el promedio geométrico a ser usado en comparaciones futuras?
+\item ¿Cuál es el promedio geométrico para comparaciones futuras?
+\item ¿ Es necesario incrementar el problema para mejorar la desviación?
+\item ¿ Es posible decrementar el tiempo sin afectar la desviación?
 \end{enumerate}
 
-\item Escalar tamaño del problema para calcular porcentaje de ejecución en paralelo.
+\item Escalar el problema para calcular proporción serie/paralelo.
 
 \begin{lstlisting}
 $ for size in `seq 1024 1024 10240`; do /usr/bin/time -v ./app $size >> size.log; done
 \end{lstlisting}
 
 \begin{enumerate}
-\item ¿Cual es la relación entre el tiempo de las diferentes ejecuciones?
+\item ¿Cuál es la relación entre el tiempo de las diferentes ejecuciones?
 \item Es la relación lineal o constante?
 \item Que porcentaje de la aplicación se estima paralelo?
 \end{enumerate}
 
-\item Escalar cantidad de procesadores para calcular cuanto se puede llegar a mejorar de acuerdo a leyes de {\it Amdalah} y {\it Gustafson}.
+\item Escalar cómputo para calcular límite de mejoras con {\it Amdalah} y {\it Gustafson}.
 
 \begin{lstlisting}
 $ for threads in `grep -c proc /proc/cpuinfo | xargs seq 1`; do OMP_NUM_THREADS=$threads ./app >> threads.log; done
@@ -1046,15 +1066,15 @@ $ for nodes in `wc -l mpd.hosts | xargs seq 1`; do mpirun -n $nodes ./app >> nod
 \end{lstlisting}
 
 \begin{enumerate}
-\item ¿Cual es la relación entre el tiempo de las diferentes ejecuciones?
+\item ¿Cuál es la relación entre el tiempo de las diferentes ejecuciones?
 \item ¿Es la relación lineal o constante?
 \end{enumerate}
 
-\item Generar el perfil de llamadas a funciones dentro de la aplicación para revisar el diseño de la misma y los posibles cuellos de botella.
+\item Generar el perfil de llamadas a funciones dentro de la aplicación para revisar el diseño de la misma y los posibles cuellos de botella a resolver.
 
 \begin{lstlisting}
 $ gcc -g -pg app.c -o app
-$ ./hpcc
+$ ./app
 \end{lstlisting}
 
 \begin{lstlisting}
