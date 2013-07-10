@@ -50,8 +50,10 @@ static int mpi_finalize(void)
 
 	printd("()");
 
-	result = MPI_Finalize();
+#ifdef HAVE_MPI_H
 
+	result = MPI_Finalize();
+#endif
 	return result;
 }
 

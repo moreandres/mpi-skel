@@ -9,7 +9,6 @@ char *timestamp(int size)
 	assert(size >= 0);
 
 	char *buffer = calloc(size, sizeof(char));
-	int result = -1;
 
 	struct timeval tv;
 	time_t time;
@@ -17,7 +16,7 @@ char *timestamp(int size)
 	gettimeofday(&tv, NULL);
 	time = tv.tv_sec;
 
-	result = strftime(buffer, size, "%m%d%y-%H%M%S", localtime(&time));
+	strftime(buffer, size, "%m%d%y-%H%M%S", localtime(&time));
 
 	return buffer;
 }
