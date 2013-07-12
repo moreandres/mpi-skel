@@ -95,7 +95,7 @@ puede determinar que son los más utilizados en el cómputo de aplicaciones de a
 
 \section{Estado Actual}
 
-Actualmente existen numerosas y diversas herramientas para el análisis de rendimiento.
+Actualmente existen numerosas y diversas herramientas para el análisis de rendimiento \cite{gregg}.
 Estas funcionan a diferentes niveles de abstracción: desde contadores de eventos
 a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo, instrumentación de código, y hasta la simple utilización del tiempo de ejecución de una aplicación o la comparación contra un trabajo similar de referencia.
 Para poder analizar del rendimiento un desarrollador aplica las herramientas listadas en la tabla \ref{table:tools}.
@@ -1172,6 +1172,8 @@ campos de aplicación científica como la resolución de ecuaciones
 lineales y la representación de grafos y espacios dimensionales. Por ello
 existe abundante material sobre el tema. 
 
+
+
 {\small \lstinputlisting{mm.c} }
 
 Al aplicar las herramientas vistas previamente se identifica claramente que la multiplicación de los elementos de la matriz consume el
@@ -1192,24 +1194,18 @@ se demuestra claramente que utilizar una librería como BLAS tiene grandes benef
 Otro problema interesante es la simulación de transferencia de calor en un plano.
 Se utiliza una grilla donde cada punto transfiere calor a sus vecinos.
 
-\begin{lstlisting}
-  for (j = 1; j < matrix_height - 1; j++) {
-    for (i = 1; i < grid_length - 1; i++) {
-      
-      matrix[j * grid_length + i] = 
-                     0.25 * (tmp[j * grid_length + i - 1]
-                  + tmp[j * grid_length + i + 1]
-                  + tmp[(j - 1) * grid_length + i]
-                  + tmp[(j + 1) * grid_length + i]);
+\href{TBD}{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}
 
-      diff = matrix[pos(i,j)] - tmp[pos(i,j)];
+Average	Geomean	Stddev
+21.079125
+21.06550238	 
+0.76358561
 
-      if (error < diff) {
-         error = diff;
-      }
-    }
-  }
-\end{lstlisting}
+300	21.0655
+400	40.31
+500	68.386
+600	118.213
+700	168.052
 
 Un gráfico de la salida del cálculo es mostrado en la Figura \ref{fig:heat}.
 
@@ -1233,90 +1229,51 @@ pieza en el tablero que este en la mismo diagonal, fila o columna.
 \end{center}
 \end{figure}
 
-Este problema suele resolverse utilizando recursión.
+El problema de encontrar todas las soluciones para un tamaño de tablero dado suele resolverse utilizando recursión.
+Una implementación de ejemplo puede encontrarse en \href{TBD}{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}.
 
-\begin{lstlisting}
-#include <stdio.h>
-#include <stdlib.h>
+% workload is stable? 
+16
+Average	31.39727276
+Geomean 31.39346679
+Stddev 0.510209544
 
-static int *row = NULL;
+% problem scaling
+14 0.715s
+15 4.602s
+16 31.290s
+17 4m9.010s
+18 
 
-static int available(int i, int n)
-{
-        int j = 1;
-        while (row[i] != row[j] && abs(row[i] - row[j]) != (i - j) && j < n)
-                j++;
-        return ((i == j) ? 1 : 0);
-}
+% parallel/serial percentage
 
-static void show(int n)
-{
-        int i;
-        for (i = 1; i <= n; i++)
-                printf("row[\%d] = col[\%d]\n", i, row[i]);
-}
+% laws
 
-static void queens(int i, int n)
-{
-        for (row[i] = 1; row[i] <= n; row[i]++) {
-                if (available(i, n)) {
-                        if (i == n) {
-                                show(n);
-                                exit(0);
-                        } else
-                                queens(i + 1, n);
-                }
-        }
-}
-
-int main()
-{
-        int n = atoi(getenv("QUEEN_N"));
-
-        row = malloc(sizeof(int)*n);
-        queens(1, n);
-        show(n);
-
-        return (0);
-}
-\end{lstlisting}
-
-\begin{lstlisting}
-Each sample counts as 0.01 seconds.
-%   cumulative   self              self     total
-time seconds   seconds    calls  ms/call  ms/call  name
-79.28 4.65 4.65 available (queen.c:9 @ 400775)
-6.01 5.01 0.35 queens (queen.c:24 @ 4008d3)
-\end{lstlisting}
-
-Contrastando el tiempo requerido de ejecución entre la versión original y la instrumentada, la diferencia fue 52.73 versus 49.61 segundos. Aproximadamente un 5.91 \%.
-
-\begin{lstlisting}
-$ gcc -Wall -Wextra -O3 -g -pg queen.c
-$ QUEEN_N=30 time ./a.out
-\end{lstlisting}
+% threads scaling
 
 \chapter{Conclusiones}\label{chapter:conclusions}
 
 La optimización del rendimiento de una aplicación es algo no trivial.
 Es preciso realizar un análisis del comportamiento y del uso de los recursos antes de
-empezar a optimizar una aplicación. Muchas veces las mejoras no son significativas si no son realizadas en el lugar correcto.
+empezar a optimizar. Las mejoras pueden ser no significativas si son realizadas en el lugar incorrecto.
 
 \bigskip
 
-Este trabajo soporta los primeros pasos de análisis de rendimiento para expertos del dominio resolviendo problemas específicos utilizando computación de altas prestaciones.
-Este trabajo aporta el estado del arte del análisis de rendimiento en
-aplicaciones de cómputo de altas prestaciones. Discute, clasifica y detalla
-diferentes opciones en herramientas de soporte. Se demuestra su aplicación
-en varios problemas simples pero suficientemente interesantes. Propone un
-proceso de análisis de rendimiento gradual e iterativo.
+Este trabajo soporta los primeros pasos de análisis de rendimiento para expertos del dominio de un problema científico utilizando computación de altas prestaciones. Se provee una metodología de aplicación para principiantes, que puede ser utilizada como una lista de pasos para usuarios casuales, e incluso como referencia de consulta para expertos.
 
 \bigskip
 
-Este estudio puede ser tomado como trabajo previo de una implementación práctica del método propuesto,
+Se aporta con el estado del arte del análisis de rendimiento en
+aplicaciones de cómputo de altas prestaciones. Respecto a herramientas de soporte, se detallan
+diferentes opciones y se demuestra su aplicación en varios problemas simples pero suficientemente interesantes. 
+
+\bigskip
+
+Este estudio propone un proceso de análisis de rendimiento gradual e iterativo.
+puede ser tomado como trabajo previo de una implementación práctica del método propuesto,
 incluyendo soporte automático para la aplicación de las herramientas y la generación integrada de
 reportes de rendimiento. La utilización de estas ideas en una aplicación del mundo real es materia
-pendiente, otra posibilidad es reimplementar desde cero alguna aplicación
+pendiente, otra posibilidad es re-implementar desde cero alguna aplicación
 científica en colaboración con algún grupo de investigación y realizar
 varios ciclos de optimización.
 
