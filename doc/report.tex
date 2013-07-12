@@ -1,5 +1,8 @@
 \documentclass[a4paper]{report}
 
+% Review all biblio is referenced
+% Review all figures are referenced
+
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
@@ -1017,9 +1020,9 @@ A continuación se muestran los pasos a realizar, junto con preguntas que guían
 \item Ejecutar pruebas de rendimiento sobre el sistema a utilizar para poder entender sus capacidades máximas en contraste con las teóricas.
 
 \begin{lstlisting}
-$ pdsh -a hostname | sort | cut -f1 -d: > mpd.hosts
-$ mpirun -n `wc -l mpd.hosts` ./hpcc
-$ cat hpcout.inf
+$ sudo apt-get install hpcc # Ubuntu
+$ mpirun -n `grep -c proc /proc/cpuinfo` ./hpcc
+$ cat hpccoutf.txt
 \end{lstlisting}
 
 \begin{enumerate}
@@ -1040,7 +1043,7 @@ $ for i in `seq 1 32`; do /usr/bin/time -v ./app >> time.log; done
 \item ¿La desviación estándar es menor que 3?
 \item ¿Cuál es el promedio geométrico para comparaciones futuras?
 \item ¿ Es necesario incrementar el problema para mejorar la desviación?
-\item ¿ Es posible decrementar el tiempo sin afectar la desviación?
+\item ¿ Es posible reducir el tiempo sin afectar la desviación?
 \end{enumerate}
 
 \item Escalar el problema para calcular proporción serie/paralelo.
@@ -1124,37 +1127,36 @@ y analizados utilizando los benchmarks y herramientas anteriormente presentadas.
 
 \section{Rendimiento de Referencia}
 
-El sistema utilizado es el mismo para todos los casos de prueba. A continuación se muestra su configuración de hardware y software (Tabla \ref{table:testbed}), además del resultado del rendimiento según HPCC (Tabla \ref{table:pruebas}).
+El sistema utilizado es el mismo para todos los casos de prueba. A continuación se muestra su configuración de hardware y software (Tabla \ref{table:testbed}), además del resultado del rendimiento según HPCC con un proceso por core disponible (Tabla \ref{table:pruebas}).
 
 \begin{table}[H]
     \caption{Hardware y software de cada nodo de cómputo}
     \centering
     \begin{tabular}{|l|l|}\hline
       {\bf Component} & {\bf Description} \\ \hline
-      Server Board & Intel\textregistered S5000PAL Server Board\\ \hline
-      CPU & Intel\textregistered Xeon\textregistered X5355 2.66GHz 4 way 8MB L2 \\ \hline
-      Ethernet controller & Intel\textregistered 80003ES2LAN (Copper) (rev 01) \\ \hline
-      RAM Memory & 4 GB DDR2 FB 667 MHz \\ \hline
-      Operating System & Red Hat Enterprise 5.5 (Tikanga) \\ \hline
-      Network Driver & Intel\textregistered PRO/1000 1.2.20-NAPI \\ \hline
-      Ethernet Switch & Hewlett Packard HPJ4904A \\ \hline
+      Placa Madre & Intel\textregistered 6 Series/C200 Series Chipset \\ \hline
+      CPU & Intel\textregistered Xeon\textregistered CoreTM i7-2620M CPU @ 2.7GHz \\ \hline
+      Ethernet controller & Intel\textregistered 82579V Gigabit Network \\ \hline
+      RAM Memory & 8 GB DDR3 \\ \hline
+      Operating System & Ubuntu 10.02 LTS \\ \hline
     \end{tabular}
     \label{table:testbed}
 \end{table}
 
-\begin{table}[H]
-\caption{Pruebas de Referencia}
-  \centering
-    \begin{tabular}{|l|l|l|}\hline
-      {\bf Benchmark} & {\bf Valor} & {\bf Unidad} \\ \hline
-      dgemm & 70141 & mflops \\ \hline
-      stream & 5931.6635 & MB/s \\ \hline
-      hpl & 0.1217 & tflops \\ \hline
-      ping pong BW & 1183.68 & MB/s \\ \hline
-      ping pong latency & 4.49 & us \\ \hline
-    \end{tabular}
- \label{table:pruebas}
-\end{table}
+\label{table:pruebas}
+
+\begin{verbatim}
+HPL_Tflops=0.00701244
+StarDGEMM_Gflops=2.21279
+SingleDGEMM_Gflops=4.45068
+PTRANS_GBs=0.661972
+MPIRandomAccess_GUPs=0.000839626
+StarRandomAccess_GUPs=0.0184879
+SingleRandomAccess_GUPs=0.0359549
+StarFFT_Gflops=1.11089
+SingleFFT_Gflops=1.4984
+MPIFFT_Gflops=2.42216
+\end{verbatim}
 
 En comparación del rendimiento teórico contra el real cada {\it core} de la familia de procesadores 5000 realiza 2 FLOPs por ciclo,
 al vectorizarse el cómputo y utilizar registros de 128 bits con instrucciones SSE puede realizar 4 FLOPs por ciclo.
@@ -1167,24 +1169,40 @@ CORES \times CICLOS \times FLOPS = 4 \times 2.66 \times 4 = 42.56 MFLOPS
 
 \section{Multiplicación de Matrices}
 
-La multiplicación de matrices es una operación fundamental en múltiples
-campos de aplicación científica como la resolución de ecuaciones
-lineales y la representación de grafos y espacios dimensionales. Por ello
-existe abundante material sobre el tema. 
+La multiplicación de matrices es una operación fundamental en múltiples campos de aplicación científica como la resolución de ecuaciones lineales y la representación de grafos y espacios dimensionales. Por ello existe abundante material sobre el tema. Tomando como ejemplo una implementación utilizando OpenMP \footnote{\href{http://blog.speedgocomputing.com/2010/08/parallelizing-matrix-multiplication.html}{http://blog.speedgocomputing.com/2010/08/parallelizing-matrix-multiplication.html}.}, se procede a seguir la metodología propuesta en la sección anterior. 
 
+\bigskip
 
+Para una matriz de {\tt 2048} números de punto flotante de precisión simple, el promedio de ejecución tomó {\tt 2.036} segundos, la media geométrica {\tt 2.03567}. La desviación de resultados {\tt 0.03645}. Por lo tanto se puede concluir que es un buen conjunto de entrada para analizar rendimiento.
 
-{\small \lstinputlisting{mm.c} }
+\bigskip
 
-Al aplicar las herramientas vistas previamente se identifica claramente que la multiplicación de los elementos de la matriz consume el
-mayor tiempo de cómputo. Diferentes alternativas de implementación son demostradas en \cite{mm-tool}. 
-A continuación se muestra una comparación de diferentes métodos,
-se demuestra claramente que utilizar una librería como BLAS tiene grandes beneficios contra varios intentos de optimización (Figura \ref{fig:mm}).
+Al realizar ejecuciones con tamaños de entrada creciente los resultados fueron: {\tt N=1024 2.035678236} segundos, {\tt N=2048 18.853} segundos, {\tt N=3072 1m19.505} segundos y {\tt N=4096 3m42.779s} (Figura \ref{fig:matrix-problem}. 
+Por defecto se ejecuta 1 thread por core disponible en el CPU.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{matrix-problem.png}
+\caption{Tiempo de Ejecución con Diferentes Tamaños de Problema}
+\label{fig:matrix-problem}
+\end{figure}
+
+Al realizar ejecuciones variando la cantidad de threads se obtuvieron los siguientes resultados (Figura \ref{fig:matrix-threads}). Calculamos entonces la proporción serial y paralela, 20\% y 80\% respectivamente. Los límites son entonces: Amdalah 5x y Gustafson 10x.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{matrix-threads.png}
+\caption{Tiempo de Ejecución con Diferente Número de Threads}
+\label{fig:matrix-threads}
+\end{figure}
+
+Al aplicar las herramientas vistas previamente se identifica claramente que la multiplicación de los elementos de la matriz consume el mayor tiempo de cómputo. Diferentes alternativas de implementación son demostradas en \cite{mm-tool}, la 
+Figura \ref{fig:mm} resume que utilizar una librería como BLAS es mejor que varios intentos de optimización.
 
 \begin{figure}[H]
 \label{fig:mm}
 \begin{center}
-\includegraphics[width=8cm]{mm.png}
+\includegraphics[width=10cm]{mm.png}
 \caption{Comparación de Implementaciones}
 \end{center}
 \end{figure}
@@ -1192,20 +1210,35 @@ se demuestra claramente que utilizar una librería como BLAS tiene grandes benef
 \section{Distribución de Calor en Dos Dimensiones}
 
 Otro problema interesante es la simulación de transferencia de calor en un plano.
-Se utiliza una grilla donde cada punto transfiere calor a sus vecinos.
+Se utiliza una grilla donde cada punto transfiere calor a sus vecinos \footnote{\href{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}.}.
 
-\href{TBD}{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}
+\bigskip
 
-Average	Geomean	Stddev
-21.079125
-21.06550238	 
-0.76358561
+Para un tamaño de matriz de {\tt N=300} números de punto flotante de precisión simple, el promedio de ejecución tomó {\tt 21.07913} segundos, la media geométrica {\tt 21.06550} segundos. La desviación de resultados fue de {\tt 0.76358}.
+Por lo tanto se puede concluir que es un conjunto de datos de entrada estable.
 
-300	21.0655
-400	40.31
-500	68.386
-600	118.213
-700	168.052
+\bigskip
+
+Al realizar ejecuciones con tamaños de entrada creciente los resultados fueron:
+{\tt N=300 21.0655}, {\tt N=400 40.31}, {\tt N=500 68.386}, {\tt N=600 118.213}, {\tt N=700 168.052} (Figura \ref{fig:heat-problem}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{heat-problem.png}
+\caption{Tiempo de Ejecución con Diferente Tamaño de Grilla}
+\label{fig:heat-problem}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{heat-threads.png}
+\caption{Tiempo de Ejecución con Diferente Número de Threads}
+\label{fig:heat-threads}
+\end{figure}
+
+Al realizar ejecuciones variando la cantidad de threads se obtuvieron los siguientes resultados (Figura \ref{fig:matrix-threads}). Calculamos entonces la proporción serial y paralela, 20\% y 80\% respectivamente. Los límites son entonces: Amdalah 5x y Gustafson 10x.
+
+\bigskip
 
 Un gráfico de la salida del cálculo es mostrado en la Figura \ref{fig:heat}.
 
@@ -1222,34 +1255,34 @@ El dilema trata en el problema de posicionar en un tablero de ajedrez ocho
 reinas sin que alguna amenace a las demás. Una reina amenaza a cualquier otra
 pieza en el tablero que este en la mismo diagonal, fila o columna.
 
+El problema de encontrar todas las soluciones para un tamaño de tablero dado suele resolverse utilizando recursión \footnote{\href{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}.}.
+
+\bigskip
+
+Ejercitando el problema con {\tt N=16} nos da un promedio de ejecución de {\tt 31.39727} segundos, y una media geométrica de {\tt 31.39346} segundos. Con una desviación de resultado de {\tt 0.5102}. Resultado estable.
+
+\bigskip
+
 \begin{figure}[H]
-\begin{center}
-\includegraphics[width=7cm]{queen.png}
-\caption{Solución simétrica del problema de las 8 reinas [Wikipedia]}
-\end{center}
+\centering
+\includegraphics[width=10cm]{queen-problem.png}
+\caption{Tiempo de Ejecución con Diferente Tamaño de Tablero}
+\label{fig:queen-problem}
 \end{figure}
 
-El problema de encontrar todas las soluciones para un tamaño de tablero dado suele resolverse utilizando recursión.
-Una implementación de ejemplo puede encontrarse en \href{TBD}{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}.
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{queen-scaling.png}
+\caption{Tiempo de Ejecución con Diferente Tamaño de Tablero}
+\label{fig:queen-scaling}
+\end{figure}
 
-% workload is stable? 
-16
-Average	31.39727276
-Geomean 31.39346679
-Stddev 0.510209544
 
-% problem scaling
-14 0.715s
-15 4.602s
-16 31.290s
-17 4m9.010s
-18 
-
-% parallel/serial percentage
-
-% laws
-
-% threads scaling
+\begin{figure}[H]
+\centering
+\includegraphics[width=7cm]{queen.png}
+\caption{Solución simétrica del problema de las 8 reinas [Wikipedia]}
+\end{figure}
 
 \chapter{Conclusiones}\label{chapter:conclusions}
 
