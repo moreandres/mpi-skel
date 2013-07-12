@@ -5,7 +5,7 @@ AM_CFLAGS = -Wall
 
 bin_PROGRAMS = queens matrix heat
 
-queens_SOURCES = queens.c
+queens_SOURCES = queens.cpp
 matrix_SOURCES = matrix.c
 heat_SOURCES = heat.c
 
