@@ -208,9 +208,9 @@ En el mismo tiempo de ejecución, el programa resuelve entonces problemas más g
 
 \begin{table}[H]
 \caption{Tamaño de Datos de Entrada}
-\label{fig:gustafson}
 \centering
 \includegraphics[width=7cm]{gustafson.png}
+\label{fig:gustafson}
 \end{table}
 
 Similarmente al cuadro anterior, podemos deducir de la Tabla \ref{fig:gustafson} que en el caso de un programa con sólo $ 10\% $ de paralelismo, al incrementar los recursos 64x sólo podemos incrementar el tamaño del problema $ 7x $. Sin embargo nos calcula
@@ -278,11 +278,10 @@ En el caso de tener problemas de desviación en los resultados medidos, es acons
 Suponiendo una distribución normal de resultados, se suelen controlar que haya menos de 3 $ \sigma $ de diferencia. Se busca que la mayoría de los resultados queden cerca de su promedio, como muestra la Figura \ref{fig:deviation}.
 
 \begin{figure}[H]
-\label{fig:deviation}
-\begin{center}
+\centering
 \includegraphics[width=8cm]{deviation.png}
 \caption{Desviación de valores en una distribución normal [Wikipedia]}
-\end{center}
+\label{fig:deviation}
 \end{figure}
 
 Los resultados deben también ser correctamente guardados para evitar
@@ -301,8 +300,7 @@ Para comparar es recomendable utilizar la media geométrica según la Ecuación 
 G = \sqrt[n]{x_{1} \ldots x_{n}}
 \end{equation}
 
-Ya que se necesita conocer la raíz n-ésima (para un $ n $ posiblemente muy grande), es una operación ineficiente ya que se implementa con métodos numéricos de aproximación
-siguiendo el método de {\it Newton} (\cite{numerical-analysis}). En cambio se suele tomar el anti-logaritmo del promedio de los logaritmos de los valores siguiendo la ecuación \ref{eq:geomean-log}.
+La raíz n-ésima de un número (para un $ n $ posiblemente muy grande), es una operación ineficiente ya que se implementa con métodos numéricos de aproximación siguiendo el método de {\it Newton} (\cite{numerical-analysis}). En cambio se suele tomar el anti-logaritmo del promedio de los logaritmos de los valores siguiendo la ecuación \ref{eq:geomean-log}.
 
 \begin{equation}
 \label{eq:geomean-log}
@@ -412,7 +410,7 @@ el paquete Linpack pero modificado para sistemas de memoria distribuida.
 
 Este {\it benchmark} es utilizado mundialmente para la comparación de la
 velocidad de las supercomputadoras en el ranking TOP500. 
-Un gráfico del TOP500 de los últimos años demuestra claramente la
+Un gráfico del TOP500 de los últimos años (Figura \ref{fig:top500}) demuestra claramente la
 tendencia en crecimiento de rendimiento; también la relación entre el primero,
 el último y la suma de todos los sistemas en la lista.
 
@@ -545,7 +543,7 @@ simplemente la mayor capacidad de cómputo de operaciones flotantes posible.
 
 \bigskip
 
-Una analogía interesante para entender cómo el {\it benchmark} se relaciona con diferentes núcleos de cómputo se muestra en la figura \ref{fig:locality}. Por ejemplo al tener un problema que utiliza principalmente acceso a memoria local, se puede suponer que un sistema con buenos resultados de STREAM va ser útil.
+Una analogía interesante para entender cómo el {\it benchmark} se relaciona con diferentes núcleos de cómputo se muestra en la Figura \ref{fig:locality}. Por ejemplo al tener un problema que utiliza principalmente acceso a memoria local, se puede suponer que un sistema con buenos resultados de STREAM va ser útil.
 
 \bigskip
 
@@ -560,7 +558,7 @@ Una analogía interesante para entender cómo el {\it benchmark} se relaciona co
 \bigskip
 
 Para una mejor comparación de resultados de HPCC se utilizan diagramas
-denominados {\it kiviats}, un ejemplo se muestra en la figura \ref{fig:kiviat}.
+denominados {\it kiviats}, un ejemplo se muestra en la Figura \ref{fig:kiviat}.
 Los resultados están normalizados hacia uno de los sistemas, y se puede identificar mejor rendimiento en FLOPs por poseer mejores DGEMM y HPL en comparación.
 
 \begin{figure}[H]
@@ -678,7 +676,7 @@ End of HPC Challenge tests.
 
 \section{Herramientas}
 
-Se recomienda un proceso de aplicación gradual empezando por herramientas generales de alto nivel que analizan la aplicación como un todo; terminando con herramientas de bajo nivel que proveen detalles complejos de granularidad más fina en componentes particulares del sistema. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un análisis complejo y extensivo desde un principio. Una lista de las herramientas más conocidas se muestra en \ref{table:tooling}.
+Se recomienda un proceso de aplicación gradual empezando por herramientas generales de alto nivel que analizan la aplicación como un todo; terminando con herramientas de bajo nivel que proveen detalles complejos de granularidad más fina en componentes particulares del sistema. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un análisis complejo y extensivo desde un principio. Una lista de las herramientas más conocidas se muestra en la Tabla \ref{table:tooling}.
 
 \begin{table}[H]
 \caption{Aplicación Gradual de Herramientas}
@@ -704,12 +702,7 @@ Tercero se dimensiona el comportamiento de la aplicación mediante un perfil de 
 
 \subsection{Tiempo de ejecución global}
 
-La granularidad de el método de medición de tiempo es importante.
-
-\bigskip
-
-Para medir el tiempo de ejecución de un comando en consola se utiliza {\tt time(1)}.
-Aunque rudimentaria, esta simple herramienta no necesita de instrumentación de código y se encuentra disponible en cualquier distribución {\it  GNU/Linux}.
+Para medir el tiempo de ejecución de un comando en consola se utiliza {\tt time(1)}. Aunque rudimentaria, esta simple herramienta no necesita de instrumentación de código y se encuentra disponible en cualquier distribución {\it  GNU/Linux}.
 El interprete de comandos tiene su propia versión embebida, sin embargo el del sistema brinda información del uso de otros recursos del sistema, localizado en {\tt /usr/bin/time}.
 
 \bigskip
@@ -744,7 +737,12 @@ $ /usr/bin/time -v ./script.sh
 
 \subsection{Reloj del sistema}
 
-{\tt gettimeofday(3)}
+La librería de sistema permite acceder a llamadas al sistema operativo para obtener datos precisos del paso del tiempo.
+Las más utilizadas son {\tt gettimeofday(3)} y {\tt clock(3)}, aunque éste último se comporta de manera especial al utilizar multi-threading ya que suma el tiempo ejecutado en cada core.
+
+\bigskip
+
+El siguiente código ejemplifica como obtener un número de segundos en un punto flotante de doble precisión.
 
 \begin{lstlisting}
 double wtime(void)
@@ -752,19 +750,15 @@ double wtime(void)
   double sec;
   struct timeval tv;
   
-  gettimeofday(&tv,NULL);
+  gettimeofday(&tv, NULL);
   sec = tv.tv_sec + tv.tv_usec/1000000.0;
   return sec;
 }
 \end{lstlisting}
 
-{\tt clock(3)}
+\subsection{Ejemplo: {\tt time}}
 
-Por otra parte clock() se comporta de manera especial al utilizar multithreading.
-
-Más preciso.
-
-\subsection{Ejemplo: {\tt time(1)}}
+El siguiente ejemplo muestra como obtener información del uso de los recursos del sistema por parte de una aplicación.
 
 \begin{lstlisting} 
 $ /usr/bin/time -v ./program
@@ -897,9 +891,7 @@ incluso programables para funciones determinadas de medición.
 
 \subsection{Ejemplo: {\tt perf}}
 
-En kernel más viejos que 2.6, oprofile \footnote{\tt http://oprofile.sourceforge.net/} sino perf \footnote{\tt https://perf.wiki.kernel.org}.
-
-low overhead as they avoid system calls. una orden de magnitud al menos. mayor información.
+En kernel más viejos que 2.6, {\tt oprofile} \footnote{\tt http://oprofile.sourceforge.net} sino {\tt perf} \footnote{\tt https://perf.wiki.kernel.org}. Al estar implementados a nivel de núcleo, estos evitan las llamadas al sistema y tienen una sobrecarga de un orden de magnitud menor que los profilers a nivel de aplicación.
 
 \begin{lstlisting}
 $ perf report
@@ -1127,7 +1119,7 @@ y analizados utilizando los benchmarks y herramientas anteriormente presentadas.
 
 \section{Rendimiento de Referencia}
 
-El sistema utilizado es el mismo para todos los casos de prueba. A continuación se muestra su configuración de hardware y software (Tabla \ref{table:testbed}), además del resultado del rendimiento según HPCC con un proceso por core disponible (Tabla \ref{table:pruebas}).
+El sistema utilizado es el mismo para todos los casos de prueba. A continuación se muestra su configuración de hardware y software (Tabla \ref{table:testbed}), además del resultado del rendimiento según HPCC con un proceso por core disponible.
 
 \begin{table}[H]
     \caption{Hardware y software de cada nodo de cómputo}
@@ -1200,11 +1192,10 @@ Al aplicar las herramientas vistas previamente se identifica claramente que la m
 Figura \ref{fig:mm} resume que utilizar una librería como BLAS es mejor que varios intentos de optimización.
 
 \begin{figure}[H]
-\label{fig:mm}
-\begin{center}
+\centering
 \includegraphics[width=10cm]{mm.png}
 \caption{Comparación de Implementaciones}
-\end{center}
+\label{fig:mm}
 \end{figure}
 
 \section{Distribución de Calor en Dos Dimensiones}
@@ -1236,7 +1227,7 @@ Al realizar ejecuciones con tamaños de entrada creciente los resultados fueron:
 \label{fig:heat-threads}
 \end{figure}
 
-Al realizar ejecuciones variando la cantidad de threads se obtuvieron los siguientes resultados (Figura \ref{fig:matrix-threads}). Calculamos entonces la proporción serial y paralela, 20\% y 80\% respectivamente. Los límites son entonces: Amdalah 5x y Gustafson 10x.
+Al realizar ejecuciones variando la cantidad de threads se obtuvieron los siguientes resultados (Figura \ref{fig:heat-threads}). Calculamos entonces la proporción serial y paralela, 20\% y 80\% respectivamente. Los límites son entonces: Amdalah 5x y Gustafson 10x.
 
 \bigskip
 
