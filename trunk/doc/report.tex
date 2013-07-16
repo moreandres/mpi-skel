@@ -1188,7 +1188,45 @@ Al realizar ejecuciones variando la cantidad de threads se obtuvieron los siguie
 \label{fig:matrix-threads}
 \end{figure}
 
-Al aplicar las herramientas vistas previamente se identifica claramente que la multiplicación de los elementos de la matriz consume el mayor tiempo de cómputo. Diferentes alternativas de implementación son demostradas en \cite{mm-tool}, la 
+Al aplicar las herramientas vistas previamente se identifica claramente que la multiplicación de los elementos de la matriz consume el mayor tiempo de cómputo. 
+
+\begin{verbatim}
+91.59% 111.61 main._omp_fn.0 (matrix.c:23)
+6.56% 7.99 main._omp_fn.0 (matrix.c:22)
+2.59% 3.16 main._omp_fn.0 (matrix.c:23)
+\end{verbatim}
+
+La gran mayoría del tiempo de ejecución del sistema se concentra en la aplicación.
+
+\begin{verbatim}
+97.43% matrix matrix [.] main._omp_fn.0
+1.60% matrix [kernel.kallsyms] [k] __do_softirq
+\end{verbatim}
+
+El ciclo principal realiza la mayoría de las operaciones rápidamente, pero demora en la acumulación de resultados.
+
+\begin{verbatim}
+for (i = 0; i < SIZE; ++i) {
+  for (j = 0; j < SIZE; ++j) {
+    for (k = 0; k < SIZE; ++k) {
+      c[i][j] += a[i][k] * b[k][j];
+0.45 movaps %xmm2,%xmm0
+0.03 movlps (%rax),%xmm0
+0.07 movhps 0x8(%rax),%xmm0
+1.35 add $0x4,%rax
+0.24 shufps $0x0,%xmm0,%xmm0
+0.04 mulps  (%rdx),%xmm0
+81.36 add $0x2000,%rdx
+\end{verbatim}
+
+\begin{verbatim}
+69278.383857 task-clock # 3.915 CPUs utilized
+231 context-switches # 0.003 K/sec
+4 CPU-migrations # 0.000 K/sec
+12,461 page-faults # 0.180 K/sec
+\end{verbatim}
+
+Diferentes alternativas de implementación esta operación son demostradas en \cite{mm-tool}, la 
 Figura \ref{fig:mm} resume que utilizar una librería como BLAS es mejor que varios intentos de optimización.
 
 \begin{figure}[H]
@@ -1201,9 +1239,15 @@ Figura \ref{fig:mm} resume que utilizar una librería como BLAS es mejor que var
 \section{Distribución de Calor en Dos Dimensiones}
 
 Otro problema interesante es la simulación de transferencia de calor en un plano.
-Se utiliza una grilla donde cada punto transfiere calor a sus vecinos \footnote{\href{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}.}.
+Se utiliza una grilla donde cada celda transfiere calor a sus vecinos \footnote{\href{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}.}.
+Un gráfico de la salida del cálculo es mostrado en la Figura \ref{fig:heat}.
 
-\bigskip
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{heat2d.png}
+\caption{Simulación de Transferencia de Calor}
+\label{fig:heat}
+\end{figure}
 
 Para un tamaño de matriz de {\tt N=300} números de punto flotante de precisión simple, el promedio de ejecución tomó {\tt 21.07913} segundos, la media geométrica {\tt 21.06550} segundos. La desviación de resultados fue de {\tt 0.76358}.
 Por lo tanto se puede concluir que es un conjunto de datos de entrada estable.
@@ -1227,18 +1271,41 @@ Al realizar ejecuciones con tamaños de entrada creciente los resultados fueron:
 \label{fig:heat-threads}
 \end{figure}
 
-Al realizar ejecuciones variando la cantidad de threads se obtuvieron los siguientes resultados (Figura \ref{fig:heat-threads}). Calculamos entonces la proporción serial y paralela, 20\% y 80\% respectivamente. Los límites son entonces: Amdalah 5x y Gustafson 10x.
+Al realizar ejecuciones variando la cantidad de threads se obtuvieron los siguientes resultados (Figura \ref{fig:heat-threads}). Calculamos entonces la proporción serial y paralela, 20\% y 80\% respectivamente. Los límites son entonces: Amdalah $ X $ x y Gustafson $ Y $ x.
 
-\bigskip
+\begin{verbatim}
+109960.157161 task-clock # 3.839 CPUs utilized
+2,244 context-switches # 0.020 K/sec
+6 CPU-migrations # 0.000 K/sec
+1,160 page-faults # 0.011 K/sec
+\end{verbatim}
 
-Un gráfico de la salida del cálculo es mostrado en la Figura \ref{fig:heat}.
+Un perfil del sistema nos localiza el computo en nuestro núcleo de computación, seguida del maneja de threads por parte de la implementación GNU de OpenMP.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=10cm]{heat2d.png}
-\caption{Simulación de Transferencia de Calor}
-\label{fig:heat}
-\end{figure}
+\begin{verbatim}
+78.38% heat heat [.] compute_one_iteration._omp_fn.0
+20.61% heat libgomp.so.1.0.0 [.] 0x00000000000093be
+\end{verbatim}
+
+Un perfil de la aplicación nos demuestra que el 35.05\% del tiempo de ejecución se concentra en la línea que realiza el promedio de las celdas vecinas. Y casi el 13.79\% donde se ajusta el promedio por la diferencia de temperatura por ciclo.
+
+\begin{verbatim}
+35.05% 28.71 compute_one_iteration._omp_fn.0 (heat.c:77)
+13.79% 11.30 compute_one_iteration._omp_fn.0 (heat.c:82)
+\end{verbatim}
+
+Un nivel más detallado nos muestra específicamente que instrucciones del procesador están en juego.
+
+\begin{verbatim}
+#pragma omp parallel for shared(solution,cur_gen,next_gen,diff_constant) private(i,j)
+for (i = 1; i <= RESN; i++)
+  for (j = 1; j <= RESN; j++)
+    solution[next_gen][i][j] = solution[cur_gen][i][j] +
+ 21.79 addpd  %xmm1,%xmm0
+ 15.13 movlpd %xmm0,(%rdx,%rax,1)
+  2.94 movhpd %xmm0,0x8(%rdx,%rax,1)
+  5.66 add $0x10,%rax
+\end{verbatim}
 
 \section{Problema de las Ocho Reinas}
 
@@ -1246,13 +1313,21 @@ El dilema trata en el problema de posicionar en un tablero de ajedrez ocho
 reinas sin que alguna amenace a las demás. Una reina amenaza a cualquier otra
 pieza en el tablero que este en la mismo diagonal, fila o columna.
 
+\bigskip
+
 El problema de encontrar todas las soluciones para un tamaño de tablero dado suele resolverse utilizando recursión \footnote{\href{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}.}.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=7cm]{queen.png}
+\caption{Solución simétrica del problema de las 8 reinas [Wikipedia]}
+\end{figure}
+
+Ejercitando el problema con {\tt N=16} nos da un promedio de ejecución de {\tt 31.39727} segundos, y una media geométrica de {\tt 31.39346} segundos. Con una desviación de resultado de {\tt 0.5102}. Podemos concluir que los resultados son estables.
+
 \bigskip
 
-Ejercitando el problema con {\tt N=16} nos da un promedio de ejecución de {\tt 31.39727} segundos, y una media geométrica de {\tt 31.39346} segundos. Con una desviación de resultado de {\tt 0.5102}. Resultado estable.
-
-\bigskip
+El escalamiento de tamaño y cantidad de unidades de cómputo refleja un comportamiento no deseado.
 
 \begin{figure}[H]
 \centering
@@ -1268,12 +1343,49 @@ Ejercitando el problema con {\tt N=16} nos da un promedio de ejecución de {\tt 
 \label{fig:queen-scaling}
 \end{figure}
 
+\begin{verbatim}
+302506.712420 task-clock                #    3.610 CPUs utilized
+               545 context-switches          #    0.002 K/sec
+                 3 CPU-migrations            #    0.000 K/sec
+               382 page-faults               #    0.001 K/sec
+\end{verbatim}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=7cm]{queen.png}
-\caption{Solución simétrica del problema de las 8 reinas [Wikipedia]}
-\end{figure}
+Un perfil del sistema muestra un uso casi totalitario por parte de la aplicación.
+
+\begin{verbatim}
+97.64% queens queens [.] solve(int, int, unsigned long, unsigned long, unsigned long)
+1.56% queens [kernel.kallsyms] [k] __do_softirq
+\end{verbatim}
+
+Un perfil de la aplicación muestra que el cuello de botella se encuentra en la determinación de amenazas por parte de
+otras reinas.
+
+\begin{verbatim}
+21.95 19.73 test (queens.cc:51)
+12.81 11.52 test (queens.cc:51)
+8.72 7.84 test (queens.cc:51)
+\end{verbatim}
+
+Un detalle de la operación muestra el tiempo que toma cada instrucción.
+
+\begin{verbatim}
+solve(int, int, unsigned long, unsigned long, unsigned long,
+  uint64_t diag135, uint64_t cols)                                                                                             {
+10.86 lea (%rdx,%r11,1),%ecx
+{
+  return ((cols & (1ull << j))
+    + (diag135 & (1ull << (j+k)))
+    + (diag45 & (1ull << (32+j-k))))==0;
+0.85 mov %r14,%rdx
+1.49 mov %rax,%rsi
+2.95 shl %cl,%rdx
+9.81 mov %r8,%rcx
+1.15 and %rbp,%rsi
+2.17 and %r12,%rcx
+2.06 add %rsi,%rcx
+4.73 mov %rdx,%rsi
+1.49 and %r13,%rsi
+\end{verbatim}
 
 \chapter{Conclusiones}\label{chapter:conclusions}
 
