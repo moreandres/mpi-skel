@@ -35,11 +35,42 @@ Director: Dr. Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
 
 \section{Objetivo}
 
-La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de Cómputo de Altas Prestaciones.
+La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de Cómputo de Altas Prestaciones. Este trabajo se realiza en continuación al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
 
-\smallskip
+\bigskip
 
-Como se demuestra en la Figura \ref{fig:framework}, la infraestructura implementa una serie de etapas donde se automatiza un proceso de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento, análisis de resultados y compilación de un reporte.
+La infraestructura implementará una serie de etapas donde se automatiza un proceso de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. Luego se genera un reporte que soporta el análisis de rendimiento con información cuantitativa.
+Se incluirá datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación, escalamiento de problemas y cómputo e identificación de cuellos de botella.
+
+\section{Motivación/Estado del Arte del Tema}
+
+En el área de cómputo de altas prestaciones los desarrolladores son los mismos
+especialistas del dominio del problema a resolver. Las rutinas
+más demandantes de cálculo son en su mayoría científicas y su
+alta complejidad hace posible su correcta implementación sólo por los mismos investigadores.
+
+\bigskip
+
+Estas cuestiones resultan en un tiempo reducido de optimización de rendimiento
+e impactan directamente en la productividad de los grupos de investigación y
+desarrollo. Frecuentemente el proceso de optimización termina siendo
+hecho de modo {\it ad-hoc}, sin la utilización de información cuantitativa para dirigir los
+esfuerzos de optimización.
+
+\section{Temas de Investigación}
+
+Esta sección contiene una lista inicial de los temas a desarrollar.
+
+\begin{enumerate}
+\item Automatización de ejecución de pruebas de referencia
+\item Aplicación general de herramientas de perfil de ejecución
+\item Generación de gráficos de rendimiento
+\item Generación de reportes
+\end{enumerate}
+
+\section{Desarrollos/Trabajo Experimental a Realizar}
+
+La infraestructura a desarrollar consiste de distintos componentes, como se demuestra en la Figura \ref{fig:framework} a continuación.
 
 \begin{figure}[H]
 \centering
@@ -48,54 +79,29 @@ Como se demuestra en la Figura \ref{fig:framework}, la infraestructura implement
 \label{fig:framework}
 \end{figure}
 
-\section{Motivación/Estado del Arte del Tema}
-
-Expertos de dominio no son expertos en análisis de rendimiento.
-
-\smallskip
-
-Continuación del trabajo final de la especialización.
-
-\section{Temas de Investigación}
-
-Esta sección contiene una lista inicial de los temas a desarrollar.
-
-\begin{enumerate}
-\item Análisis automático de rendimiento
-\end{enumerate}
-
-\section{Desarrollos/Trabajo Experimental a Realizar}
-
-La infraestructura a desarrollar consiste de distintos componentes:
-
-  \begin{enumerate}
-  \item Componente de ejecución de pruebas de rendimiento.
-  \item Componente de aplicación de herramientas de soporte.
-  \item Componente de análisis de datos de rendimiento.
-  \item Componente de reporte de rendimiento.
-  \end{enumerate}
-
-% chart?
-% hidef model?
-
-% Execution (Figures) / Analysis (Laws) / Reporting (PDF)
+  \begin{description}
+  \item[Ejecución de pruebas de rendimiento:] automáticamente configura y ejecuta pruebas, publicando números de rendimiento relevantes.
+  \item[Aplicación de herramientas de soporte:] automáticamente configura y ejecuta herramientas para medir rendimiento e identificar cuellos de botella.
+  \item[Análisis de datos de rendimiento:] utilizando la información anterior, calcula límites de potenciales mejoras y lista los cuellos de botella principales.
+  \item[Generación de reporte:] a partir de la información anterior, compila un reporte incluyendo gráficos y referencias al código específico a optimizar.
+  \end{description}
 
 \section{Esquema de Plan de Trabajo}
 
 El siguiente cronograma muestra el plan de actividades tentativo incluyendo actividades y tiempos.
-Es de notar que el trabajo es una continuación de un trabajo final de especialización.
 
 \begin{table}[H]
-    \caption{Detalle de Actividades}
+  \caption{Detalle de Actividades}
   \centering
     \begin{tabular}{|l|l|}\hline
       {\bf Actividad} & {\bf Duración} \\ \hline
       Diseño de Alto Nivel & Noviembre \\ \hline
-      Prototipo & Diciembre-Enero \\ \hline
-      Pruebas de Rendimiento & Febrero \\ \hline
-      Calculo de Leyes & Marzo \\ \hline
-      Perfil de Rendimiento & Abril \\ \hline
-      Eventos y Vectorización & Mayo-Junio \\ \hline
+      Prototipo & Diciembre-Enero-Febrero \\ \hline
+      Pruebas de Rendimiento & Marzo \\ \hline
+      Cálculo de Leyes & Abril \\ \hline
+      Perfil de Rendimiento & Mayo-Junio-Julio \\ \hline
+      Eventos y Vectorización & Agosto \\ \hline
+      Realización Tesis & Septiembre-Octubre \\ \hline
     \end{tabular}
   \label{schedule}
 \end{table}
@@ -103,7 +109,7 @@ Es de notar que el trabajo es una continuación de un trabajo final de especiali
 \section{Posibilidades de Realización}
 
 El alumno tiene a su disposición acceso al equipamiento necesario como parte de su ámbito laboral.
-El alumno trabaja como Ingeniero en Software en Argentina Software Design Center (ASDC - Intel Córdoba); también
+El alumno trabaja como Ingeniero en Software en {\it Argentina Software Design Center} (ASDC - Intel Córdoba); también
 como docente e investigador en el Instituto Universitario Aeronáutico dictando tanto cursos de grado (Cómputo de Altas Prestaciones) como postgrado (Implementación de Sistemas Operativos).
 
 \section{Bibliografía Básica Relacionada}
