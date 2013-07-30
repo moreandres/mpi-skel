@@ -41,7 +41,7 @@
 
   \bigskip
 
-  Este trabajo contribuye con un resumen de la teoría de análisis de rendimiento más una descripción de los herramientas de soporte 
+  Este trabajo contribuye con un resumen de la teoría de análisis de rendimiento más una descripción de las herramientas de soporte 
   disponibles en el momento. Se propone también un proceso para analizar el rendimiento, ejemplificando su aplicación a un conjunto de núcleos de
   cómputo no triviales.
 
@@ -689,16 +689,33 @@ Contadores en {\it hardware} & oprofile, PAPI, perf \\ \hline
 \label{table:tooling}
 \end{table}
 
-Primero se establece una línea de comparación al ejecutar una prueba de rendimiento del sistema, {\it HPCC} brinda un conjunto de métricas muy completo. Segundo se utilizan herramientas para medir el tiempo de ejecución de la aplicación sobre diferentes escenarios. time permite una ejecución directa sin modificación de código, {\tt gettimeofday()} requiere modificación de código pero puede ser utilizados con mayor libertad dentro de la aplicación.  
-En el caso de estar utilizando la librería MPI {\tt MPI\_WTime()} y la herramienta VAMPIR\footnote{\href{http://www.vampir.eu}{http://www.vampir.eu}} proveen soporte especifico para análisis de rendimiento.
-Tercero se dimensiona el comportamiento de la aplicación mediante un perfil de ejecución y un análisis de cuello de botella utilizando {\tt gprof}. Cuarto se analiza el comportamiento del sistema ejecutando la aplicación mediante {\tt oprofile} \footnote{\href{http://oprofile.sourceforge.net}{http://oprofile.sourceforge.net}} o {\tt perf} \footnote{\href{https://perf.wiki.kernel.org}{https://perf.wiki.kernel.org}}. Quinto se revisa el reporte del compilador para comprobar que se estén vectorizando los ciclos de cálculo más intensivos. Por último, se analiza el comportamiento de las unidades de cómputo utilizando soporte de {\it hardware} mediante herramientas como {\tt perf}, {\tt oprofile} y {\it Performance Application Programming Interface} (PAPI) \footnote{\href{http://icl.cs.utk.edu/papi}{http://icl.cs.utk.edu/papi}}.
+A grandes rasgos el procedimiento es el siguiente:
+
+\begin{enumerate}
+
+\item Se establece una línea de comparación al ejecutar una prueba de rendimiento del sistema, {\it HPCC} brinda un conjunto de métricas muy completo. 
+
+\item Se utilizan herramientas para medir el tiempo de ejecución de la aplicación sobre diferentes escenarios. time permite una ejecución directa sin modificación de código, {\tt gettimeofday()} requiere modificación de código pero puede ser utilizados con mayor libertad dentro de la aplicación.  
+En el caso de estar utilizando la librería MPI {\tt MPI\_WTime()} y la herramienta VAMPIR\footnote{\href{http://www.vampir.eu}{http://www.vampir.eu}} proveen soporte específico para análisis de rendimiento.
+
+\item Se dimensiona el comportamiento de la aplicación mediante un perfil de ejecución y un análisis de cuello de botella utilizando {\tt gprof}. 
+
+\item Se analiza el comportamiento del sistema ejecutando la aplicación mediante {\tt oprofile} \footnote{\href{http://oprofile.sourceforge.net}{http://oprofile.sourceforge.net}} o {\tt perf} \footnote{\href{https://perf.wiki.kernel.org}{https://perf.wiki.kernel.org}}. 
+
+\item Se revisa el reporte del compilador para comprobar que se estén vectorizando los ciclos de cálculo más intensivos.
+
+\item Se analiza el comportamiento de las unidades de cómputo utilizando soporte de {\it hardware} mediante herramientas como {\tt perf}, {\tt oprofile} y {\it Performance Application Programming Interface} (PAPI) \footnote{\href{http://icl.cs.utk.edu/papi}{http://icl.cs.utk.edu/papi}}.
+
+\end{enumerate}
 
 \section{Tiempo de Ejecución}
+
+Esta sección revisa como medir el tiempo de ejecución global de una aplicación, incluyendo ejemplos.
 
 \subsection{Tiempo de ejecución global}
 
 Para medir el tiempo de ejecución de un comando en consola se utiliza {\tt time(1)}. Aunque rudimentaria, esta simple herramienta no necesita de instrumentación de código y se encuentra disponible en cualquier distribución {\it GNU/Linux}.
-El interprete de comandos tiene su propia versión embebida, sin embargo el del sistema brinda información del uso de otros recursos del sistema, usualmente localizado en {\tt /usr/bin/time}.
+El intérprete de comandos tiene su propia versión embebida, sin embargo el del sistema brinda información del uso de otros recursos del sistema, usualmente localizado en {\tt /usr/bin/time}.
 
 \bigskip
 
@@ -854,22 +871,11 @@ index % time    self  children    called     name
 Un {\it profiler} a nivel de sistema analiza el uso de los recursos disponibles a nivel de núcleo del
 sistema operativo. Actúa de forma transparente a nivel global. Utiliza
 contadores de {\it hardware} del CPU y utiliza interrupciones de un temporizador
-cuando no logra detectar soporte específico en {\it hardware}. Aunque tiene un costo adicional inherente, la sobrecarga es mínimo.
+cuando no logra detectar soporte específico en {\it hardware}. Aunque tiene un costo adicional inherente, la sobrecarga es mínima.
 
 \bigskip
 
-Para obtener realizar un análisis se necesita:
-
-\begin{enumerate}
-\item Detener toda aplicación o servicio no relevante en el sistema.
-\item Ejecutar el profiler
-\item Ejecutar la aplicación
-\item Generar el resumen
-\end{enumerate}
-
-La herramienta de por si no se necesita acceder al código fuente de la aplicación.
-Pero si esta disponible el código correspondiente se muestra anotado con contadores
-si hay símbolos de depuración en el binario.
+Para obtener un perfil de ejecución representativo, usualmente se recomienda detener toda aplicación o servicio no relevante en el sistema. La herramienta de por si no requiere acceder al código fuente de la aplicación, pero si esta disponible el código correspondiente se muestra anotado con contadores si hay símbolos de depuración en el binario.
 
 \bigskip
 
@@ -885,7 +891,7 @@ siguientes:
 \item Cantidad de instrucciones de carga y descarga
 \end{enumerate}
 
-En núcleos más viejos que la versión 2.6, en lugar de {\tt oprofile} se recomienda utilizar {\tt perf}. Al estar implementados a nivel de núcleo, estos evitan las llamadas al sistema y tienen una sobrecarga de un orden de magnitud menor que los profilers a nivel de aplicación. Las herramientas propietarias suelen tener acceso a contadores más específicos e
+En núcleos más viejos que la versión 2.6, en lugar de {\tt oprofile} se recomienda utilizar {\tt perf}. Al estar implementados a nivel de núcleo, éstos evitan las llamadas al sistema y tienen una sobrecarga de un orden de magnitud menor que los {\it profilers} a nivel de aplicación. Las herramientas propietarias suelen tener acceso a contadores más específicos e
 incluso programables para funciones determinadas de medición.
 
 \subsection{Ejemplo: {\tt perf}}
@@ -962,7 +968,7 @@ que debería estar vectorizando los ciclos de cómputo intensivo. Esto es muy
 
 \bigskip
 
-Por ejemplo, GCC provee opciones especificas que deben ser provistas para mostrar el reporte.
+Por ejemplo, GCC provee opciones específicas que deben ser provistas para mostrar el reporte.
 
 \begin{lstlisting}
 $ gcc -c -O3 -ftree-vectorizer-verbose=1 ex.c
@@ -1229,7 +1235,7 @@ for (i = 0; i < SIZE; ++i) {
 \end{verbatim}
 
 Diferentes alternativas de implementación de esta operación son demostradas en \cite{mm-tool}, la 
-Figura \ref{fig:mm} resume que utilizar una librería como BLAS es mejor que varios intentos de optimización.
+Figura \ref{fig:mm} resume que utilizar una librería implementando BLAS es mejor que varios intentos de optimización.
 
 \begin{figure}[H]
 \centering
