@@ -31,7 +31,7 @@
   Director: Dr Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
 }
 
-\date{Octubre de 2013}
+\date{Agosto de 2013}
 
 \maketitle
 
@@ -799,7 +799,7 @@ Page size (bytes): 4096
 Exit status: 0
 \end{lstlisting}
 
-\section{Perfil de Ejecución de Aplicación}
+\section{Perfil de Ejecución Funcional}
 
 Estas herramientas denominadas {\it profilers} extraen el perfil dinámico de una aplicación en tiempo de ejecución. 
 Se instrumenta la aplicación con una opción específica que incluye información de uso de las diferentes partes del programa y los recursos del sistema como por ejemplo procesador y memoria.
@@ -866,9 +866,9 @@ index % time    self  children    called     name
 --
 \end{lstlisting}
 
-\section{Perfil de Ejecución de Sistema}
+\section{Perfil de Ejecución asistido por {\it Hardware}}
 
-Un {\it profiler} a nivel de sistema analiza el uso de los recursos disponibles a nivel de núcleo del
+Un {\it profiler} puede utilizar el {\it hardware} para analizar el uso de los recursos disponibles a nivel de núcleo del
 sistema operativo. Actúa de forma transparente a nivel global. Utiliza
 contadores de {\it hardware} del CPU y utiliza interrupciones de un temporizador
 cuando no logra detectar soporte específico en {\it hardware}. Aunque tiene un costo adicional inherente, la sobrecarga es mínima.
@@ -1157,16 +1157,6 @@ SingleFFT_Gflops=1.4984
 MPIFFT_Gflops=2.42216
 \end{verbatim}
 
-% re-revisar, sino sacar
-
-En comparación del rendimiento teórico contra el real cada {\it core} de la familia de procesadores 5000 realiza 2 FLOPs por ciclo, al vectorizarse el cómputo y utilizar registros de 128 bits con instrucciones SSE puede realizar 4 FLOPs por ciclo.
-La ecuación \ref{eq:flops} muestra que si cada servidor posee dos procesadores entonces tiene un máximo teórico de $ 42.56 \times 2 = 85.12 $, por lo cual los $ 70.141 $ medidos corresponden.
-
-\begin{equation}
-\label{eq:flops}
-CORES \times CICLOS \times FLOPS = 4 \times 2.66 \times 4 = 42.56 MFLOPS
-\end{equation}
-
 \section{Multiplicación de Matrices}
 
 La multiplicación de matrices es una operación fundamental en múltiples campos de aplicación científica como la resolución de ecuaciones lineales y la representación de grafos y espacios dimensionales. Por ello existe abundante material sobre el tema. Tomando como ejemplo una implementación utilizando OpenMP \footnote{\href{http://blog.speedgocomputing.com/2010/08/parallelizing-matrix-multiplication.html}{http://blog.speedgocomputing.com/2010/08/parallelizing-matrix-multiplication.html}.}, se procede a seguir la metodología propuesta en la sección anterior. 
@@ -1279,7 +1269,7 @@ Al realizar ejecuciones con tamaños de entrada creciente los resultados fueron:
 \label{fig:heat-threads}
 \end{figure}
 
-Al realizar ejecuciones variando la cantidad de {\it threads} se obtuvieron los siguientes resultados (Figura \ref{fig:heat-threads}). Calculamos entonces la proporción serial y paralela, 20\% y 80\% respectivamente. Los límites son entonces: {\it Amdalah} $ X $ x y {\it Gustafson} $ Y $ x.
+Al realizar ejecuciones variando la cantidad de {\it threads} se obtuvieron los siguientes resultados (Figura \ref{fig:heat-threads}). Calculamos entonces la proporción serial y paralela, 20\% y 80\% respectivamente. Los límites son entonces: {\it Amdalah} $ 5 $ x y {\it Gustafson} $ 20 $ x.
 
 \begin{verbatim}
 109960.157161 task-clock # 3.839 CPUs utilized
