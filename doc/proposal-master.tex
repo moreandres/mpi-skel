@@ -35,27 +35,19 @@ Director: Dr. Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
 
 \section{Objetivo}
 
-La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de Cómputo de Altas Prestaciones. Este trabajo se realiza en continuación al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
+La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de cómputo de altas prestaciones ({\it HPC}, por sus siglas en inglés). Este trabajo se realiza en continuación al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
 
 \bigskip
 
-La infraestructura implementará una serie de etapas donde se automatiza un proceso de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. Luego se genera un reporte que soporta el análisis de rendimiento con información cuantitativa.
-Se incluirá datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación, escalamiento de problemas y cómputo e identificación de cuellos de botella.
+La infraestructura implementa un procedimiento de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. Al concluir se genera un informe detallado que soporta la tarea de optimización con información cuantitativa.
+Por ejemplo se incluirá datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación, escalamiento de problemas y cómputo e identificación de cuellos de botella.
 
 \section{Motivación/Estado del Arte del Tema}
 
-En el área de cómputo de altas prestaciones los desarrolladores son los mismos
-especialistas del dominio del problema a resolver. Las rutinas
-más demandantes de cálculo son en su mayoría científicas y su
-alta complejidad hace posible su correcta implementación sólo por los mismos investigadores.
-
-\bigskip
-
-Estas cuestiones resultan en un tiempo reducido de optimización de rendimiento
-e impactan directamente en la productividad de los grupos de investigación y
-desarrollo. Frecuentemente el proceso de optimización termina siendo
-hecho de modo {\it ad-hoc}, sin la utilización de información cuantitativa para dirigir los
-esfuerzos de optimización.
+En el área de HPC los programadores son los mismos especialistas del dominio del problema a resolver. Las rutinas
+más demandantes de cálculo son en su mayoría científicas y su alta complejidad hace posible su correcta implementación sólo por los mismos investigadores. Estas cuestiones resultan en un tiempo reducido de optimización de rendimiento
+e impactan directamente en la productividad de los grupos de investigación y desarrollo. Frecuentemente el proceso de optimización termina siendo hecho de modo {\it ad-hoc}, sin la utilización de información cuantitativa para dirigir los
+esfuerzos de mejora.
 
 \bigskip
 
@@ -75,14 +67,26 @@ Algunas referencias a la problemática se incluyen a continuación como soporte 
 
 \section{Temas de Investigación}
 
-Esta sección contiene una lista inicial de los temas a desarrollar.
+Esta sección contiene una lista inicial de los temas a incorporar a la infraestructura automática:
 
-\begin{enumerate}
-\item Automatización de ejecución de pruebas de referencia
-\item Aplicación general de herramientas de perfil de ejecución
-\item Generación de gráficos de rendimiento
-\item Generación de reportes
-\end{enumerate}
+\begin{description}
+\item[Configuración y ejecución de pruebas de referencia:]
+
+Las pruebas de rendimiento proveen una línea base de comparación sobre las capacidades de los diferentes componentes de un sistema de computo, ya sea aislados o trabajando en conjunto. Las principales candidatas son {\it HPCC} y {\it HPL}.
+
+\item[Aplicación general de herramientas de perfil de ejecución:]
+
+Un perfil de ejecución de una aplicación permite conocer su comportamiento interno, identificando que partes necesitan ser optimizadas. El perfil puede ser construido utilizando instrumentación del código e incluso utilizando soporte de contadores de {\it hardware}.
+
+\item[Generación de gráficos de rendimiento]
+
+La utilización de gráficos para entender el rendimiento de una aplicación facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución al varias tamaño de problema y cantidad de unidades de procesamiento permite entender {\it scaling} y {\it speedup} de una aplicación.
+
+\item[Generación de reportes]
+
+Como soporte para el análisis de rendimiento, se incluye como resultado final un reporte integral con información de referencia, datos de perfil de ejecución y gráficos de rendimiento. Identificando problemas y áreas de mejora potenciales.
+
+\end{description}
 
 \section{Desarrollos/Trabajo Experimental a Realizar}
 
@@ -117,7 +121,7 @@ El siguiente cronograma muestra el plan de actividades tentativo incluyendo acti
       Cálculo de Leyes & Abril \\ \hline
       Perfil de Rendimiento & Mayo-Junio-Julio \\ \hline
       Eventos y Vectorización & Agosto \\ \hline
-      Realización Tesis & Septiembre-Octubre \\ \hline
+      Documentación Tesis & Septiembre-Octubre \\ \hline
     \end{tabular}
   \label{schedule}
 \end{table}
