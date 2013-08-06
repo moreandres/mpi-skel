@@ -1,0 +1,20 @@
+PROGRAM = sspr
+SOURCES = $(PROGRAM:=.cu)
+OBJECTS = $(SOURCES:.cu=.cu.o)
+
+NVCC ?= nvcc
+CFLAGS ?= -O3 --ptxas-options=-v -pg -g -G -arch=compute_11 --use_fast_math
+LDFLAGS ?= -lcublas
+
+$(PROGRAM): $(OBJECTS)
+
+run: $(PROGRAM)
+	./$(PROGRAM)
+
+%.cu.o: %.cu
+	$(NVCC) $(CFLAGS) $< -o $(@:.cu.o=) $(LDFLAGS)
+
+clean:
+	rm -fr *~ $(PROGRAM) $(OBJECTS)
+
+.SUFFIXES: .cu.o .cu
