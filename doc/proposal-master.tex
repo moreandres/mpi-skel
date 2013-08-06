@@ -27,7 +27,7 @@ Facultad de Informática\\
 \author{Tesista: Andrés More - {\tt amore@hal.famaf.unc.edu.ar}\\
 Director: Dr. Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
 
-\date{Octubre de 2013}
+\date{Agosto de 2013}
 
 \maketitle
 
@@ -78,11 +78,11 @@ Las pruebas de rendimiento proveen una línea base de comparación sobre las cap
 
 Un perfil de ejecución de una aplicación permite conocer su comportamiento interno, identificando que partes necesitan ser optimizadas. El perfil puede ser construido utilizando instrumentación del código e incluso utilizando soporte de contadores de {\it hardware}.
 
-\item[Generación de gráficos de rendimiento]
+\item[Generación de gráficos de rendimiento:]
 
-La utilización de gráficos para entender el rendimiento de una aplicación facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución al varias tamaño de problema y cantidad de unidades de procesamiento permite entender {\it scaling} y {\it speedup} de una aplicación.
+La utilización de gráficos para entender el rendimiento de una aplicación facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución al variar tamaño de problema y cantidad de unidades de procesamiento permite entender {\it scaling} y {\it speedup} de una aplicación.
 
-\item[Generación de reportes]
+\item[Generación de reportes:]
 
 Como soporte para el análisis de rendimiento, se incluye como resultado final un reporte integral con información de referencia, datos de perfil de ejecución y gráficos de rendimiento. Identificando problemas y áreas de mejora potenciales.
 
@@ -106,6 +106,8 @@ La infraestructura a desarrollar consiste de distintos componentes, como se demu
   \item[Generación de reporte:] a partir de la información anterior, compila un reporte incluyendo gráficos y referencias al código específico a optimizar.
   \end{description}
 
+En principio el desarrollo se limita al soporte de ambientes {\it GNU/Linux}, soportando paralelismo implementado utilizando tecnología {\it OpenMP}.
+
 \section{Esquema de Plan de Trabajo}
 
 El siguiente cronograma muestra el plan de actividades tentativo incluyendo actividades y tiempos.
@@ -115,6 +117,7 @@ El siguiente cronograma muestra el plan de actividades tentativo incluyendo acti
   \centering
     \begin{tabular}{|l|l|}\hline
       {\bf Actividad} & {\bf Duración} \\ \hline
+	Estado del Arte & Octubre \\ \hline
       Diseño de Alto Nivel & Noviembre \\ \hline
       Prototipo & Diciembre-Enero-Febrero \\ \hline
       Pruebas de Rendimiento & Marzo \\ \hline
@@ -177,6 +180,11 @@ Un conjunto inicial a modo de referencia es incluido en la bibliografía listada
   Fernando G. Tinetti, Mariano Mendez, and Armando De Giusti,
   \emph{An Automated Approach to Hardware Performance Monitoring Counters},
   2013. 
+
+\bibitem{openmp}
+  OpenMP Architecture Review Board,
+  \emph{OpenMP Application Program Interface Version 3.0},
+  Mayo 2008.
 
 \end{thebibliography}
 
