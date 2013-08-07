@@ -17,11 +17,12 @@
 
 \begin{document}
 
+\setlength{\parindent}{0cm}
 \renewcommand{\tablename}{Tabla}
 
 \title{Universidad Nacional de La Plata\\Facultad de Informática\\ \bigskip
 {\large Tesis presentada para obtener el grado de \\}  Magister en Cómputo de Altas Prestaciones\\ \bigskip
-  Infraestructura para el Soporte de Análisis de Rendimiento}
+  Infraestructura para el Análisis de Rendimiento}
 
 \author{
   Alumno: Andrés More - {\tt amore@hal.famaf.unc.edu.ar}\\
@@ -33,62 +34,133 @@
 \maketitle
 
 \begin{abstract}
-one-liner marketinero.
+Este trabajo revisa la construcción de una infraestructura de análisis de rendimiento para aplicaciones de cómputo de altas prestaciones; incluyendo casos de estudio con aplicaciones del mundo real.
 
-contribuciones.
+\bigskip
 
-mas detalles de lo que se hizo.
+Este trabajo contribuye con un generador de reporte automático de rendimiento para aplicaciones utilizando tecnología {\it OpenMP} sobre sistemas {\it GNU/Linux}.
 \end{abstract}
 
 \tableofcontents
 
 \chapter{Introducción}
 
-Introducción de la introducción.
-
-Re-usar lo de la especialización.
+Este capítulo introduce el tema bajo estudio, definiendo los objetivos principales, las contribuciones logradas durante la investigación, y detallando la estructura del resto del documento.
 
 \section{Objetivos}
 
-Re-usar lo del pre-proyecto.
+La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de cómputo de altas prestaciones ({\it HPC}, por sus siglas en inglés). Este trabajo se realiza como extensión al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
+
+\bigskip
+
+La infraestructura desarrollada implementa un procedimiento de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. La infraestructura genera como etapa final un informe detallado que soporta la tarea de optimización con información cuantitativa.
+El reporte final incluye datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación de resultados, escalamiento de problema y cómputo e identificación de cuellos de botella.
 
 \section{Contribuciones}
 
-Latencia.
+La siguiente lista enumera las diferentes publicaciones realizadas durante el cursado del magister y el desarrollo de la tesis.
 
-GPU.
+\begin{enumerate}
+\item Estudio de Multiplicación de Matrices. Reporte Técnico. Realizado como parte del curso {\it Fundamentos de Procesamiento Paralelo} dictado por {\it Marcelo Laiouf}.
+\item Mejora de Latencia en Redes {\it Ethernet}. JAAIO. More, Garabato, Rosales.
+\item Comparación de Implementaciones de una Operación BLAS. Reporte Técnico. Realizado como parte del curso {\it Programación GPU de Propósito General} dictado por {\it Margarita Amor}.
+\item Sección {\it Intel Cluster Ready} y {\it Intel Cluster Checker} en el libro {\it Programming Intel Xeon Phi}. Intel Press. 2013.
+\end{enumerate}
+
+\section{Metodología}
+
+En base al problema y a los objetivos establecidos previamente la metodología adoptada es la siguiente:
 
 \section{Estructura}
 
-Como siguen los capítulos y las secciones.
+El resto del documento se estructura de la siguiente forma:
+
+\begin{itemize}
+\item Capitulo 2: revisa el estado del arte de los temas incluidos.
+\item Capitulo 3: describe el problema a resolver.
+\item Capitulo 4: muestra la propuesta de solución.
+\item Capitulo 5: aplica la solución a casos de estudio.
+\item Capítulo 6: concluye reflejando los objetivos y proponiendo trabajo futuro.
+\end{itemize}
 
 \chapter{Estado del Arte}
 
-Introducción del capítulo.
+Este capítulo revisa el estado del arte de los temas revisados en este tesis.
 
 \section{Análisis del Rendimiento}
 
+El análisis del rendimiento es un tema diverso, existen diferentes puntos de vista, ya sean diferentes niveles, componente, arquitecturas.
+
+niveles,
+
+componentes.
+
+arquitecturas.
+
 \section{Herramientas de Soporte}
+
+Benchmarks.
+
+Profilers.
+
+Vectorizadores. Compiladores.
 
 \section{Automatización}
 
+Métodos generales.
+
 \chapter{Descripción del Problema}
 
-Introducción del capitulo.
+Este capítulo introduce el problema a resolver.
+
+En el área de HPC los programadores son los mismos especialistas del dominio del problema a resolver. Las rutinas
+más demandantes de cálculo son en su mayoría científicas y su alta complejidad hace posible su correcta implementación sólo por los mismos investigadores. Estas cuestiones resultan en un tiempo reducido de optimización de rendimiento
+e impactan directamente en la productividad de los grupos de investigación y desarrollo. Frecuentemente el proceso de optimización termina siendo hecho de modo {\it ad-hoc}, sin la utilización de información cuantitativa para dirigir los
+esfuerzos de mejora.
 
 \chapter{Propuesta de Solución}
 
-Introducción del capitulo.
+Este capítulo muestra la propuesta de solución, incluyendo el diseño de la misma a diferentes niveles, un ejemplo de su reporte de salida y realizando casos de aplicación con aplicaciones del mundo real.
 
-\section{Casos de Estudio}
+\section{Infraestructura}
+
+{\tt bottleneck}
+
+\section{Diseño de Alto Nivel}
+
+componentes.
+
+\section{Diseño de Bajo Nivel}
+
+comportamiento de cada componente.
+
+\section{Reporte Generado}
+
+secciones dentro del reporte, que datos incluyen y para qué son útiles.
+
+\chapter{Casos de Aplicación}
+
+\section{NEC}
+
+Mario Trangoni.
+
+\section{IUA}
+
+Elementos Finitos.
+
+\section{Espresso}
+
+Biología.
 
 \chapter{Conclusiones y Trabajo Futuro}
 
-Introducción del capitulo.
+Este capítulo concluye revisando los objetivos propuestos y posibles líneas de investigación como continuación.
 
 \section{Conclusiones}
 
 \section{Trabajo Futuro}
+
+Doctorado.
 
 \bibliography{report}
 
