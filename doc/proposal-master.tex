@@ -35,12 +35,12 @@ Director: Dr. Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
 
 \section{Objetivo}
 
-La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de cómputo de altas prestaciones ({\it HPC}, por sus siglas en inglés). Este trabajo se realiza en continuación al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
+La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de cómputo de altas prestaciones ({\it HPC}, por sus siglas en inglés). Este trabajo se realiza como extensión al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
 
 \bigskip
 
-La infraestructura implementa un procedimiento de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. Al concluir se genera un informe detallado que soporta la tarea de optimización con información cuantitativa.
-Por ejemplo se incluirá datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación, escalamiento de problemas y cómputo e identificación de cuellos de botella.
+La infraestructura a desarrollar implementará un procedimiento de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. La infraestructura generará como etapa final un informe detallado para soportar la tarea de optimización con información cuantitativa.
+El reporte final incluirá datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación de resultados, escalamiento de problema y cómputo e identificación de cuellos de botella.
 
 \section{Motivación/Estado del Arte del Tema}
 
@@ -67,12 +67,12 @@ Algunas referencias a la problemática se incluyen a continuación como soporte 
 
 \section{Temas de Investigación}
 
-Esta sección contiene una lista inicial de los temas a incorporar a la infraestructura automática:
+Esta sección contiene una lista inicial de los temas a trabajar:
 
 \begin{description}
 \item[Configuración y ejecución de pruebas de referencia:]
 
-Las pruebas de rendimiento proveen una línea base de comparación sobre las capacidades de los diferentes componentes de un sistema de computo, ya sea aislados o trabajando en conjunto. Las principales candidatas son {\it HPCC} y {\it HPL}.
+Las pruebas de rendimiento proveen una línea base de comparación sobre las capacidades de los diferentes componentes de un sistema de cómputo, ya sea aislados o trabajando en conjunto. Las principales candidatas son {\it HPCC} y {\it HPL}.
 
 \item[Aplicación general de herramientas de perfil de ejecución:]
 
@@ -80,7 +80,7 @@ Un perfil de ejecución de una aplicación permite conocer su comportamiento int
 
 \item[Generación de gráficos de rendimiento:]
 
-La utilización de gráficos para entender el rendimiento de una aplicación facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución al variar tamaño de problema y cantidad de unidades de procesamiento permite entender {\it scaling} y {\it speedup} de una aplicación.
+Los gráficos facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución al variar tamaño de problema y cantidad de unidades de procesamiento permite entender {\it scaling} y {\it speedup} de una aplicación.
 
 \item[Generación de reportes:]
 
@@ -95,18 +95,18 @@ La infraestructura a desarrollar consiste de distintos componentes, como se demu
 \begin{figure}[H]
 \centering
 \includegraphics{framework.png}
-\caption{Infrastructura a Desarrollar}
+\caption{Infraestructura a Desarrollar}
 \label{fig:framework}
 \end{figure}
 
   \begin{description}
-  \item[Ejecución de pruebas de rendimiento:] automáticamente configura y ejecuta pruebas, publicando números de rendimiento relevantes.
-  \item[Aplicación de herramientas de soporte:] automáticamente configura y ejecuta herramientas para medir rendimiento e identificar cuellos de botella.
+  \item[Ejecución de pruebas de rendimiento:] automáticamente configura y ejecuta pruebas sobre el sistema, publicando números de rendimiento relevantes.
+  \item[Aplicación de herramientas de soporte:] automáticamente configura y ejecuta herramientas para medir rendimiento e identificar cuellos de botella en una aplicación.
   \item[Análisis de datos de rendimiento:] utilizando la información anterior, calcula límites de potenciales mejoras y lista los cuellos de botella principales.
   \item[Generación de reporte:] a partir de la información anterior, compila un reporte incluyendo gráficos y referencias al código específico a optimizar.
   \end{description}
 
-En principio el desarrollo se limita al soporte de ambientes {\it GNU/Linux}, soportando paralelismo implementado utilizando tecnología {\it OpenMP}.
+En principio el desarrollo se limita al soporte de ambientes {\it GNU/Linux}, con aplicaciones utilizando paralelismo implementado utilizando tecnología {\it OpenMP}.
 
 \section{Esquema de Plan de Trabajo}
 
