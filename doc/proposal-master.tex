@@ -35,11 +35,11 @@ Director: Dr. Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
 
 \section{Objetivo}
 
-La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de cómputo de altas prestaciones ({\it HPC}, por sus siglas en inglés). Este trabajo se realiza como extensión al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
+La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de rendimiento en aplicaciones de cómputo de altas prestaciones ({\it HPC}, por sus siglas en inglés).
 
 \bigskip
 
-La infraestructura a desarrollar implementará un procedimiento de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. La infraestructura generará como etapa final un informe detallado para soportar la tarea de optimización con información cuantitativa.
+La infraestructura a desarrollar implementará un procedimiento de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. La infraestructura generará como resultado final un informe detallado para soportar la tarea de optimización con información cuantitativa.
 El reporte final incluirá datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación de resultados, escalamiento de problema y cómputo e identificación de cuellos de botella.
 
 \section{Motivación/Estado del Arte del Tema}
@@ -53,17 +53,23 @@ esfuerzos de mejora.
 
 Algunas referencias a la problemática se incluyen a continuación como soporte de la propuesta:
 
-\begin{itemize}
+\begin{enumerate}
 
-\item Como correctamente mostrar resultados de rendimiento por {\it Fleming, Philip J. and Wallace, John J.} en {\it How Not to Lie with Statistics: the Correct Way to Summarize Benchmark Results}, {ACM}, {29/3}, {1986}.
+\item Cómo correctamente mostrar resultados de rendimiento por {\it Fleming, Philip J. and Wallace, John J.} en {\it How Not to Lie with Statistics: the Correct Way to Summarize Benchmark Results}, {ACM}, {29/3}, {1986}.
 
-\item Como acceder a memoria eficientemente por {\it Drepper, Ulrich} en {\it What Every Programmer Should Know About Memory}, Reporte Técnico, 2007.
+\item Cómo acceder a memoria eficientemente por {\it Drepper, Ulrich} en {\it What Every Programmer Should Know About Memory}, Reporte Técnico, 2007.
 
 \item Una discusión de la dificultad de la programación en paralelo por {\it McKenney, Paul E.} en {\it Is Parallel Programming Hard, And, If So, What Can You Do About It?}, Reporte Técnico, 2007.
 
 \item Una revisión de como medir rendimiento durante el desarrollo de una aplicación por {\it Woodside, Murray and Franks, Greg and Petriu, Dorina C.} en {\it The Future of Software Performance Engineering}, IEEE Computer Society, 2007.
 
-\end{itemize}
+\item Ejemplos de optimización compleja por {\it Jeff A. Bilmes et al.} en {\it BLAS3 Compatible Fast Matrix Matrix Multiply} y también por {\it R. Clint Whaley et al.} en {\it Automatically Tuned Linear Algebra Software}
+
+\item Como utilizar información de contadores de hardware durante la ejecución de un programa por {\it Thomas Ball} en {\it Eficiently counting program events with support for on-line queries}.
+
+\item Como optimizar software teniendo en cuenta arquitectura de bajo nivel por {\it Intel Press} en {it Intel® 64 and IA-32 Architectures Optimization Reference Manual}
+
+\end{enumerate}
 
 \section{Temas de Investigación}
 
@@ -74,6 +80,10 @@ Esta sección contiene una lista inicial de los temas a trabajar:
 
 Las pruebas de rendimiento proveen una línea base de comparación sobre las capacidades de los diferentes componentes de un sistema de cómputo, ya sea aislados o trabajando en conjunto. Las principales candidatas son {\it HPCC} y {\it HPL}.
 
+\item[Monitorización utilizando Contadores de Eventos en Hardware:]
+
+Los contadores a nivel de {\it hardware} ofrecen mayor precisión, evitan errores de muestreos y producen menor sobrecarga que instrumentar {\it software}.
+
 \item[Aplicación general de herramientas de perfil de ejecución:]
 
 Un perfil de ejecución de una aplicación permite conocer su comportamiento interno, identificando que partes necesitan ser optimizadas. El perfil puede ser construido utilizando instrumentación del código e incluso utilizando soporte de contadores de {\it hardware}.
@@ -81,6 +91,14 @@ Un perfil de ejecución de una aplicación permite conocer su comportamiento int
 \item[Generación de gráficos de rendimiento:]
 
 Los gráficos facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución al variar tamaño de problema y cantidad de unidades de procesamiento permite entender {\it scaling} y {\it speedup} de una aplicación.
+
+\item[Análisis diferencial de rendimiento:]
+
+La comparación histórica de resultados permite corroborar los resultados de las diferentes optimizaciones a través del paso del tiempo.
+
+\item[Optimización guiada por perfil de ejecución:]
+
+La mayoría de los compiladores actuales permiten utilizar información de una ejecución previa para optimizar el acceso a instrucciones en cache de instrucciones y datos en sus diferentes niveles.
 
 \item[Generación de reportes:]
 

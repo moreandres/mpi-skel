@@ -8,6 +8,7 @@
 \usepackage{listings}
 \usepackage{enumitem}
 \usepackage[utf8]{inputenc}
+\usepackage{pdfpages}
 
 \lstset{language=c, frame=tlrb, basicstyle=\scriptsize, breaklines=true, numberbychapter=false,numbers=left}
 \setlist[enumerate]{noitemsep}
@@ -34,11 +35,17 @@
 \maketitle
 
 \begin{abstract}
-Este trabajo revisa la construcción de una infraestructura de análisis de rendimiento para aplicaciones de cómputo de altas prestaciones; incluyendo casos de estudio con aplicaciones del mundo real.
+
+En el área del cómputo de altas prestaciones las aplicaciones son construidas por especialistas del dominio del problema, no siempre expertos en análisis de rendimiento y optimización.
 
 \bigskip
 
-Este trabajo contribuye con un generador de reporte automático de rendimiento para aplicaciones utilizando tecnología {\it OpenMP} sobre sistemas {\it GNU/Linux}.
+Este trabajo revisa la construcción de una infraestructura que simplifica el análisis de rendimiento; incluyendo casos de estudio con aplicaciones del mundo real como etapa de validación. El objetivo es simplificar la tarea evitando la ejecución de datos relevantes de modo manual, permitiendo más tiempo de experimentación y análisis.
+
+\bigskip
+
+Este trabajo contribuye entonces con un generador automático de reporte de rendimiento para aplicaciones de cómputo de altas prestaciones utilizando tecnología {\it OpenMP} sobre sistemas {\it GNU/Linux}.
+
 \end{abstract}
 
 \tableofcontents
@@ -97,7 +104,14 @@ La siguiente lista enumera las diferentes publicaciones realizadas durante el cu
 
 \section{Metodología}
 
-En base al problema y a los objetivos establecidos previamente la metodología adoptada es la siguiente:
+En base al problema y a los objetivos establecidos previamente, la metodología adoptada es la siguiente:
+
+\begin{enumerate}
+\item Dado el procedimiento propuesto anteriormente, automatizarlo y analizar potenciales mejoras hacia generalidad y eficacia.
+\item Identificar que tipos de gráficos y tablas pueden resumir la información obtenida y facilitar su utilización.
+\item Utilizar la infraestructura generando reportes de núcleos de cómputo conocidos para poder focalizar los esfuerzos en la mejora del reporte.
+\item Por último, probar con aplicaciones del mundo real y verificar que la información reunida es útil para el análisis del rendimiento.
+\end{enumerate}
 
 \section{Estructura}
 
@@ -113,30 +127,7 @@ El resto del documento se estructura de la siguiente forma:
 
 \chapter{Estado del Arte}
 
-Este capítulo revisa el estado del arte de los temas revisados en este tesis.
-
-Actualmente existen numerosas y diversas herramientas para el análisis de rendimiento \cite{gregg}.
-Estas funcionan a diferentes niveles de abstracción: desde contadores de eventos
-a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo, instrumentación de código, y hasta la simple utilización del tiempo de ejecución de una aplicación o la comparación contra un trabajo similar de referencia.
-Para poder analizar del rendimiento un desarrollador aplica las herramientas listadas en la tabla \ref{table:tools}.
-
-\begin{table}[H]
-    \caption{Herramientas de Soporte para Optimización}
-    \centering
-    \begin{tabular}{|l|l|}\hline
-      {\bf Herramienta} & {\bf Descripción} \\ \hline
-      {\tt gprof} & Muestra información de perfil de llamadas a funciones \\ \hline
-      {\tt perf} & Muestra información de perfil de sistema \\ \hline
-      {\it STREAM} & Benchmark de jerarquía de memoria \\ \hline
-      HPL & Benchmark de capacidad de cómputo \\ \hline
-      IMB Ping Pong & Benchmark de latencia y ancho de banda de red \\ \hline
-      HPCC & Paquete de benchmarks \\ \hline
-    \end{tabular}
-    \label{table:tools}
-\end{table}
-
-Las pruebas de rendimiento como STREAM, HPL, IMB Ping Pong y HPCC permiten conocer el estado del sistema y los límites de rendimiento en la práctica.
-Los perfiles de ejecución de aplicaciones y sistema permiten conocer como se utilizan los recursos del sistema para llevar a cabo las instrucciones de cada programa.
+Este capítulo revisa el estado del arte de los temas relevantes a esta tesis.
 
 \section{Análisis de Rendimiento}\label{chapter:analysis}
 
@@ -317,7 +308,29 @@ La raíz n-ésima de un número (para un $ n $ posiblemente muy grande), es una 
 G = 10 ^{( log _{10} (x_{1}) + \ldots + log _{10} (x_{n}) ) / n}
 \end{equation}
 
-\section{Pruebas de Rendimiento}
+\section{Herramientas}
+
+Actualmente existen numerosas y diversas herramientas para el análisis de rendimiento \cite{gregg}. Estas funcionan a diferentes niveles de abstracción: desde contadores de eventos a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo, instrumentación de código, y hasta la simple utilización del tiempo de ejecución de una aplicación o la comparación contra un trabajo similar de referencia. Para poder analizar del rendimiento un desarrollador aplica las herramientas listadas en la Tabla \ref{table:tools}.
+
+\begin{table}[H]
+    \caption{Herramientas de Soporte para Optimización}
+    \centering
+    \begin{tabular}{|l|l|l|}\hline
+      {\bf Herramienta} & {\bf Ejemplo} & {\bf Descripción} \\ \hline
+      Profiler & Software {\tt gprof} & Muestra información de perfil de llamadas a funciones \\ \hline
+      Profiler & Hardware {\tt perf} & Muestra información de perfil de sistema \\ \hline
+      Benchmark & {\it STREAM} & Benchmark de jerarquía de memoria \\ \hline
+      Benchmark & HPL & Benchmark de capacidad de cómputo \\ \hline
+      Benchmark & IMB Ping Pong & Benchmark de latencia y ancho de banda de red \\ \hline
+      Benchmark & HPCC & Paquete de benchmarks \\ \hline
+    \end{tabular}
+    \label{table:tools}
+\end{table}
+
+Las pruebas de rendimiento como STREAM, HPL, IMB Ping Pong y HPCC permiten conocer el estado del sistema y los límites de rendimiento en la práctica.
+Los perfiles de ejecución de aplicaciones y sistema permiten conocer como se utilizan los recursos del sistema para llevar a cabo las instrucciones de cada programa.
+
+\subsection{Pruebas de Rendimiento}
 
 Para medir el rendimiento se utilizan pruebas de referencia ({\em benchmarks}); éstas pueden ser aplicaciones sintéticas construidas específicamente, o bien aplicaciones del mundo real computando un problema prefijado. Al tener valores de referencia se pueden caracterizar los sistemas de modo de predecir el rendimiento de una aplicación.
 Los valores a los que se llegan con un {\it benchmark} suelen ser más prácticos y
@@ -364,7 +377,7 @@ su no desviación indica que el sistema sigue saludable). Por último,
 un {\it benchmark} sintético implementando el cómputo que uno quiere realizar
 muestra el rendimiento máximo posible a obtener en la práctica.
 
-\subsection{STREAM}
+\subsubsection{STREAM}
 
 STREAM \cite{stream} es un {\it benchmark} sintético que mide el ancho de banda de memoria sostenido en MB/s y el rendimiento de computación relativa de algunos vectores simples de cálculo. Se utiliza para dimensionar el ancho de banda de acceso de escritura o lectura a la jerarquía de memoria principal del sistema bajo análisis. Dentro de una misma ejecución de este {\it benchmark} se ejercitan diferentes operaciones en memoria, listadas en la tabla \ref{table:stream}.
 
@@ -404,7 +417,7 @@ Como último paso, el programa valida también la solución computada.
 \end{verbatim}
 }
 
-\subsection{Linpack}
+\subsubsection{Linpack}
 
 Linpack \cite{linpack} es un conjunto de subrutinas {\it FORTRAN} que resuelven
 problemas de álgebra lineal como ecuaciones lineales y multiplicación de
@@ -486,7 +499,7 @@ sistema de cómputo distribuido ya que no implica uso significativo de la
 red, sólo procesamiento intensivo de aritmética de punto flotante
 sobre la jerarquía local de memoria.
 
-\subsection{Intel MPI Benchmarks}
+\subsubsection{Intel MPI Benchmarks}
 
 Es un conjunto de {\it benchmarks} cuyo objetivo es ejercitar las funciones
 más importantes del estándar para librerías de paso de mensajes (MPI, por sus siglas en inglés) \cite{mpi-standard}.
@@ -532,7 +545,7 @@ Para obtener el máximo ancho de banda disponible, se ejercita la comunicación 
 \end{verbatim}
 }
 
-\subsection{HPC Challenge}
+\subsubsection{HPC Challenge}
 
 El {\it benchmark} HPC Challenge \cite{hpcc} (HPCC) está compuesto internamente por un conjunto de
 varios núcleos de cómputo: entre ellos STREAM, HPL, Ping Pong, Transformadas de {\it Fourier}
@@ -675,7 +688,7 @@ End of HPC Challenge tests.
 \end{verbatim}
 }
 
-\section{Herramientas}
+\subsection{Herramientas}
 
 Se recomienda un proceso de aplicación gradual empezando por herramientas generales de alto nivel que analizan la aplicación como un todo; terminando con herramientas de bajo nivel que proveen detalles complejos de granularidad más fina en componentes particulares del sistema. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un análisis complejo y extensivo desde un principio. Una lista de las herramientas más conocidas se muestra en la Tabla \ref{table:tooling}.
 
@@ -1007,33 +1020,134 @@ Este capítulo muestra la propuesta de solución, incluyendo el diseño de la mi
 
 \section{Infraestructura}
 
-{\tt bottleneck}
+{\tt bottleneck} es una aplicación escrita en C localizada en \href{github.com/moreandres/bottleneck}{github.com/moreandres/bottleneck}.
+Se utiiliza {\it GNU Plot} para la generación de gráfico y {\it GNU Scientific Library} para cálculos estadísticos. {\it Latex} se utiliza para la generación del reporte final.
+Se depende de GCC, GNU Make, prof, gprof para obtener información relevante.
+
+\section{Teoría de Operación}
+
+Esta sección detalla el funcionamiento de la infraestructura relacionando los componentes.
+
+\bigskip
+
+La herramienta de linea de comando toma como parámetro principal el binario de la aplicación a analizar. Asume por defecto que la aplicación esta construida utilizando Makefile de la forma usual, ya que para algunos pasos de análisis se necesita recompilar la aplicación con información extra de depuración.
+Otros parámetros necesarios son los datos del rango de tamaños de problema a utilizar, asumidos como {\tt seq(1)}.
+
+\bigskip
+
+Se utiliza un directorio escondido dentro de la carpeta que contiene la aplicación y se guardan en sub-directorios por fecha y hora las diferentes ejecuciones. Esta información es luego usada para comparación histórica de resultados.
+
+\bigskip
+
+Inicialmente se ejecuta la aplicación múltiples veces para validar que los resultados poseen una desviación saludable. Se resume esta información con un histograma y se hace una aproximación a una distribución de resultados normales como comparación.
+Se toma como referencia la media geométrica de los resultados.
+La primer ejecución se descarta.
+
+\bigskip
+
+Se ejercita la aplicación dentro del rango de tamaño de problema, por cada punto en el rango se ejecuta múltiples veces para promediar. Se grafican los resultados en un gráfico, posiblemente con escala logarítmica. Se sobrepone una curva ideal suponiendo que el doble de tamaño va a necesitar el doble de tiempo de cómputo.
+Se sobrepone también la información más vieja disponible como mecanismo de validación de las optimizaciones.
+
+\bigskip
+
+Se detecta cuantas unidades de procesamiento hay en el sistema. Se utiliza una y luego se itera hasta utilizar todas, se ejecuta múltiples veces la aplicación y se promedia el resultado. Se sobrepone una curva ideal suponiendo {\it speedup} ideal.
+Se sobrepone también la información más vieja disponible como mecanismo de validación de las optimizaciones.
+
+\bigskip
+
+Utilizando la información anterior, se calcula porcentaje de ejecución en serie y en paralelo. Con esta información se calcula limites según leyes de {\it Amdalah} y {\it Gustafson} para los procesadores disponibles y para un número grande como para visualizar que va a pasar con infinitos procesadores.
+
+\bigskip
+
+Se recompila la aplicación con información extra de depuración y se obtiene información del perfil de ejecución. Se detallan las funciones, las líneas de código y el {assembler} implementado por las mismas.
+
+\bigskip
+
+Gráfico de secuencias.
 
 \section{Diseño de Alto Nivel}
 
-componentes.
+Gráfico de componentes.
+
+\begin{enumerate}
+\item componente1
+\item componente2
+\item componente3
+\end{enumerate}
 
 \section{Diseño de Bajo Nivel}
 
-comportamiento de cada componente.
+Gráfico de clases.
+
+\begin{enumerate}
+\item clase1, descripción, responsabilidad
+\item clase2, descripción, responsabilidad
+\item clase3, descripción, responsabilidad
+\end{enumerate}
 
 \section{Reporte Generado}
 
-secciones dentro del reporte, que datos incluyen y para qué son útiles.
+Secciones dentro del reporte, que datos incluyen y para qué son útiles.
+
+\subsection{Consideraciones Generales}
+
+Las consideraciones generales tenidas en cuenta en todas las secciones fueron las siguientes:
+
+\begin{enumerate}
+\item Hipervínculos a archivos con la información pura.
+\item Inclusión de una explicación breve de para que sirve la sección y el gráfico.
+\item Inclusión de {\it trendlines} y comportamiento ideal.
+\item Referencias a material de consulta.
+\end{enumerate}
+
+\subsection{Introducción}
+
+Referencia.
+
+\subsection{Estabilidad de Resultados}
+
+Histograma.
+
+\subsection{Escalabilidad}
+
+Tamaño y Procesadores.
+
+\subsection{Mejoras}
+
+Speedup.
+
+\subsection{Profiling}
+
+Funciones más usadas. Cuellos de botella. Líneas de código assembler.
+
+\bigskip
+
+Un ejemplo de salida completo se encuentra adjuntado en el apéndice.
 
 \chapter{Casos de Aplicación}
 
-\section{NEC}
+Este capítulo contiene casos de estudio mostrando los resultados de aplicar la infraestructura desarrollada a aplicaciones de cómputo de alto rendimiento conocidas.
 
-Mario Trangoni.
+\section{NEC OpenMP}
 
-\section{IUA}
+Mario Trangoni realizó una paralelizacion del código original.
+Es utilizado por estudiantes de ingeniería electrónica para el calculo de distribución de radiación de una antena.
 
-Elementos Finitos.
+\href{bla}{https://code.google.com/p/nec2c/}
+
+Partes relevantes del reporte.
+
+\section{IUA Solver Elementos Finitos}
+
+Elementos Finitos. Sacco. Utilizado para simular la resistencia del viento en aeronáutica.
+
+Partes relevantes del reporte.
 
 \section{Espresso}
 
-Biología.
+Biología. Marcela Moré.
+
+Partes relevantes del reporte.
 
 \chapter{Conclusiones y Trabajo Futuro}
 
@@ -1041,14 +1155,18 @@ Este capítulo concluye revisando los objetivos propuestos y posibles líneas de
 
 \section{Conclusiones}
 
+Objetivos completados.
+
 \section{Trabajo Futuro}
 
-Doctorado.
+Doctorado. Run-time. Dinámico.
 
 \bibliography{report}
 
 \appendix
 
 \chapter{Reporte de Ejemplo}
+
+\includepdf[frame=true, pages=-, scale=0.8]{sample.pdf}
 
 \end{document}
