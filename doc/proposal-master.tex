@@ -35,12 +35,11 @@ Director: Dr. Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
 
 \section{Objetivo}
 
-La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de rendimiento en aplicaciones de cómputo de altas prestaciones ({\it HPC}, por sus siglas en inglés).
+La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de rendimiento en aplicaciones de cómputo de altas prestaciones.
 
 \bigskip
 
-La infraestructura a desarrollar implementará un procedimiento de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. La infraestructura generará como resultado final un informe detallado para soportar la tarea de optimización con información cuantitativa.
-El reporte final incluirá datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación de resultados, escalamiento de problema y cómputo e identificación de cuellos de botella.
+La infraestructura a desarrollar implementará un procedimiento sistemático de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados.  La infraestructura generará como resultado final un informe detallado para soportar la tarea de optimización con información cuantitativa. El reporte final incluirá datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación de resultados, escalamiento de problema y capacidad de cómputo e identificación de cuellos de botella.
 
 \section{Motivación/Estado del Arte del Tema}
 
@@ -63,13 +62,15 @@ Algunas referencias a la problemática se incluyen a continuación como soporte 
 
 \item Una revisión de como medir rendimiento durante el desarrollo de una aplicación por {\it Woodside, Murray and Franks, Greg and Petriu, Dorina C.} en {\it The Future of Software Performance Engineering}, IEEE Computer Society, 2007.
 
-\item Ejemplos de optimización compleja por {\it Jeff A. Bilmes et al.} en {\it BLAS3 Compatible Fast Matrix Matrix Multiply} y también por {\it R. Clint Whaley et al.} en {\it Automatically Tuned Linear Algebra Software}
+\item Ejemplos de optimización compleja por {\it Jeff A. Bilmes et al.} en {\it BLAS3 Compatible Fast Matrix Matrix Multiply} y también por {\it R. Clint Whaley et al.} en {\it Automatically Tuned Linear Algebra Software}, ICSI, 1998.
 
-\item Como utilizar información de contadores de hardware durante la ejecución de un programa por {\it Thomas Ball} en {\it Eficiently counting program events with support for on-line queries}.
+\item Cómo utilizar información de contadores de hardware durante la ejecución de un programa por {\it Thomas Ball} en {\it Eficiently counting program events with support for on-line queries}, ACM Programming Languages and Systems, 1994.
 
-\item Como optimizar software teniendo en cuenta arquitectura de bajo nivel por {\it Intel Press} en {it Intel® 64 and IA-32 Architectures Optimization Reference Manual}
+\item Cómo optimizar software teniendo en cuenta arquitectura de bajo nivel por {\it Intel} en {\it Intel® 64 and IA-32 Architectures Optimization Reference Manual}, Intel Press, 2013.
 
 \end{enumerate}
+
+En principio el desarrollo se limita al soporte de ambientes {\it GNU/Linux}, con aplicaciones utilizando paralelismo implementado utilizando tecnología {\it OpenMP}.
 
 \section{Temas de Investigación}
 
@@ -80,25 +81,25 @@ Esta sección contiene una lista inicial de los temas a trabajar:
 
 Las pruebas de rendimiento proveen una línea base de comparación sobre las capacidades de los diferentes componentes de un sistema de cómputo, ya sea aislados o trabajando en conjunto. Las principales candidatas son {\it HPCC} y {\it HPL}.
 
-\item[Monitorización utilizando Contadores de Eventos en Hardware:]
-
-Los contadores a nivel de {\it hardware} ofrecen mayor precisión, evitan errores de muestreos y producen menor sobrecarga que instrumentar {\it software}.
-
 \item[Aplicación general de herramientas de perfil de ejecución:]
 
 Un perfil de ejecución de una aplicación permite conocer su comportamiento interno, identificando que partes necesitan ser optimizadas. El perfil puede ser construido utilizando instrumentación del código e incluso utilizando soporte de contadores de {\it hardware}.
 
 \item[Generación de gráficos de rendimiento:]
 
-Los gráficos facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución al variar tamaño de problema y cantidad de unidades de procesamiento permite entender {\it scaling} y {\it speedup} de una aplicación.
+Los gráficos facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución permite entender escalamiento de una aplicación.
 
 \item[Análisis diferencial de rendimiento:]
 
-La comparación histórica de resultados permite corroborar los resultados de las diferentes optimizaciones a través del paso del tiempo.
+La comparación histórica de resultados permite corroborar los resultados de las diferentes optimizaciones.
 
 \item[Optimización guiada por perfil de ejecución:]
 
 La mayoría de los compiladores actuales permiten utilizar información de una ejecución previa para optimizar el acceso a instrucciones en cache de instrucciones y datos en sus diferentes niveles.
+
+\item[Monitorización utilizando Contadores de Eventos en Hardware:]
+
+Los contadores a nivel de {\it hardware} ofrecen mayor precisión, evitan errores de muestreos y producen menor sobrecarga que instrumentar {\it software}.
 
 \item[Generación de reportes:]
 
@@ -112,19 +113,19 @@ La infraestructura a desarrollar consiste de distintos componentes, como se demu
 
 \begin{figure}[H]
 \centering
-\includegraphics{framework.png}
+\includegraphics[width=8cm]{framework.png}
 \caption{Infraestructura a Desarrollar}
 \label{fig:framework}
 \end{figure}
-
   \begin{description}
-  \item[Ejecución de pruebas de rendimiento:] automáticamente configura y ejecuta pruebas sobre el sistema, publicando números de rendimiento relevantes.
-  \item[Aplicación de herramientas de soporte:] automáticamente configura y ejecuta herramientas para medir rendimiento e identificar cuellos de botella en una aplicación.
-  \item[Análisis de datos de rendimiento:] utilizando la información anterior, calcula límites de potenciales mejoras y lista los cuellos de botella principales.
+  \item[Pruebas de Rendimiento de Referencia:] automáticamente configura y ejecuta pruebas sobre el sistema, publicando números de rendimiento relevantes.
+ \item[Pruebas de Escalabilidad:] se ejecuta la aplicación variando tamaño de problema y también capacidad de cómputo para obtener información de comportamiento y límites de escalabilidad.
+  \item[Perfil de Ejecución:] automáticamente configura y ejecuta herramientas para medir rendimiento e identificar cuellos de botella en una aplicación utilizando soporte de {\it software} y {\it hardware}.
+  \item[Análisis de Resultados:] utilizando la información anterior, calcula límites de potenciales mejoras y lista los cuellos de botella principales asociados al código de la aplicación.
   \item[Generación de reporte:] a partir de la información anterior, compila un reporte incluyendo gráficos y referencias al código específico a optimizar.
   \end{description}
 
-En principio el desarrollo se limita al soporte de ambientes {\it GNU/Linux}, con aplicaciones utilizando paralelismo implementado utilizando tecnología {\it OpenMP}.
+La tarea de optimización y paralelización entonces es realizada manualmente, utilizando información estadística y cuantitativa sobre el comportamiento de la aplicación, extraída automáticamente por la infraestructura a desarrollar.
 
 \section{Esquema de Plan de Trabajo}
 
