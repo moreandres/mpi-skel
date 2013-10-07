@@ -30,7 +30,7 @@
   Director: Dr Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
 }
 
-\date{Octubre de 2014}
+\date{Noviembre de 2014}
 
 \maketitle
 
@@ -40,11 +40,11 @@ En el área del cómputo de altas prestaciones las aplicaciones son construidas 
 
 \bigskip
 
-Este trabajo revisa la construcción de una infraestructura que simplifica el análisis de rendimiento; incluyendo casos de estudio con aplicaciones del mundo real como etapa de validación. El objetivo es simplificar la tarea evitando la ejecución de datos relevantes de modo manual, permitiendo más tiempo de experimentación y análisis.
+Este trabajo revisa la construcción de una infraestructura que simplifica el análisis de rendimiento; incluyendo casos de estudio con aplicaciones del mundo real como etapa de validación. El objetivo es simplificar la tarea evitando la recolección de datos relevantes de modo manual, permitiendo más tiempo de experimentación y análisis.
 
 \bigskip
 
-Este trabajo contribuye entonces con un generador automático de reporte de rendimiento para aplicaciones de cómputo de altas prestaciones utilizando tecnología {\it OpenMP} sobre sistemas {\it GNU/Linux}.
+En particular, este trabajo contribuye entonces con un generador automático de reporte de rendimiento para aplicaciones de cómputo de altas prestaciones utilizando tecnología {\it OpenMP} sobre sistemas {\it GNU/Linux}.
 
 \end{abstract}
 
@@ -100,6 +100,8 @@ La siguiente lista enumera las diferentes publicaciones realizadas durante el cu
 \item Mejora de Latencia en Redes {\it Ethernet}. JAAIO. More, Garabato, Rosales.
 \item Comparación de Implementaciones de una Operación BLAS. Reporte Técnico. Realizado como parte del curso {\it Programación GPU de Propósito General} dictado por la Dra {\it Margarita Amor}.
 \item Sección {\it Intel Cluster Ready} y {\it Intel Cluster Checker} en el libro {\it Programming Intel Xeon Phi}. Intel Press. 2013.
+\item Book Review - Journal UNLP
+\item GPU Paper in CACIC 2013
 \end{enumerate}
 
 \section{Metodología}
@@ -185,6 +187,15 @@ procesamiento que sean utilizadas.
 Por ejemplo, en el caso de tener solo un $ 10\% $ de paralelismo
 en una aplicación, la mejora nunca va a superar $ 1.10x $ la original.
 En el caso de tener un $ 95\% $, la mejora no puede ser mayor a $ 20x $.
+
+\bigskip
+
+En el caso de conocer los tiempos de ejecución para distinto número de procesadores, la porción serial/paralelo puede ser aproximada mediante la siguiente ecuación:
+
+\begin{equation}
+P = TBD1
+S = TBD2
+\end{equation}
 
 \subsubsection{Ley de {\it Gustafson}}
 
@@ -315,14 +326,14 @@ Actualmente existen numerosas y diversas herramientas para el análisis de rendi
 \begin{table}[H]
     \caption{Herramientas de Soporte para Optimización}
     \centering
-    \begin{tabular}{|l|l|l|}\hline
-      {\bf Herramienta} & {\bf Ejemplo} & {\bf Descripción} \\ \hline
-      Profiler & Software {\tt gprof} & Muestra información de perfil de llamadas a funciones \\ \hline
-      Profiler & Hardware {\tt perf} & Muestra información de perfil de sistema \\ \hline
-      Benchmark & {\it STREAM} & Benchmark de jerarquía de memoria \\ \hline
-      Benchmark & HPL & Benchmark de capacidad de cómputo \\ \hline
-      Benchmark & IMB Ping Pong & Benchmark de latencia y ancho de banda de red \\ \hline
-      Benchmark & HPCC & Paquete de benchmarks \\ \hline
+    \begin{tabular}{|l|l|}\hline
+      {\bf Ejemplo} & {\bf Descripción} \\ \hline
+      Software {\tt gprof} & Muestra información de perfil de llamadas a funciones \\ \hline
+      Hardware {\tt perf} & Muestra información de perfil de sistema \\ \hline
+      {\it STREAM} & Benchmark de jerarquía de memoria \\ \hline
+      HPL & Benchmark de capacidad de cómputo \\ \hline
+      IMB Ping Pong & Benchmark de latencia y ancho de banda de red \\ \hline
+      HPCC & Paquete de benchmarks \\ \hline
     \end{tabular}
     \label{table:tools}
 \end{table}
@@ -386,10 +397,10 @@ STREAM \cite{stream} es un {\it benchmark} sintético que mide el ancho de banda
   \centering
     \begin{tabular}{|l|l|l|}\hline
       {\bf Función} & {\bf Operación} & {\bf Descripción} \\ \hline
-      copy & $ \forall i $ $ b_{i} = a_{i} $ & Copia simple \\ \hline
-      scale & $ \forall i $ $ b_{i} = c \times a_{i} $ & Multiplicación escalar \\ \hline
-      add & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & Suma directa \\ \hline
-      triad & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & Suma y multiplicación escalar \\ \hline
+      {\tt copy} & $ \forall i $ $ b_{i} = a_{i} $ & Copia simple \\ \hline
+      {\tt scale} & $ \forall i $ $ b_{i} = c \times a_{i} $ & Multiplicación escalar \\ \hline
+      {\tt add} & $ \forall i $ $ c_{i} = b_{i} + a_{i} $ & Suma directa \\ \hline
+      {\tt triad} & $ \forall i $ $ c_{i} = b_{i} + c \times a_{i} $ & Suma y multiplicación escalar \\ \hline
     \end{tabular} 
  \label{table:stream}
 \end{table}
@@ -508,7 +519,7 @@ cómputo con diferentes tamaños de mensajes. \cite{latency}.
 
 \bigskip
 
-Para obtener el máximo ancho de banda disponible, se ejercita la comunicación a través de mensajes con datos grandes. Para obtener la mínima latencia, se ejercita la comunicación con mensajes vacíos, es decir transmitiendo mensajes sin dato alguno.
+Para obtener el máximo ancho de banda disponible, se ejercita la comunicación a través de mensajes con datos grandes. Para obtener la mínima latencia, se ejercita la comunicación con mensajes vacíos.
 
 {\small
 \begin{verbatim}
@@ -690,7 +701,7 @@ End of HPC Challenge tests.
 
 \subsection{Herramientas}
 
-Se recomienda un proceso de aplicación gradual empezando por herramientas generales de alto nivel que analizan la aplicación como un todo; terminando con herramientas de bajo nivel que proveen detalles complejos de granularidad más fina en componentes particulares del sistema. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un análisis complejo y extensivo desde un principio. Una lista de las herramientas más conocidas se muestra en la Tabla \ref{table:tooling}.
+Se recomienda un proceso de aplicación gradual empezando por herramientas generales de alto nivel que analizan la aplicación como un todo; terminando con herramientas de bajo nivel que proveen detalles complejos de granularidad más fina en partes específicas del código. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un análisis complejo y extensivo desde un principio. Una lista de las herramientas más conocidas se muestra en la Tabla \ref{table:tooling}.
 
 \begin{table}[H]
 \caption{Aplicación Gradual de Herramientas}
@@ -739,9 +750,9 @@ El intérprete de comandos tiene su propia versión embebida, sin embargo el del
 \bigskip
 
 \begin{lstlisting}
-$ /usr/bin/time -v ./script.sh
+$ /usr/bin/time -v ./program
 1
-        Command being timed: "./script.sh"
+        Command being timed: "./program"
         User time (seconds): 0.61
         System time (seconds): 0.00
         Percent of CPU this job got: 99%
@@ -785,37 +796,6 @@ double wtime(void)
   sec = tv.tv_sec + tv.tv_usec/1000000.0;
   return sec;
 }
-\end{lstlisting}
-
-\subsubsection{Ejemplo: {\tt time}}
-
-El siguiente ejemplo muestra como obtener información del uso de los recursos del sistema por parte de una aplicación.
-
-\begin{lstlisting} 
-$ /usr/bin/time -v ./program
-Command being timed: "./program"
-User time (seconds): 0.00
-System time (seconds): 0.00
-Percent of CPU this job got: 0%
-Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
-Average shared text size (kbytes): 0
-Average unshared data size (kbytes): 0
-Average stack size (kbytes): 0
-Average total size (kbytes): 0
-Maximum resident set size (kbytes): 3808
-Average resident set size (kbytes): 0
-Major (requiring I/O) page faults: 0
-Minor (reclaiming a frame) page faults: 289
-Voluntary context switches: 1
-Involuntary context switches: 1
-Swaps: 0
-File system inputs: 0
-File system outputs: 0
-Socket messages sent: 0
-Socket messages received: 0
-Signals delivered: 0
-Page size (bytes): 4096
-Exit status: 0
 \end{lstlisting}
 
 \subsection{Perfil de Ejecución Funcional}
@@ -1149,6 +1129,8 @@ Biología. Marcela Moré.
 
 Partes relevantes del reporte.
 
+\section{OpenMP Database (Spain)}
+
 \chapter{Conclusiones y Trabajo Futuro}
 
 Este capítulo concluye revisando los objetivos propuestos y posibles líneas de investigación como continuación.
@@ -1167,6 +1149,6 @@ Doctorado. Run-time. Dinámico.
 
 \chapter{Reporte de Ejemplo}
 
-\includepdf[frame=true, pages=-, scale=0.8]{sample.pdf}
+% \includepdf[frame=true, pages=-, scale=0.8]{sample.pdf}
 
 \end{document}
