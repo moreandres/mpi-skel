@@ -40,11 +40,11 @@ En el área del cómputo de altas prestaciones las aplicaciones son construidas 
 
 \bigskip
 
-Este trabajo revisa la construcción de una infraestructura que simplifica el análisis de rendimiento; incluyendo casos de estudio con aplicaciones del mundo real como etapa de validación. El objetivo es simplificar la tarea evitando la recolección de datos relevantes de modo manual, permitiendo más tiempo de experimentación y análisis.
+Este trabajo revisa la construcción de una infraestructura que simplifica el análisis de rendimiento; incluyendo casos de estudio con aplicaciones del mundo real como etapa de validación. El objetivo es facilitar la tarea evitando la recolección de datos relevantes de modo manual, permitiendo más tiempo de experimentación y análisis.
 
 \bigskip
 
-En particular, este trabajo contribuye entonces con un generador automático de reporte de rendimiento para aplicaciones de cómputo de altas prestaciones utilizando tecnología {\it OpenMP} sobre sistemas {\it GNU/Linux}.
+En particular, este trabajo contribuye con un generador automático de reporte de rendimiento para aplicaciones de cómputo de altas prestaciones utilizando tecnología {\it OpenMP} sobre sistemas {\it GNU/Linux}.
 
 \end{abstract}
 
@@ -1108,22 +1108,28 @@ Un ejemplo de salida completo se encuentra adjuntado en el apéndice.
 
 Este capítulo contiene casos de estudio mostrando los resultados de aplicar la infraestructura desarrollada a aplicaciones de cómputo de alto rendimiento conocidas.
 
-\section{NEC OpenMP}
+\section{Código de Prueba}
+
+Esta sección incluye los resultados obtenidos al aplicar la infrastructura a núcleos de cómputo de prueba.
+
+\subsection{Matrix}
+
+\subsection{Heat2d}
+
+\subsection{8 Queens}
+
+\section{Código del Mundo Real}
+
+\subsection{NEC OpenMP}
 
 Mario Trangoni realizó una paralelizacion del código original.
-Es utilizado por estudiantes de ingeniería electrónica para el calculo de distribución de radiación de una antena.
+Es utilizado por estudiantes de ingeniería electrónica para el cálculo de distribución de radiación de una antena.
 
 \href{bla}{https://code.google.com/p/nec2c/}
 
 Partes relevantes del reporte.
 
-\section{IUA Solver Elementos Finitos}
-
-Elementos Finitos. Sacco. Utilizado para simular la resistencia del viento en aeronáutica.
-
-Partes relevantes del reporte.
-
-\section{Espresso}
+\subsection{Espresso}
 
 Biología. Marcela Moré.
 
