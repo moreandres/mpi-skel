@@ -97,11 +97,11 @@ La siguiente lista enumera las diferentes publicaciones realizadas durante el cu
 
 \begin{enumerate}
 \item Estudio de Multiplicación de Matrices. Reporte Técnico. Realizado como parte del curso {\it Fundamentos de Procesamiento Paralelo} dictado por el Dr {\it Fernando Tinetti Laiouf}.
-\item Mejora de Latencia en Redes {\it Ethernet}. JAAIO. More, Garabato, Rosales.
+\item Articulo {\it Optimizing Latency in Beowulf Clusters}. HPC Latam 2012.
 \item Comparación de Implementaciones de una Operación BLAS. Reporte Técnico. Realizado como parte del curso {\it Programación GPU de Propósito General} dictado por la Dra {\it Margarita Amor}.
 \item Sección {\it Intel Cluster Ready} y {\it Intel Cluster Checker} en el libro {\it Programming Intel Xeon Phi}. Intel Press. 2013.
-\item Book Review - Journal UNLP
-\item GPU Paper in CACIC 2013
+\item Reseña del Libro {\it Intel Xeon Phi Coprocessor High Performance Programming} - JCS\&T Vol 13 N 2 Octubre 2013.
+\item Articulo {\it Lessons learned from contrasting BLAS kernel implementations} - XIII Workshop Procesamiento Distribuido y Paralelo (WPDP), 2013.
 \end{enumerate}
 
 \section{Metodología}
@@ -109,7 +109,7 @@ La siguiente lista enumera las diferentes publicaciones realizadas durante el cu
 En base al problema y a los objetivos establecidos previamente, la metodología adoptada es la siguiente:
 
 \begin{enumerate}
-\item Dado el procedimiento propuesto anteriormente, automatizarlo y analizar potenciales mejoras hacia generalidad y eficacia.
+\item Dado el procedimiento propuesto anteriormente, automatizarlo y analizar potenciales mejoras hacia generalidad y utilidad.
 \item Identificar que tipos de gráficos y tablas pueden resumir la información obtenida y facilitar su utilización.
 \item Utilizar la infraestructura generando reportes de núcleos de cómputo conocidos para poder focalizar los esfuerzos en la mejora del reporte.
 \item Por último, probar con aplicaciones del mundo real y verificar que la información reunida es útil para el análisis del rendimiento.
@@ -200,7 +200,7 @@ S = TBD2
 \subsubsection{Ley de {\it Gustafson}}
 
 Desde un punto de vista más general, la ley de {\it Gustafson}
-\cite{gustafson} (computada mediante la Ecuación \ref{eq:gustafson})
+\cite{gustafson} (Ecuación \ref{eq:gustafson})
 establece que las aplicaciones que manejan problemas
 repetitivos con conjuntos de datos similares pueden ser fácilmente
 paralelizadas. En comparación, la ley anterior no escala el tamaño o
@@ -225,12 +225,11 @@ Al aplicar esta ley obtenemos que un problema con datos grandes o repetitivos en
 \label{fig:gustafson}
 \end{table}
 
-Similarmente al cuadro anterior, podemos deducir de la Tabla \ref{fig:gustafson} que en el caso de un programa con sólo $ 10\% $ de paralelismo, al incrementar los recursos 64x sólo podemos incrementar el tamaño del problema $ 7x $. Sin embargo nos calcula
-un incremento de $ 61x $ en el caso de tener $ 95\% $ de paralelismo.
+Similarmente al cuadro anterior, podemos deducir de la Tabla \ref{fig:gustafson} que en el caso de un programa con sólo $ 10\% $ de paralelismo, al incrementar los recursos $ 64x $ sólo podemos incrementar el tamaño del problema $ 7x $. En el otro extremo, nos estima un incremento de $ 61x $ en el caso de tener $ 95\% $ de paralelismo.
 
 \subsubsection{Métrica de {\it Karp-Flatt}}
 
-Esta métrica es utilizada para medir el grado de paralelismo de una aplicación \cite{karp-flatt}. Esta métrica nos permite rápidamente estimar la mejora posible al aplicar un alto nivel de paralelismo.
+Esta métrica es utilizada para medir el grado de paralelismo de una aplicación \cite{karp-flatt}. Su valor nos permite rápidamente dimensionar la mejora posible al aplicar un alto nivel de paralelismo.
 
 \bigskip
 
@@ -242,10 +241,7 @@ procesadores, donde $ P > 1 $. La fracción serial {\it Karp-Flatt} representada
  e = \frac{\frac{1}{\psi} - \frac{1}{p}}{1 - \frac{1}{p}} 
 \end{eqnarray}
 
-Para un problema de tamaño fijo, la eficiencia típicamente disminuye cuando
-el número de procesadores aumenta. Se puede entonces determinar si esta disminución
-es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema de
-arquitectura del sistema.
+Para un problema de tamaño fijo, la eficiencia típicamente disminuye cuando el número de procesadores aumenta. Se puede entonces determinar si esta disminución es debida a un paralelismo limitado, a un algoritmo no optimizado o un problema de arquitectura del sistema.
 
 \subsection{Métricas}
 
@@ -1000,9 +996,13 @@ Este capítulo muestra la propuesta de solución, incluyendo el diseño de la mi
 
 \section{Infraestructura}
 
-{\tt bottleneck} es una aplicación escrita en C localizada en \href{github.com/moreandres/bottleneck}{github.com/moreandres/bottleneck}.
-Se utiiliza {\it GNU Plot} para la generación de gráfico y {\it GNU Scientific Library} para cálculos estadísticos. {\it Latex} se utiliza para la generación del reporte final.
+{\tt hotspot} es una aplicación escrita en Python localizada en:\\ \href{github.com/moreandres/bottleneck}{https://github.com/moreandres/hotspot}.
+Se utiliza {\it GNU Plot} para la generación de gráficos y {\it GNU Scientific Library} para cálculos estadísticos. {\it Latex} se utiliza para la generación del reporte final.
 Se depende de GCC, GNU Make, prof, gprof para obtener información relevante.
+
+\bigskip
+
+Limitaciones
 
 \section{Teoría de Operación}
 
@@ -1030,8 +1030,7 @@ Se sobrepone también la información más vieja disponible como mecanismo de va
 
 \bigskip
 
-Se detecta cuantas unidades de procesamiento hay en el sistema. Se utiliza una y luego se itera hasta utilizar todas, se ejecuta múltiples veces la aplicación y se promedia el resultado. Se sobrepone una curva ideal suponiendo {\it speedup} ideal.
-Se sobrepone también la información más vieja disponible como mecanismo de validación de las optimizaciones.
+Se detecta cuantas unidades de procesamiento hay en el sistema. Se utiliza una y luego se itera hasta utilizar todas, se ejecuta múltiples veces la aplicación y se promedia el resultado. Se sobrepone una curva ideal suponiendo {\it speedup} ideal. Se sobrepone también la información más vieja disponible como mecanismo de validación de las optimizaciones.
 
 \bigskip
 
@@ -1043,26 +1042,64 @@ Se recompila la aplicación con información extra de depuración y se obtiene i
 
 \bigskip
 
-Gráfico de secuencias.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{hotspot-seq.png}
+\caption{Diagrama de Secuencia}
+\label{fig:hotspot-seq}
+\end{center}
+\end{figure}
 
 \section{Diseño de Alto Nivel}
 
-Gráfico de componentes.
+El diseño de la infrastructura refleja la interacción manual con el programa a analizar.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{hotspot-hld.png}
+\caption{Diseño de Alto Nivel}
+\label{fig:hotspot-hld}
+\end{center}
+\end{figure}
 
 \begin{enumerate}
-\item componente1
-\item componente2
+\item Configuración, RFC 822
 \item componente3
 \end{enumerate}
 
 \section{Diseño de Bajo Nivel}
 
-Gráfico de clases.
+La infrastructura se implementa mediante una jerarquía de clases simple, fácil de extender de ser necesario.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{hotspot-lld.png}
+\caption{Diseño de Bajo Nivel}
+\label{fig:hotspot-lld}
+\end{center}
+\end{figure}
 
 \begin{enumerate}
-\item clase1, descripción, responsabilidad
-\item clase2, descripción, responsabilidad
-\item clase3, descripción, responsabilidad
+\item Singleton, descripción, responsabilidad
+\item Tags, descripción, responsabilidad
+\item Log, descripción, responsabilidad
+\item Config, descripción, responsabilidad
+\item Section, descripción, responsabilidad
+\item HardwareSection, descripción, responsabilidad
+\item ProgramSection, descripción, responsabilidad
+\item SoftwareSection, descripción, responsabilidad
+\item SanitySection, descripción, responsabilidad
+\item BenchmarkSection, descripción, responsabilidad
+\item WorkloadSection, descripción, responsabilidad
+\item ScalingSection, descripción, responsabilidad
+\item ThreadsSection, descripción, responsabilidad
+\item OptimizationSection, descripción, responsabilidad
+\item ProfileSection, descripción, responsabilidad
+\item ResourcesSection, descripción, responsabilidad
+\item AnnotatedSection, descripción, responsabilidad
+\item VectorizationSection, descripción, responsabilidad
+\item CountersSection, descripción, responsabilidad
+\item ConfigSection, descripción, responsabilidad
 \end{enumerate}
 
 \section{Reporte Generado}
