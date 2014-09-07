@@ -9,6 +9,10 @@
 \usepackage{enumitem}
 \usepackage[utf8]{inputenc}
 \usepackage{pdfpages}
+%\usepackage{times}
+%\usepackage[T1]{fontenc}
+\usepackage{graphics}
+%\usepackage[a4paper, top=3.5cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 
 \lstset{language=c, frame=tlrb, basicstyle=\scriptsize, breaklines=true, numberbychapter=false,numbers=left}
 \setlist[enumerate]{noitemsep}
@@ -990,19 +994,143 @@ queen.c:35: note: vectorized 0 loops in function.
 
 Este capítulo introduce el problema a resolver.
 
+\section{Análisis de Rendimiento}
+
+Este trabajo entonces trata de simplificar la tarea de análisis de rendimiento. Aunque es una tarea difícil de sistematizar y que muchas veces depende fuertemente de la aplicación bajo análisis, se propone un procedimiento general para ciertas aplicaciones.
+
 \chapter{Propuesta de Solución}
 
 Este capítulo muestra la propuesta de solución, incluyendo el diseño de la misma a diferentes niveles, un ejemplo de su reporte de salida y realizando casos de aplicación con aplicaciones del mundo real.
 
+\section{Procedimiento}
+
+La Figura \ref{fig:procedure} muestra a grandes rasgos las etapas del proceso.
+Primero se establece una línea base de rendimiento del sistema utilizando pruebas conocidas.
+Luego se procede a trabajar en etapas iterativas asegurando en cada paso la estabilidad de los resultados, una correcta utilización de recursos y utilizando un perfil de ejecución. Luego de optimizar y comprobar la mejora, se vuelve a empezar el ciclo.
+
+\begin{figure}[H]
+\label{fig:procedure}
+\centering
+\includegraphics[width=5cm]{procedure.png}
+\caption{Procedimiento de Análisis}
+\end{figure}
+
+\section{Paso a Paso}
+
+A continuación se muestran los pasos a realizar, junto con preguntas que guían el análisis de rendimiento de una aplicación.
+
+\subsection{Pruebas de Referencia}
+
+\begin{enumerate}
+\item Ejecutar pruebas de rendimiento sobre el sistema a utilizar para poder entender sus capacidades máximas en contraste con las teóricas.
+
+\begin{lstlisting}
+$ sudo apt-get install hpcc
+$ mpirun -n `grep -c proc /proc/cpuinfo` ./hpcc
+$ cat hpccoutf.txt
+\end{lstlisting}
+
+\begin{enumerate}
+\item ¿Los resultados reflejan las capacidades esperadas del sistema?
+\item ¿Los FLOPS se aproximan al rendimiento de un sistema similar?
+\item ¿El rendimiento es $ CORES \times CLOCK \times FLOPS/CYCLE $ ?
+\item ¿La latencia y ancho de banda de la memoria es la esperada?
+\end{enumerate}
+
+\item Comprobar variación de resultados para conocer la estabilidad de los mismos. La desviación estándar debe ser menor a 3 sigmas. Establecer cual es el promedio geométrico  a usar como referencia para comparaciones futuras.
+
+\begin{lstlisting}
+$ for i in `seq 1 32`; do /usr/bin/time -v ./app >> time.csv; done
+\end{lstlisting}
+
+\begin{enumerate}
+\item ¿Son los resultados estables?
+\item ¿La desviación estándar es menor que 3?
+\item ¿Cuál es el promedio geométrico para comparaciones futuras?
+\item ¿ Es necesario incrementar el problema para mejorar la desviación?
+\item ¿ Es posible reducir el tiempo sin afectar la desviación?
+\end{enumerate}
+
+\item Escalar el problema para dimensionar la cantidad de trabajo según el tamaño del problema.
+
+\begin{lstlisting}
+$ for size in `seq 1024 1024 10240`; do /usr/bin/time -v ./app $size >> size.log; done
+\end{lstlisting}
+
+\begin{enumerate}
+\item ¿Cuál es la relación entre el tiempo de las diferentes ejecuciones?
+\item ¿Es la relación lineal o constante?
+\end{enumerate}
+
+\item Escalar cómputo para luego calcular límite de mejoras con {\it Amdalah} y {\it Gustafson}.
+
+\begin{lstlisting}
+$ for threads in `grep -c proc /proc/cpuinfo | xargs seq 1`; do OMP_NUM_THREADS=$threads ./app >> threads.log; done
+\end{lstlisting}
+
+\begin{enumerate}
+\item ¿Cuál es la relación entre el tiempo de las diferentes ejecuciones?
+\item ¿Es la relación lineal o constante?
+\item ¿Qué porcentaje de la aplicación se estima paralelo?
+\item ¿Cual es la mejora máxima posible?
+\end{enumerate}
+
+\item Generar el perfil de llamadas a funciones dentro de la aplicación para revisar el diseño de la misma y los posibles cuellos de botella a resolver.
+
+\begin{lstlisting}
+$ gcc -g -pg app.c -o app
+$ ./app
+\end{lstlisting}
+
+\begin{lstlisting}
+$ gprof --flat-profile --graph --annotated-source app
+...
+\end{lstlisting}
+
+\begin{enumerate}
+\item ¿Cómo esta diseñada la aplicación?
+\item ¿Que dependencias en librerías externas tiene?
+\item ¿Implementa algún núcleo de cómputo conocido encuadrado dentro de librerías optimizadas como BLAS?
+\item ¿En que archivos, funciones y líneas se concentra la mayor cantidad de tiempo de cómputo?
+\end{enumerate}
+
+\item Utilizar el profiler a nivel de sistema
+
+\begin{lstlisting}
+$ prof stat ./app
+$ prof record ./app
+$ prof report
+\end{lstlisting}
+
+\begin{enumerate}
+\item ¿Cómo se comporta el sistema durante la ejecución de la aplicación?
+\item ¿Son las métricas de contadores de {\it hardware} las esperadas?
+\item ¿Es la aplicación la gran concentradora de los recursos disponibles?
+\item ¿Qué instrucciones de {\it hardware} son las utilizadas en el cuello de botella?
+\end{enumerate}
+
+\item Comprobar vectorizaciones
+
+\begin{lstlisting}
+$ gcc -Wall -Wextra -O3 --report-loop
+\end{lstlisting}
+
+\begin{enumerate}
+\item ¿Hay ciclos que no pueden ser automáticamente vectorizados?
+\end{enumerate}
+
+\end{enumerate}
+
 \section{Infraestructura}
 
-{\tt hotspot} es una aplicación escrita en Python localizada en:\\ \href{github.com/moreandres/bottleneck}{https://github.com/moreandres/hotspot}.
-Se utiliza {\it GNU Plot} para la generación de gráficos y {\it GNU Scientific Library} para cálculos estadísticos. {\it Latex} se utiliza para la generación del reporte final.
-Se depende de GCC, GNU Make, prof, gprof para obtener información relevante.
+El procedimiento anterior se implementó como una infrastructura automática de generacion de reportes de rendimiento denominada 
+{\tt hotspot}. \footnote{El proyecto {\tt hotspot} está disponible en \href{https://github.com/moreandres/hotspot}{https://github.com/moreandres/hotspot}}.
+{\it Latex} se utiliza para la generación del reporte final.
+Se depende de utilidades como GCC, GNU Make, prof, gprof, pidstat para obtener la información relevante.
 
 \bigskip
 
-Limitaciones
+Las limitaciones {\it a-priori} que posee la infrastructura son en materia de portabilidad y aplicación. Por el lado de la portabilidad, solo se soportan sistemas GNU/Linux recientes, siendo necesarias un conjunto de utilidades de soporte específicas. Por el lado de la aplicación, solo se soportan programan utilizando tecnología OpenMP multi-hilo.
 
 \section{Teoría de Operación}
 
@@ -1011,7 +1139,55 @@ Esta sección detalla el funcionamiento de la infraestructura relacionando los c
 \bigskip
 
 La herramienta de linea de comando toma como parámetro principal el binario de la aplicación a analizar. Asume por defecto que la aplicación esta construida utilizando Makefile de la forma usual, ya que para algunos pasos de análisis se necesita recompilar la aplicación con información extra de depuración.
+En el caso de que no sea así, el archivo de configuración permite la definición de tareas como configuración, compilacion y ejecución del programa.
+
 Otros parámetros necesarios son los datos del rango de tamaños de problema a utilizar, asumidos como {\tt seq(1)}.
+
+\begin{lstlisting}[language=bash, caption={ayuda hotspot}, label={lst:hotspot-help}]
+$ hotspot --help
+usage: hotspot [-h] [-v] [--config CONFIG] [--debug]
+
+Generate performance report for OpenMP programs.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  --config CONFIG, -c CONFIG
+                        path to configuration
+  --debug, -d           enable verbose logging
+
+Check https://github.com/moreandres/hotspot for details.
+$ hotspot
+\end{lstlisting}
+
+\bigskip
+
+\begin{lstlisting}[language=bash, caption={configuración hotspot}, label={lst:hotspot-config}]
+# hotspot configuration file
+
+[hotspot]
+
+# python format method is used to pass parameters
+
+# range is a seq-like definition for problem size
+range=1024,2048,256
+
+# cflags are the compiler flags to use when building
+cflags=-O3 -Wall -Wextra
+
+# build is the command used to build the program
+build=CFLAGS='{0}' make
+
+# clean is the cleanup command to execute
+clean=make clean
+
+# run is the program execution command
+run=OMP_NUM_THREADS={0} N={1} ./{2}
+
+# count is the number of runs to check workload stabilization
+count=16
+\end{lstlisting}
+
 
 \bigskip
 
@@ -1151,9 +1327,32 @@ Esta sección incluye los resultados obtenidos al aplicar la infrastructura a n�
 
 \subsection{Matrix}
 
+La multiplicación de matrices es una operación fundamental en múltiples campos de aplicación científica como la resolución de ecuaciones lineales y la representación de grafos y espacios dimensionales. Por ello existe abundante material sobre el tema. Tomando como ejemplo una implementación utilizando OpenMP \footnote{\href{http://blog.speedgocomputing.com/2010/08/parallelizing-matrix-multiplication.html}{http://blog.speedgocomputing.com/2010/08/parallelizing-matrix-multiplication.html}.}
+
+\bigskip
+
+El reporte generado en bruto puede consultarse en el apéndice A.
+
 \subsection{Heat2d}
 
+Otro problema interesante es la simulación de transferencia de calor en un plano.
+Se utiliza una grilla donde cada celda transfiere calor a sus vecinos en una serie de ciclos finitas simulando el paso del tiempo \footnote{\href{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}.}.
+
+\bigskip
+
+El reporte generado en bruto puede consultarse en el apéndice B.
+
 \subsection{8 Queens}
+
+El dilema trata en el problema de posicionar en un tablero de ajedrez ocho
+reinas sin que alguna amenace a las demás. Una reina amenaza a cualquier otra
+pieza en el tablero que este en la mismo diagonal, fila o columna.
+
+El problema de encontrar todas las soluciones para un tamaño de tablero dado suele resolverse utilizando recursión \footnote{\href{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}.}.
+
+\bigskip
+
+El reporte generado en brute puede consultarse en el apéndice C.
 
 \section{Código del Mundo Real}
 
@@ -1180,11 +1379,19 @@ Este capítulo concluye revisando los objetivos propuestos y posibles líneas de
 
 \section{Conclusiones}
 
-Objetivos completados.
+Se desarrollo como esta planeado una infrastructura de soporte que permite a un desarrollador especialista en el dominio de un problema obtener rapidamente  información cuantitativa del comportamiento de un programa OpenMP, incluyendo utilización del recurso y cuellos de botella.
 
 \section{Trabajo Futuro}
 
-Doctorado. Run-time. Dinámico.
+Las posibilidades de extensión de esta infrastructura son muchas, cada sección del reporte final puede incluir información más detallada o utilizar otras herramientas. En particular la sección de contadores de {\it hardware} solo contiene una lista de contadores generalizada para cualquier arquitectura; si se supone una arquitectura dada se puede proveer información más especifica y por lo tanto más útil.
+
+\bigskip
+
+Otra posibilidad consiste en incorporar soporte para programas basados sobre la libreria de comunicacion MPI. Una vez que los programas son optimizados para ejecutarse eficientemente sobre una arquitectura multicore, el siguiente paso consiste en utilizar varios sistemas multicore al unísono.
+
+\bigskip
+
+Por último, aunque la generación de un documento portable en formate PDF es simple y útil, se puede pensar en utilizar una tecnología que permita la generacion de reportes dinámicos que permitan a los expertos extraer información. Una implementación en HTML5 utilizando tablas filtrables y gráficos configurables puede ser interesante y causar gran impacto.
 
 \bibliography{report}
 
@@ -1192,6 +1399,13 @@ Doctorado. Run-time. Dinámico.
 
 \chapter{Reporte de Ejemplo}
 
+\section{Multiplicación de Matrices}
+% \includepdf[frame=true, pages=-, scale=0.8]{sample.pdf}
+
+\section{Propagación de Calor en 2 Dimensiones}
+% \includepdf[frame=true, pages=-, scale=0.8]{sample.pdf}
+
+\section{Problema de las 8 Reinas}
 % \includepdf[frame=true, pages=-, scale=0.8]{sample.pdf}
 
 \end{document}
