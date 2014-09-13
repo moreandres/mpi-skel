@@ -9,10 +9,7 @@
 \usepackage{enumitem}
 \usepackage[utf8]{inputenc}
 \usepackage{pdfpages}
-%\usepackage{times}
-%\usepackage[T1]{fontenc}
 \usepackage{graphics}
-%\usepackage[a4paper, top=3.5cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 
 \lstset{language=c, frame=tlrb, basicstyle=\scriptsize, breaklines=true, numberbychapter=false,numbers=left}
 \setlist[enumerate]{noitemsep}
@@ -1256,20 +1253,20 @@ La infrastructura se implementa mediante una jerarquía de clases simple, fácil
 \end{figure}
 
 \begin{enumerate}
-\item Singleton, descripción, responsabilidad
-\item Tags, descripción, responsabilidad
-\item Log, descripción, responsabilidad
-\item Config, descripción, responsabilidad
-\item Section, descripción, responsabilidad
-\item HardwareSection, descripción, responsabilidad
-\item ProgramSection, descripción, responsabilidad
-\item SoftwareSection, descripción, responsabilidad
-\item SanitySection, descripción, responsabilidad
-\item BenchmarkSection, descripción, responsabilidad
-\item WorkloadSection, descripción, responsabilidad
-\item ScalingSection, descripción, responsabilidad
-\item ThreadsSection, descripción, responsabilidad
-\item OptimizationSection, descripción, responsabilidad
+\item Singleton, Patrón de Instancia Única, Es utilizado por otras clases para garantizar que solo existe una instancia única.
+\item Tags, Almacenamiento de Palabras Clave, Es utilizado para guardar palabras clave que son utilizadas para generar el reporte.
+\item Log, Generador de Mensajes, Es utilizado para estructurar los mensajes durante la ejecución.
+\item Config, Administración de la Configuracion, Es utilizado para consultar la configuración de cada programación.
+\item Section, Sección de Reporte, Es utilizado como base de otras secciones.
+\item HardwareSection, Sección sobre {\it Hardware}, Es utilizado para obtener información del {\it hardware} disponible.
+\item ProgramSection, Sección sobre el Programa, Es utilizado para obtener información del programa a analizar.
+\item SoftwareSection, Sección sobre {\it Software}, Es utilizado para obtener información del {\it software} disponible.
+\item SanitySection, Chequeo Base, Es utilizado para comprobaciones básicas del programa.
+\item BenchmarkSection, Pruebas de Rendimiento, Es utilizada para obtener información de rendimiento.
+\item WorkloadSection, Caso de Prueba, Es utilizada para obtener información del caso de prueba.
+\item ScalingSection, Escalamiento de Problema, Es utilizada para entender como escala el tamaño del problema.
+\item ThreadsSection, Seccion sobre Hilos, Es utilizada para entender como escalan los hilos.
+\item OptimizationSection, Seccion sobre Optimización.
 \item ProfileSection, descripción, responsabilidad
 \item ResourcesSection, descripción, responsabilidad
 \item AnnotatedSection, descripción, responsabilidad
@@ -1381,6 +1378,30 @@ Este capítulo concluye revisando los objetivos propuestos y posibles líneas de
 
 Se desarrollo como esta planeado una infrastructura de soporte que permite a un desarrollador especialista en el dominio de un problema obtener rapidamente  información cuantitativa del comportamiento de un programa OpenMP, incluyendo utilización del recurso y cuellos de botella.
 
+\bigskip
+
+La optimización del rendimiento de una aplicación es algo no trivial.
+Es preciso realizar un análisis disciplinado del comportamiento y del uso de los recursos antes de
+empezar a optimizar. Las mejoras pueden ser no significativas si son realizadas en el lugar incorrecto.
+
+\bigskip
+
+Este trabajo soporta los primeros pasos de análisis de rendimiento para expertos del dominio de un problema científico utilizando computación de altas prestaciones. Se provee una metodología de uso de herramientas de soporte para principiantes, que puede ser utilizada como una lista de pasos resumidos para usuarios casuales, e incluso como referencia de consulta diaria para expertos.
+
+\bigskip
+
+Se resume también el estado del arte del análisis de rendimiento en
+aplicaciones de cómputo de altas prestaciones. Respecto a herramientas de soporte, se detallan
+diferentes opciones y se demuestra su aplicación en varios problemas simples aunque suficientemente interesantes. 
+Este estudio propone un proceso de análisis de rendimiento gradual e iterativo que
+puede ser tomado como trabajo previo de una implementación práctica del mismo. Es decir
+incluyendo soporte automático para la aplicación de las herramientas y la generación integrada de
+reportes de rendimiento. La utilización de estas ideas en una aplicación del mundo real es materia
+pendiente, otra posibilidad es re-implementar desde cero alguna aplicación
+científica en colaboración con algún grupo de investigación y realizar
+varios ciclos de optimización para validar su utilidad.
+
+
 \section{Trabajo Futuro}
 
 Las posibilidades de extensión de esta infrastructura son muchas, cada sección del reporte final puede incluir información más detallada o utilizar otras herramientas. En particular la sección de contadores de {\it hardware} solo contiene una lista de contadores generalizada para cualquier arquitectura; si se supone una arquitectura dada se puede proveer información más especifica y por lo tanto más útil.
@@ -1388,6 +1409,10 @@ Las posibilidades de extensión de esta infrastructura son muchas, cada sección
 \bigskip
 
 Otra posibilidad consiste en incorporar soporte para programas basados sobre la libreria de comunicacion MPI. Una vez que los programas son optimizados para ejecutarse eficientemente sobre una arquitectura multicore, el siguiente paso consiste en utilizar varios sistemas multicore al unísono.
+
+\bigskip
+
+Las herramientas y procedimientos ya integrados solo utilizan el programa ya compilado para obtener información. Existen tecnicas de analisis de rendimiento o de calidad de software que necesitan acceso al codigo fuente. Analisis estatico de código. Ejecucion simbólica. cppcheck. clint. klocwork. coverity.
 
 \bigskip
 
@@ -1400,12 +1425,12 @@ Por último, aunque la generación de un documento portable en formate PDF es si
 \chapter{Reporte de Ejemplo}
 
 \section{Multiplicación de Matrices}
-% \includepdf[frame=true, pages=-, scale=0.8]{sample.pdf}
+\includepdf[frame=true, pages=-, scale=0.75, pagecommand={}]{matrix.pdf}
 
 \section{Propagación de Calor en 2 Dimensiones}
-% \includepdf[frame=true, pages=-, scale=0.8]{sample.pdf}
+\includepdf[frame=true, pages=-, scale=0.75, pagecommand={}]{heat2d.pdf}
 
-\section{Problema de las 8 Reinas}
-% \includepdf[frame=true, pages=-, scale=0.8]{sample.pdf}
+\section{Mandel}
+\includepdf[frame=true, pages=-, scale=0.75, pagecommand={}]{mandel.pdf}
 
 \end{document}
