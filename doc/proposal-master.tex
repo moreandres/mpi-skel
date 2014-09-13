@@ -26,7 +26,7 @@ Facultad de Informática\\
 \author{Tesista: Andrés More - {\tt amore@hal.famaf.unc.edu.ar}\\
 Director: Dr. Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}}
 
-\date{Noviembre de 2013}
+\date{Noviembre de 2014}
 
 \maketitle
 
@@ -82,23 +82,16 @@ Las pruebas de rendimiento proveen una línea base de comparación sobre las cap
 
 \item[Aplicación general de herramientas de perfil de ejecución:]
 
-Un perfil de ejecución de una aplicación permite conocer su comportamiento interno, identificando que partes necesitan ser optimizadas. El perfil puede ser construido utilizando instrumentación del código e incluso utilizando soporte de contadores de {\it hardware}.
+Un perfil de ejecución de una aplicación permite conocer su comportamiento interno, identificando que partes necesitan ser optimizadas. El perfil puede ser construido utilizando instrumentación del código e incluso utilizando soporte de contadores de {\it hardware}. Los contadores a nivel de {\it hardware} ofrecen mayor precisión, evitan errores de muestreos y producen menor sobrecarga que instrumentar {\it software}.
+Las herramientas candidatas a utilizar para obtener esta información son {\it gprof} y {\it perf}.
 
 \item[Generación de gráficos de rendimiento:]
 
-Los gráficos facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución permite entender escalamiento de una aplicación.
-
-\item[Análisis diferencial de rendimiento:]
-
-La comparación histórica de resultados permite corroborar los resultados de las diferentes optimizaciones.
+Los gráficos facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución permite entender escalamiento de una aplicación. Para la generación de gráficos se planea utilizar la libreria {\it mathplotlib}.
 
 \item[Optimización guiada por perfil de ejecución:]
 
-La mayoría de los compiladores actuales permiten utilizar información de una ejecución previa para optimizar el acceso a instrucciones en cache de instrucciones y datos en sus diferentes niveles.
-
-\item[Monitorización utilizando Contadores de Eventos en Hardware:]
-
-Los contadores a nivel de {\it hardware} ofrecen mayor precisión, evitan errores de muestreos y producen menor sobrecarga que instrumentar {\it software}.
+La mayoría de los compiladores actuales permiten utilizar información de una ejecución previa para optimizar el acceso a instrucciones en cache de instrucciones y datos en sus diferentes niveles. Para obtener esta información se planea utilizar opciones avanzadas del compilador {\it gcc}.
 
 \item[Generación de reportes:]
 
