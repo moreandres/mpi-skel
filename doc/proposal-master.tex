@@ -42,10 +42,7 @@ La infraestructura a desarrollar implementará un procedimiento sistemático de 
 
 \section{Motivación/Estado del Arte del Tema}
 
-En el área de HPC los programadores son los mismos especialistas del dominio del problema a resolver. Las rutinas
-más demandantes de cálculo son en su mayoría científicas y su alta complejidad hace posible su correcta implementación sólo por los mismos investigadores. Estas cuestiones resultan en un tiempo reducido de optimización de rendimiento
-e impactan directamente en la productividad de los grupos de investigación y desarrollo. Frecuentemente el proceso de optimización termina siendo hecho de modo {\it ad-hoc}, sin la utilización de información cuantitativa para dirigir los
-esfuerzos de mejora.
+En el área de HPC los programadores son los mismos especialistas del dominio del problema a resolver. Las rutinas más demandantes de cálculo son en su mayoría científicas y su alta complejidad hace posible su correcta implementación sólo por los mismos investigadores. Estas cuestiones resultan en un tiempo reducido de optimización de rendimiento e impactan directamente en la productividad de los grupos de investigación y desarrollo. Frecuentemente el proceso de optimización termina siendo hecho de modo {\it ad-hoc}, sin la utilización de información cuantitativa para dirigir los esfuerzos de mejora.
 
 \bigskip
 
@@ -78,24 +75,20 @@ Esta sección contiene una lista inicial de los temas a trabajar:
 \begin{description}
 \item[Configuración y ejecución de pruebas de referencia:]
 
-Las pruebas de rendimiento proveen una línea base de comparación sobre las capacidades de los diferentes componentes de un sistema de cómputo, ya sea aislados o trabajando en conjunto. Las principales candidatas son {\it HPCC} y {\it HPL}.
+Las pruebas de rendimiento proveen una línea base de comparación sobre las capacidades de los diferentes componentes de un sistema de cómputo, ya sea aislados o trabajando en conjunto. Las principales candidatas son {\it HPC Challenge Benchmark (HPCC)} y {\it High Performance Linpack (HPL)}. HPCC incluye un conjunto de pruebas que sintetizan diferentes casos de uso del mundo real.  HPL mide el poder de cómputo en la cantidad de operaciones de número flotante que un sistema realiza al resolver un sistema linear de ecuaciones. Aunque HPCC es la que brinda información más completa y variada, HPL es utilizada mundialmente para comparar el rendimiento de diferentes sistemas.
 
 \item[Aplicación general de herramientas de perfil de ejecución:]
 
 Un perfil de ejecución de una aplicación permite conocer su comportamiento interno, identificando que partes necesitan ser optimizadas. El perfil puede ser construido utilizando instrumentación del código e incluso utilizando soporte de contadores de {\it hardware}. Los contadores a nivel de {\it hardware} ofrecen mayor precisión, evitan errores de muestreos y producen menor sobrecarga que instrumentar {\it software}.
-Las herramientas candidatas a utilizar para obtener esta información son {\it gprof} y {\it perf}.
+Las herramientas candidatas a utilizar para obtener esta información son {\it GNU gprof} y {\it perf}. GNU gprof es una herramienta de instrumentación y muestreo que introduce código durante la compilación para obtener información de rendimiento. {\it Performance Counters for Linux (perf)} es una herramienta de análisis estadístico de rendimiento a nivel de sistema, en particular utilizando contadores de {\it hardware} a nivel de CPU.
 
 \item[Generación de gráficos de rendimiento:]
 
-Los gráficos facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución permite entender escalamiento de una aplicación. Para la generación de gráficos se planea utilizar la libreria {\it mathplotlib}.
-
-\item[Optimización guiada por perfil de ejecución:]
-
-La mayoría de los compiladores actuales permiten utilizar información de una ejecución previa para optimizar el acceso a instrucciones en cache de instrucciones y datos en sus diferentes niveles. Para obtener esta información se planea utilizar opciones avanzadas del compilador {\it gcc}.
+Los gráficos facilitan el análisis y modelado del comportamiento de una aplicación. Por ejemplo: un histograma de la distribución de resultados permite entender la desviación de los mismos, un gráfico histórico comparando diferentes versiones de una aplicación permite comprobar mejoras, un gráfico de tiempos de ejecución permite entender escalamiento de una aplicación. Para la generación de gráficos se planea utilizar la librería {\it matplotlib}.
 
 \item[Generación de reportes:]
 
-Como soporte para el análisis de rendimiento, se incluye como resultado final un reporte integral con información de referencia, datos de perfil de ejecución y gráficos de rendimiento. Identificando problemas y áreas de mejora potenciales.
+Como soporte para el análisis de rendimiento, se incluye como resultado final un reporte integral con información de referencia, datos de perfil de ejecución y gráficos de rendimiento. Identificando problemas y áreas de mejora potenciales. 
 
 \end{description}
 
@@ -121,6 +114,28 @@ La tarea de optimización y paralelización entonces es realizada manualmente, u
 
 \bigskip
 
+Las secciones ya identificadas a incluir en el reporte de salida son las siguientes:
+
+\begin{description}
+\item[Información de Hardware:] modelo de CPU, cantidad de unidades de procesamiento, composición de la memoria del sistema (Cache y RAM).
+\item[Información del Programa:] nombre, ubicación, parámetros de entrada, pasos de compilación.
+\item[Informacion de Software:] núcleo del sistema, librerías principales
+\item[Sanidad del Programa:] resultado de una ejecución rápida
+\item[Footprint del Programa:] tamaño del programa, analisis de las estructuras que lo componen
+\item[Pruebas de Rendimiento:] resultados de la ejecución de HPCC y HPL
+\item[Caso de Prueba:] histograma con los tiempos de ejecución de múltiples ejecuciones.
+\item[Escalamiento del Problema:] gráficos de escalamiento de unidades de computo y de tamaño del problema.
+\item[Optimizaciones:] grafico comparando el comportamiento del programa bajo diferentes niveles de optimización en el compilador.
+\item[Perfil de Rendimiento:] perfil del programa incluyendo el tiempo de ejecución mapeado al código fuente.
+\item[Utilización de Recursos:] perfil del uso de los recursos del sistema como memoria, CPU y entrada/salida.
+\item[Código Anotado:] código fuente asociado a instrucciones de hardware utilizadas y su impacto en la ejecución global.
+\item[Vectorizaciones:] reporte de vectorización de ciclos de cómputo.
+\item[Contadores de Hardware:] reporte generico del estado de lo contadores de hardware.
+\end{description}
+
+
+\bigskip
+
 Una vez paralelizado una aplicación, los métodos usuales de optimización a bajo nivel son los siguientes:
 
 \begin{description}
@@ -140,14 +155,14 @@ El siguiente cronograma muestra el plan de actividades tentativo incluyendo acti
   \centering
     \begin{tabular}{|l|l|}\hline
       {\bf Actividad} & {\bf Duración} \\ \hline
-	Estado del Arte & Noviembre \\ \hline
+      Estado del Arte & Noviembre \\ \hline
       Diseño de Alto Nivel & Diciembre \\ \hline
-      Prototipo & Enero-Febrero \\ \hline
-      Pruebas de Rendimiento & Marzo \\ \hline
-      Cálculo de Leyes & Abril \\ \hline
-      Perfil de Rendimiento & Mayo-Junio-Julio \\ \hline
-      Eventos y Vectorización & Agosto \\ \hline
-      Documentación Tesis & Septiembre-Octubre \\ \hline
+      Prototipo & Enero \\ \hline
+      Pruebas de Rendimiento & Febrero \\ \hline
+      Cálculo de Leyes & Marzo \\ \hline
+      Perfil de Rendimiento & Abril \\ \hline
+      Eventos y Vectorización & Mayo \\ \hline
+      Documentación Tesis & Junio \\ \hline
     \end{tabular}
   \label{schedule}
 \end{table}
@@ -155,8 +170,7 @@ El siguiente cronograma muestra el plan de actividades tentativo incluyendo acti
 \section{Posibilidades de Realización}
 
 El alumno tiene a su disposición acceso al equipamiento necesario como parte de su ámbito laboral.
-El alumno trabaja como Ingeniero en Software en {\it Argentina Software Design Center} (ASDC - Intel Córdoba); también
-como docente e investigador en el Instituto Universitario Aeronáutico dictando tanto cursos de grado (Cómputo de Altas Prestaciones) como postgrado (Implementación de Sistemas Operativos).
+El alumno trabaja como Ingeniero en Software en {\it Argentina Software Design Center} (ASDC - Intel Córdoba); también como docente e investigador en el Instituto Universitario Aeronáutico dictando tanto cursos de grado (Cómputo de Altas Prestaciones) como postgrado (Implementación de Sistemas Operativos).
 
 \section{Bibliografía Básica Relacionada}
 
