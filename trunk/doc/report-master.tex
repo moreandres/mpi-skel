@@ -37,11 +37,11 @@
 
 \begin{abstract}
 
-En el área del cómputo de altas prestaciones las aplicaciones son construidas por especialistas del dominio del problema, no siempre expertos en análisis de rendimiento y optimización.
+En el área del cómputo de altas prestaciones las aplicaciones son construidas por especialistas del dominio del problema, no siempre expertos en optimización de rendimiento. Se identifica entonces la necesidad de una infrastructura automática para soportar el análisis de rendimiento.
 
 \bigskip
 
-Este trabajo revisa la construcción de una infraestructura que simplifica el análisis de rendimiento; incluyendo casos de estudio con aplicaciones del mundo real como etapa de validación. El objetivo es facilitar la tarea evitando la recolección de datos relevantes de modo manual, permitiendo más tiempo de experimentación y análisis.
+Este trabajo revisa la construcción de una infraestructura que simplifica el análisis de rendimiento; incluyendo casos de estudio como etapa de validación. El objetivo es facilitar la tarea evitando la tediosa recolección de datos relevantes de modo manual, permitiendo más tiempo de experimentación y análisis.
 
 \bigskip
 
@@ -60,7 +60,7 @@ Este capítulo introduce el tema bajo estudio, definiendo los objetivos principa
 En el área de cómputo de altas prestaciones los desarrolladores son los mismos
 especialistas del dominio del problema a resolver. Las rutinas
 más demandantes de cálculo son en su mayoría científicas y su
-alta complejidad hace posible su correcta implementación sólo por los mismos investigadores.
+gran complejidad hace posible su correcta implementación sólo por los mismos investigadores.
 Estas cuestiones resultan en un tiempo reducido de análisis de resultados
 e impactan directamente en la productividad de los grupos de investigación y
 desarrollo.
@@ -85,24 +85,24 @@ profundamente y con correctitud comprobada.
 
 \section{Objetivos}
 
-La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de cómputo de altas prestaciones ({\it HPC}, por sus siglas en inglés). Este trabajo se realiza como extensión al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
+La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de cómputo de altas prestaciones ({\it HPC}, por las siglas en inglés de {\it High Performance Computing}). Este trabajo se realiza como extensión al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
 
 \bigskip
 
-La infraestructura desarrollada implementa un procedimiento de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y análisis de resultados. La infraestructura genera como etapa final un informe detallado que soporta la tarea de optimización con información cuantitativa.
-El reporte final incluye datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación de resultados, escalamiento de problema y cómputo e identificación de cuellos de botella.
+La infraestructura desarrollada implementa un procedimiento de análisis de rendimiento ejecutando pruebas de referencia, herramientas de perfil de rendimiento y graficación de resultados. La infraestructura genera como etapa final un informe detallado que soporta la tarea de optimización con información cuantitativa.
+El reporte final incluye datos estadísticos de la aplicación y el sistema donde se ejecuta, además de gráficos de desviación de resultados, escalamiento de problema y cómputo, e identificación de cuellos de botella.
 
 \section{Contribuciones}
 
 La siguiente lista enumera las diferentes publicaciones realizadas durante el cursado del magister y el desarrollo de la tesis.
 
 \begin{enumerate}
-\item Estudio de Multiplicación de Matrices. Reporte Técnico. Realizado como parte del curso {\it Fundamentos de Procesamiento Paralelo} dictado por el Dr {\it Fernando Tinetti Laiouf}.
-\item Articulo {\it Optimizing Latency in Beowulf Clusters}. HPC Latam 2012.
+\item Estudio de Multiplicación de Matrices. Reporte Técnico. Realizado como parte del curso {\it Fundamentos de Procesamiento Paralelo} dictado por el Dr {\it Marcelo Naiouf} \cite{mm-tool}.
+\item Articulo {\it Optimizing Latency in Beowulf Clusters}. HPC Latam 2012 \cite{latency}.
 \item Comparación de Implementaciones de una Operación BLAS. Reporte Técnico. Realizado como parte del curso {\it Programación GPU de Propósito General} dictado por la Dra {\it Margarita Amor}.
-\item Sección {\it Intel Cluster Ready} y {\it Intel Cluster Checker} en el libro {\it Programming Intel Xeon Phi}. Intel Press. 2013.
-\item Reseña del Libro {\it Intel Xeon Phi Coprocessor High Performance Programming} - JCS\&T Vol 13 N 2 Octubre 2013.
-\item Articulo {\it Lessons learned from contrasting BLAS kernel implementations} - XIII Workshop Procesamiento Distribuido y Paralelo (WPDP), 2013.
+\item Sección {\it Intel Cluster Ready} e {\it Intel Cluster Checker} en el libro {\it Programming Intel Xeon Phi}. Intel Press. 2013 \cite{xeonphi}.
+\item Reseña del Libro {\it Intel Xeon Phi Coprocessor High Performance Programming} - JCS\&T Vol 13 N 2 Octubre 2013 \footnote{\href{http://journal.info.unlp.edu.ar/journal/journal36/papers/JCST-Oct13-BR1.pdf}{JCS\&T Vol. 13 No. 2}}.
+\item Articulo {\it Lessons learned from contrasting BLAS kernel implementations} - XIII Workshop Procesamiento Distribuido y Paralelo (WPDP), 2013 \cite{lessons}.
 \end{enumerate}
 
 \section{Metodología}
@@ -110,10 +110,9 @@ La siguiente lista enumera las diferentes publicaciones realizadas durante el cu
 En base al problema y a los objetivos establecidos previamente, la metodología adoptada es la siguiente:
 
 \begin{enumerate}
-\item Dado el procedimiento propuesto anteriormente, automatizarlo y analizar potenciales mejoras hacia generalidad y utilidad.
-\item Identificar que tipos de gráficos y tablas pueden resumir la información obtenida y facilitar su utilización.
-\item Utilizar la infraestructura generando reportes de núcleos de cómputo conocidos para poder focalizar los esfuerzos en la mejora del reporte.
-\item Por último, probar con aplicaciones del mundo real y verificar que la información reunida es útil para el análisis del rendimiento.
+\item Dado una propuesta de procedimiento sistemático de análisis de rendimiento, automatizarlo y analizar potenciales mejoras de utilidad.
+\item Identificar que tipos de gráficos y tablas pueden resumir la información obtenida de modo de facilitar su utilización.
+\item Aplicar la infraestructura sobre núcleos de cómputo conocidos para poder focalizar los esfuerzos en la mejora del reporte.
 \end{enumerate}
 
 \section{Estructura}
@@ -121,21 +120,21 @@ En base al problema y a los objetivos establecidos previamente, la metodología 
 El resto del documento se estructura de la siguiente forma:
 
 \begin{itemize}
-\item Capitulo 2: revisa el estado del arte de los temas incluidos.
-\item Capitulo 3: describe el problema a resolver.
-\item Capitulo 4: muestra la propuesta de solución.
-\item Capitulo 5: aplica la solución a casos de estudio.
-\item Capítulo 6: concluye reflejando los objetivos y proponiendo trabajo futuro.
+\item Capitulo \ref{Estado del Arte}: revisa el estado del arte de los temas incluidos.
+\item Capitulo \ref{Descripcion del Problema}: describe el problema a resolver.
+\item Capitulo \ref{Propuesta de Solucion}: muestra la propuesta de solución.
+\item Capitulo \ref{Casos de Aplicacion}: aplica la solución a casos de estudio.
+\item Capítulo \ref{Conclusiones y Trabajo Futuro}: concluye reflejando los objetivos y proponiendo trabajo futuro.
 \end{itemize}
 
-\chapter{Estado del Arte}
+\chapter{Estado del Arte} \label{Estado del Arte}
 
-Este capítulo revisa el estado del arte de los temas relevantes a esta tesis.
+Este capítulo revisa el estado del arte de los temas relevantes a este trabajo.
 
 \section{Análisis de Rendimiento}\label{chapter:analysis}
 
 Este capítulo introduce el concepto de rendimiento y teoría básica sobre su análisis.
-Además ejemplifica las actividades a realizar durante el análisis.
+Además revisa las herramientas disponibles.
 
 \subsection{Definición}
 
@@ -175,7 +174,7 @@ S = \frac{1}{(1 - P) + \frac{P}{N}}
 
 Esta ley nos establece que incluso teniendo infinitas unidades de cómputo la ganancia está limitada.
 La Tabla \ref{fig:amdahl} muestra que no importa la cantidad de unidades de
-procesamiento que sean utilizadas.
+procesamiento que sean utilizadas existe un límite en la práctica.
 
 \begin{table}[H]
 \caption{Mejora Máxima}
@@ -185,18 +184,13 @@ procesamiento que sean utilizadas.
 \label{fig:amdahl}
 \end{table}
 
-Por ejemplo, en el caso de tener solo un $ 10\% $ de paralelismo
+Por ejemplo, en el caso de tener sólo un $ 10\% $ de paralelismo
 en una aplicación, la mejora nunca va a superar $ 1.10x $ la original.
-En el caso de tener un $ 95\% $, la mejora no puede ser mayor a $ 20x $.
+En el caso de tener un $ 95\% $ de paralelismo, la mejora no puede ser mayor a $ 20x $ la original.
 
 \bigskip
 
-En el caso de conocer los tiempos de ejecución para distinto número de procesadores, la porción serial/paralelo puede ser aproximada mediante la siguiente ecuación:
-
-\begin{equation}
-P = TBD1
-S = TBD2
-\end{equation}
+En el caso de conocer los tiempos de ejecución para distinto número de procesadores, la porción serial/paralelo puede ser aproximada.
 
 \subsubsection{Ley de {\it Gustafson}}
 
@@ -338,9 +332,13 @@ Actualmente existen numerosas y diversas herramientas para el análisis de rendi
 Las pruebas de rendimiento como STREAM, HPL, IMB Ping Pong y HPCC permiten conocer el estado del sistema y los límites de rendimiento en la práctica.
 Los perfiles de ejecución de aplicaciones y sistema permiten conocer como se utilizan los recursos del sistema para llevar a cabo las instrucciones de cada programa.
 
+\bigskip
+
+En este trabajo se ha limitado el alcance a herramientas de código abierto.
+
 \subsection{Pruebas de Rendimiento}
 
-Para medir el rendimiento se utilizan pruebas de referencia ({\em benchmarks}); éstas pueden ser aplicaciones sintéticas construidas específicamente, o bien aplicaciones del mundo real computando un problema prefijado. Al tener valores de referencia se pueden caracterizar los sistemas de modo de predecir el rendimiento de una aplicación.
+Para medir el rendimiento se utilizan pruebas de referencia (en inglés, {\em benchmarks}); éstas pueden ser aplicaciones sintéticas construidas específicamente, o bien aplicaciones del mundo real computando un problema prefijado. Al tener valores de referencia se pueden caracterizar los sistemas de modo de predecir el rendimiento de una aplicación.
 Los valores a los que se llegan con un {\it benchmark} suelen ser más prácticos y
 comparables que los teóricos de acuerdo a condiciones ideales de uso de recursos.
 También es posible garantizar que el sistema sigue en un mismo estado con el correr
@@ -696,7 +694,7 @@ End of HPC Challenge tests.
 \end{verbatim}
 }
 
-\subsection{Herramientas}
+\subsection{Utilización de las Herramientas}
 
 Se recomienda un proceso de aplicación gradual empezando por herramientas generales de alto nivel que analizan la aplicación como un todo; terminando con herramientas de bajo nivel que proveen detalles complejos de granularidad más fina en partes específicas del código. Esto permite ir analizando el rendimiento sin tener que enfrentar la dificultad de un análisis complejo y extensivo desde un principio. Una lista de las herramientas más conocidas se muestra en la Tabla \ref{table:tooling}.
 
@@ -722,8 +720,8 @@ A grandes rasgos el procedimiento es el siguiente:
 
 \item Se establece una línea de comparación al ejecutar una prueba de rendimiento del sistema, {\it HPCC} brinda un conjunto de métricas muy completo. 
 
-\item Se utilizan herramientas para medir el tiempo de ejecución de la aplicación sobre diferentes escenarios. time permite una ejecución directa sin modificación de código, {\tt gettimeofday()} requiere modificación de código pero puede ser utilizados con mayor libertad dentro de la aplicación.  
-En el caso de estar utilizando la librería MPI {\tt MPI\_WTime()} y la herramienta VAMPIR\footnote{\href{http://www.vampir.eu}{http://www.vampir.eu}} proveen soporte específico para análisis de rendimiento.
+\item Se utilizan herramientas para medir el tiempo de ejecución de la aplicación sobre diferentes escenarios. {\tt time} permite una ejecución directa sin modificación de código, {\tt gettimeofday()} requiere modificación de código pero puede ser utilizados con mayor libertad dentro de la aplicación.  
+En el caso de estar utilizando la librería MPI, {\tt MPI\_WTime()} y la herramienta VAMPIR\footnote{\href{http://www.vampir.eu}{http://www.vampir.eu}} proveen soporte específico para análisis de rendimiento.
 
 \item Se dimensiona el comportamiento de la aplicación mediante un perfil de ejecución y un análisis de cuello de botella utilizando {\tt gprof}. 
 
@@ -987,21 +985,57 @@ queen.c:22: note: vectorized 0 loops in function.
 queen.c:35: note: vectorized 0 loops in function.
 \end{lstlisting}
 
-\chapter{Descripción del Problema}
+\chapter{Descripción del Problema} \label{Descripcion del Problema}
 
 Este capítulo introduce el problema a resolver.
 
 \section{Análisis de Rendimiento}
 
-Este trabajo entonces trata de simplificar la tarea de análisis de rendimiento. Aunque es una tarea difícil de sistematizar y que muchas veces depende fuertemente de la aplicación bajo análisis, se propone un procedimiento general para ciertas aplicaciones.
+Este trabajo entonces trata de simplificar la tarea de análisis de rendimiento. 
 
-\chapter{Propuesta de Solución}
+\bigskip
+
+Aunque es una tarea difícil de sistematizar y que muchas veces depende fuertemente de la aplicación bajo análisis, se propone un procedimiento general para ciertas aplicaciones. El análisis de rendimiento requiere la utilización de diversas herramientas, las cuales implican un tiempo no trivial de aprendizaje de su correcta aplicación.
+
+\bigskip
+
+El problema concreto sobre el que se trabaja es poseer automatización para ahorrar esfuerzo y minimizar el nivel de conocimiento requerido durante el desarrollo de aplicaciones de cómputo de altas prestaciones.
+
+\section{Infrastructura de Soporte}
+
+Los siguientes requerimientos son los necesarios para una infrastructura:
+
+\subsection{Reusabilidad}
+
+La infastructura debe ser aplicable a un gran rango de programas, no requiriendo su modificación.
+Su instalación solo debe depender de la existencia previa de las mismas herramientas que un usuario podría ejecutar para obtener información relacionada al rendimiento de un programa. La infrastructura debe ser eficiente, no debe requerir ejecutar pruebas largas y tediosas cuando la información puede ser reusada.
+
+\subsection{Configurabilidad}
+
+La aplicación de las herramientas debe ser configurable en su totalidad mediante un archivo de configuración, evitando tareas manuales y repetitivas donde usualmente se comenten errores que causan pérdidas de tiempo valiosas.
+Los parámetros a configurar deberían incluir entre otros: la forma de compilar y ejecutar un programa, el rango de valores de entrada, el número de repeticiones de las diferentes ejecuciones del programa.
+
+\subsection{Portabilidad}
+
+La infrastructura debe ser implementada con un lenguaje portable, de ser posible basado en scripts de código abierto de forma que puedan ser revisado fácilmente por los usuarios para incluir nuevas fuentes de información o cambiar la forma en que las herramientas base son utilizadas.
+
+\subsection{Extensibilidad}
+
+La infrastructura debe poseer un diseño de fácil extensión, la incorporación de nuevas herramientas, gráficos o secciones dentro de un reporte debe ser una tarea trivial asumiendo que ya se conoce la forma de obtener la información requerida para ello.
+
+\subsection{Simplicidad}
+
+La infrastructura debe reutilizar las mismas herramientas disponibles en el sistema, de tal forma el usuario puede continuar el analisis de forma directa.
+También debe generar archivos de soporte con la información pura de los comandos ejecutados y su salida sin depurar.
+Debe ser posible completar un reporte entre un día de trabajo y otro sin la interacción con un usuario.
+
+\chapter{Propuesta de Solución} \label{Propuesta de Solucion}
 
 Este capítulo muestra la propuesta de solución, incluyendo el diseño de la misma a diferentes niveles, un ejemplo de su reporte de salida y realizando casos de aplicación con aplicaciones del mundo real.
 
 \section{Procedimiento}
 
-La Figura \ref{fig:procedure} muestra a grandes rasgos las etapas del proceso.
+La Figura \ref{fig:procedure} muestra a grandes rasgos las etapas del proceso a automatizar.
 Primero se establece una línea base de rendimiento del sistema utilizando pruebas conocidas.
 Luego se procede a trabajar en etapas iterativas asegurando en cada paso la estabilidad de los resultados, una correcta utilización de recursos y utilizando un perfil de ejecución. Luego de optimizar y comprobar la mejora, se vuelve a empezar el ciclo.
 
@@ -1015,6 +1049,7 @@ Luego se procede a trabajar en etapas iterativas asegurando en cada paso la esta
 \section{Paso a Paso}
 
 A continuación se muestran los pasos a realizar, junto con preguntas que guían el análisis de rendimiento de una aplicación.
+La infrastructura solo implementa los pasos especificos de ejecución de herramientas para la recolección de información.
 
 \subsection{Pruebas de Referencia}
 
@@ -1314,7 +1349,7 @@ Funciones más usadas. Cuellos de botella. Líneas de código assembler.
 
 Un ejemplo de salida completo se encuentra adjuntado en el apéndice.
 
-\chapter{Casos de Aplicación}
+\chapter{Casos de Aplicación} \label{Casos de Aplicacion}
 
 Este capítulo contiene casos de estudio mostrando los resultados de aplicar la infraestructura desarrollada a aplicaciones de cómputo de alto rendimiento conocidas.
 
@@ -1362,15 +1397,7 @@ Es utilizado por estudiantes de ingeniería electrónica para el cálculo de dis
 
 Partes relevantes del reporte.
 
-\subsection{Espresso}
-
-Biología. Marcela Moré.
-
-Partes relevantes del reporte.
-
-\section{OpenMP Database (Spain)}
-
-\chapter{Conclusiones y Trabajo Futuro}
+\chapter{Conclusiones y Trabajo Futuro} \label{Conclusiones y Trabajo Futuro}
 
 Este capítulo concluye revisando los objetivos propuestos y posibles líneas de investigación como continuación.
 
