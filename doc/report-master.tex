@@ -17,6 +17,8 @@
 
 \bibliographystyle{unsrt}
 
+\renewcommand{\lstlistingname}{Listado}
+
 \begin{document}
 
 \setlength{\parindent}{0cm}
@@ -97,7 +99,7 @@ El reporte final incluye datos estadísticos de la aplicación y el sistema dond
 La siguiente lista enumera las diferentes publicaciones realizadas durante el cursado del magister y el desarrollo de la tesis.
 
 \begin{enumerate}
-\item Estudio de Multiplicación de Matrices. Reporte Técnico. Realizado como parte del curso {\it Fundamentos de Procesamiento Paralelo} dictado por el Dr {\it Marcelo Naiouf} \cite{mm-tool}.
+\item Estudio de Multiplicación de Matrices. Reporte Técnico. Realizado como parte del curso {\it Programación en Clusters} dictado por el Dr {\it Fernando Tinetti} \cite{mm-tool}.
 \item Articulo {\it Optimizing Latency in Beowulf Clusters}. HPC Latam 2012 \cite{latency}.
 \item Comparación de Implementaciones de una Operación BLAS. Reporte Técnico. Realizado como parte del curso {\it Programación GPU de Propósito General} dictado por la Dra {\it Margarita Amor}.
 \item Sección {\it Intel Cluster Ready} e {\it Intel Cluster Checker} en el libro {\it Programming Intel Xeon Phi}. Intel Press. 2013 \cite{xeonphi}.
@@ -744,7 +746,7 @@ El intérprete de comandos tiene su propia versión embebida, sin embargo el del
 
 \bigskip
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Ejecución del Programa},label={lst:time1}]
 $ /usr/bin/time -v ./program
 1
         Command being timed: "./program"
@@ -781,7 +783,7 @@ Las más utilizadas son {\tt gettimeofday(3)} y {\tt clock(3)}, aunque éste úl
 
 El siguiente código ejemplifica como obtener un número de segundos en una representación de punto flotante de doble precisión, permitiendo una granularidad de medición adecuada.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Tiempo de Ejecución},label={lst:wtime}]
 double wtime(void)
 {
   double sec;
@@ -824,16 +826,18 @@ Esto permite visualizar el esquema de dependencias durante la ejecución.
 
 \bigskip
 
-A continuación se muestra como realizar la compilación incluyendo información de depuración específica, además de un caso concreto contra una aplicación simulando el juego de la vida \cite{conway}.
+A continuación en el listado \ref{debug} se muestra como realizar la compilación incluyendo información de depuración específica, además de un caso concreto contra una aplicación simulando el juego de la vida \cite{conway}.
 
-\begin{lstlisting} 
+\begin{lstlisting}[caption={Compilación con Información de Depuración},label={debug}]
 $ gcc -g -pg program.c -o program
 $ ./program
 $ gprof program
 ...
 \end{lstlisting}
 
-\begin{lstlisting} 
+En el listado \ref{lst:gprof} se muestra la información de las funciones del programa ordenadas por mayor impacto en el tiempo de ejecución.
+
+\begin{lstlisting}[caption={Perfil de Rendimiento},label={lst:gprof}]
 Flat profile:
 Each sample counts as 0.01 seconds.
 % cumulative self self total
@@ -842,7 +846,9 @@ time seconds seconds calls us/call us/call name
 ...
 \end{lstlisting}
 
-\begin{lstlisting} 
+En el listado \ref{lst:call} se muestra la información del gráfico de llamadas del programa.
+
+\begin{lstlisting}[caption={Gráficos de Llamadas},label={lst:call}]
 Call graph
 granularity: each sample hit covers 4 byte(s) for 2.50% of 0.40 seconds
 index % time    self  children    called     name
@@ -890,13 +896,11 @@ incluso programables para funciones determinadas de medición.
 
 \subsubsection{Ejemplo: {\tt perf}}
 
-A continuación se demuestra la información provista por {\tt perf} en sus diferentes modos de ejecución: estadísticas de contadores, perfil de sistema y por último perfil de aplicación.
+A continuación en el listado \ref{lst:perfstat} se demuestra la información provista por {\tt perf} en sus diferentes modos de ejecución: estadísticas de contadores, perfil de sistema y por último perfil de aplicación.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Estadísticas de Contadores},label={lst:perfstat}]
 $ perf stat -B program
-
 Performance counter stats for 'program':
-
            5,099 cache-misses  0.005 M/sec (scaled from 66.58%)
          235,384 cache-references 0.246 M/sec (scaled from 66.56%)
        9,281,660 branch-misses 3.858 %     (scaled from 33.50%)
@@ -907,11 +911,12 @@ Performance counter stats for 'program':
                3 CPU-migrations 0.000 M/sec
               83 context-switches 0.000 M/sec
       956.474238 task-clock-msecs 0.999 CPUs
-
       0.957617512  seconds time elapsed
 \end{lstlisting}
 
-\begin{lstlisting}
+En el listado \ref{lst:record} se muestra la salida del perfil de rendimiento. Notar que se incluye incluso la información del comportamiento del núcleo del sistema.
+
+\begin{lstlisting}[caption={Perfil de Rendimiento},label={lst:record}]
 $ perf record ./mm
 $ perf report
 # Events: 1K cycles
@@ -922,7 +927,9 @@ $ perf report
 ...
 \end{lstlisting}
 
-\begin{lstlisting}
+En el listado \ref{lst:annotated} se muestra la salida del perfil de código anotado con las instrucciones del ensamblador respectivas.
+
+\begin{lstlisting}[caption={Código Anotado},label={lst:annotated}]
  Percent |   Source code & Disassembly of program
          :   Disassembly of section .text:
          :   08048484 <main>:
@@ -963,8 +970,9 @@ que debería estar vectorizando los ciclos de cómputo intensivo. Esto es muy
 \bigskip
 
 Por ejemplo, GCC provee opciones específicas que deben ser provistas para mostrar el reporte.
+En el listado \ref{lst:vector} se muestra la información incluída.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Información de Vectorización},label={lst:vector}] 
 $ gcc -c -O3 -ftree-vectorizer-verbose=1 ex.c
 ex.c:7: note: LOOP VECTORIZED.
 ex.c:3: note: vectorized 1 loops in function.
@@ -978,8 +986,9 @@ $ gcc -c -O3 -fdump-tree-vect-details ex.c
 \end{lstlisting}
 
 En el caso de existir código recursivo, podemos comprobar que no suele estar soportado por los compiladores actuales.
+La información de vectorización sobre un código que posee recursividad se muestra en el listado \ref{lst:queen}
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Vectorización de Código Recursivo},label={lst:queen}]
 $ gcc -Wall -Wextra -O3 -ftree-vectorizer-verbose=4 -g queen.c
 queen.c:22: note: vectorized 0 loops in function.
 queen.c:35: note: vectorized 0 loops in function.
@@ -1056,7 +1065,7 @@ La infrastructura solo implementa los pasos especificos de ejecución de herrami
 \begin{enumerate}
 \item Ejecutar pruebas de rendimiento sobre el sistema a utilizar para poder entender sus capacidades máximas en contraste con las teóricas.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Instalación de HPCC},label={lst:hpcc}]
 $ sudo apt-get install hpcc
 $ mpirun -n `grep -c proc /proc/cpuinfo` ./hpcc
 $ cat hpccoutf.txt
@@ -1069,9 +1078,9 @@ $ cat hpccoutf.txt
 \item ¿La latencia y ancho de banda de la memoria es la esperada?
 \end{enumerate}
 
-\item Comprobar variación de resultados para conocer la estabilidad de los mismos. La desviación estándar debe ser menor a 3 sigmas. Establecer cual es el promedio geométrico  a usar como referencia para comparaciones futuras.
+\item Comprobar variación de resultados para conocer la estabilidad de los mismos. La desviación estándar debe ser menor a 3 sigmas. Establecer cual es el promedio geométrico a usar como referencia para comparaciones futuras.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Estabilidad de Resultados},label={lst:time}]
 $ for i in `seq 1 32`; do /usr/bin/time -v ./app >> time.csv; done
 \end{lstlisting}
 
@@ -1085,7 +1094,7 @@ $ for i in `seq 1 32`; do /usr/bin/time -v ./app >> time.csv; done
 
 \item Escalar el problema para dimensionar la cantidad de trabajo según el tamaño del problema.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Escalamiento de Problema},label={lst:size}]
 $ for size in `seq 1024 1024 10240`; do /usr/bin/time -v ./app $size >> size.log; done
 \end{lstlisting}
 
@@ -1096,7 +1105,7 @@ $ for size in `seq 1024 1024 10240`; do /usr/bin/time -v ./app $size >> size.log
 
 \item Escalar cómputo para luego calcular límite de mejoras con {\it Amdalah} y {\it Gustafson}.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Escalamiento de Cómputo},label={lst:proc}]
 $ for threads in `grep -c proc /proc/cpuinfo | xargs seq 1`; do OMP_NUM_THREADS=$threads ./app >> threads.log; done
 \end{lstlisting}
 
@@ -1109,18 +1118,16 @@ $ for threads in `grep -c proc /proc/cpuinfo | xargs seq 1`; do OMP_NUM_THREADS=
 
 \item Generar el perfil de llamadas a funciones dentro de la aplicación para revisar el diseño de la misma y los posibles cuellos de botella a resolver.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Generación de Perfil de Rendimiento},label={lst:gprofall}]
 $ gcc -g -pg app.c -o app
 $ ./app
-\end{lstlisting}
-
-\begin{lstlisting}
+...
 $ gprof --flat-profile --graph --annotated-source app
 ...
 \end{lstlisting}
 
 \begin{enumerate}
-\item ¿Cómo esta diseñada la aplicación?
+\item ¿Cómo está diseñada la aplicación?
 \item ¿Que dependencias en librerías externas tiene?
 \item ¿Implementa algún núcleo de cómputo conocido encuadrado dentro de librerías optimizadas como BLAS?
 \item ¿En que archivos, funciones y líneas se concentra la mayor cantidad de tiempo de cómputo?
@@ -1128,7 +1135,7 @@ $ gprof --flat-profile --graph --annotated-source app
 
 \item Utilizar el profiler a nivel de sistema
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Generación de Perfil de Sistema},label={lst:profall}]
 $ prof stat ./app
 $ prof record ./app
 $ prof report
@@ -1143,7 +1150,7 @@ $ prof report
 
 \item Comprobar vectorizaciones
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={Información de Vectorización},label={lst:report}]
 $ gcc -Wall -Wextra -O3 --report-loop
 \end{lstlisting}
 
@@ -1301,13 +1308,13 @@ La infrastructura se implementa mediante una jerarquía de clases simple, fácil
 \item WorkloadSection, Caso de Prueba, Es utilizada para obtener información del caso de prueba.
 \item ScalingSection, Escalamiento de Problema, Es utilizada para entender como escala el tamaño del problema.
 \item ThreadsSection, Seccion sobre Hilos, Es utilizada para entender como escalan los hilos.
-\item OptimizationSection, Seccion sobre Optimización.
-\item ProfileSection, descripción, responsabilidad
-\item ResourcesSection, descripción, responsabilidad
-\item AnnotatedSection, descripción, responsabilidad
-\item VectorizationSection, descripción, responsabilidad
-\item CountersSection, descripción, responsabilidad
-\item ConfigSection, descripción, responsabilidad
+\item OptimizationSection, Seccion sobre Optimización, Es utilizada para entender como responde el programa antes los diferentes niveles de optimización del compilador.
+\item ProfileSection, Sección sobre el Perfil de Rendimiento, Permite entender en que partes del programa se invierte el tiempo de ejecución.
+\item ResourcesSection, Uso de Recursos, Permite entender como se utilizan los recursos del sistema.
+\item AnnotatedSection, Código Anotado, 
+\item VectorizationSection, Información de Vectorización.
+\item CountersSection, Información de Contador de {\it Hardware}.
+\item ConfigSection, Configuración.
 \end{enumerate}
 
 \section{Reporte Generado}
@@ -1320,14 +1327,28 @@ Las consideraciones generales tenidas en cuenta en todas las secciones fueron la
 
 \begin{enumerate}
 \item Hipervínculos a archivos con la información pura.
-\item Inclusión de una explicación breve de para que sirve la sección y el gráfico.
+\item Inclusión de una explicación breve de para que sirve la sección y los gráficos incluídos.
 \item Inclusión de {\it trendlines} y comportamiento ideal.
 \item Referencias a material de consulta.
+\item Utilización del inglés
 \end{enumerate}
 
-\subsection{Introducción}
+\subsection{Resumen}
 
-Referencia.
+El resumen incluído en la primer página introduce el reporte junto con información sobre la infrastructura utilizada y la ubicación de la información de ejecución.
+
+\subsection{Programa}
+
+Se incluyen detalles sobre el programa bajo análisis.
+
+\subsection{Capacidad del Sistema}
+
+Se incluyen detalles sobre la configuración de hardware y software del sistema.
+Además se incluye información de rendimiento de referencia obtenida de la prueba de rendimiento HPCC.
+
+\subsection{Carga de Trabajo}
+
+Información sobre realizada.
 
 \subsection{Estabilidad de Resultados}
 
@@ -1344,6 +1365,18 @@ Speedup.
 \subsection{Profiling}
 
 Funciones más usadas. Cuellos de botella. Líneas de código assembler.
+
+\subsection{Cuellos de Botella}
+
+Cuellos de botella.
+
+\subsection{Bajo Nivel}
+
+Registros de hardware. Contadores.
+
+\subsection{Referencias}
+
+Lista de publicaciones referenciadas anteriormente.
 
 \bigskip
 
@@ -1363,7 +1396,7 @@ La multiplicación de matrices es una operación fundamental en múltiples campo
 
 \bigskip
 
-El reporte generado en bruto puede consultarse en el apéndice A.
+El reporte generado en bruto puede consultarse en el apéndice \ref{examples}.
 
 \subsection{Heat2d}
 
@@ -1372,7 +1405,7 @@ Se utiliza una grilla donde cada celda transfiere calor a sus vecinos en una ser
 
 \bigskip
 
-El reporte generado en bruto puede consultarse en el apéndice B.
+El reporte generado en bruto puede consultarse en el apéndice \ref{examples}.
 
 \subsection{8 Queens}
 
@@ -1384,7 +1417,7 @@ El problema de encontrar todas las soluciones para un tamaño de tablero dado su
 
 \bigskip
 
-El reporte generado en brute puede consultarse en el apéndice C.
+Ejemplos de los reportes generados pueden consultarse en el apéndice \ref{examples}.
 
 \section{Código del Mundo Real}
 
@@ -1449,7 +1482,7 @@ Por último, aunque la generación de un documento portable en formate PDF es si
 
 \appendix
 
-\chapter{Reporte de Ejemplo}
+\chapter{Reporte de Ejemplo} \label{examples}
 
 \section{Multiplicación de Matrices}
 \includepdf[frame=true, pages=-, scale=0.75, pagecommand={}]{matrix.pdf}
