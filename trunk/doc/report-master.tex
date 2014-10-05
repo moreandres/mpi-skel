@@ -33,7 +33,7 @@
   Director: Dr Fernando G. Tinetti - {\tt fernando@lidi.info.unlp.edu.ar}
 }
 
-\date{Noviembre de 2014}
+\date{Octubre de 2014}
 
 \maketitle
 
@@ -104,7 +104,7 @@ La siguiente lista enumera las diferentes publicaciones realizadas durante el cu
 \item Comparación de Implementaciones de una Operación BLAS. Reporte Técnico. Realizado como parte del curso {\it Programación GPU de Propósito General} dictado por la Dra {\it Margarita Amor}.
 \item Sección {\it Intel Cluster Ready} e {\it Intel Cluster Checker} en el libro {\it Programming Intel Xeon Phi}. Intel Press. 2013 \cite{xeonphi}.
 \item Reseña del Libro {\it Intel Xeon Phi Coprocessor High Performance Programming} - JCS\&T Vol 13 N 2 Octubre 2013 \footnote{\href{http://journal.info.unlp.edu.ar/journal/journal36/papers/JCST-Oct13-BR1.pdf}{JCS\&T Vol. 13 No. 2}}.
-\item Articulo {\it Lessons learned from contrasting BLAS kernel implementations} - XIII Workshop Procesamiento Distribuido y Paralelo (WPDP), 2013 \cite{lessons}.
+\item Articulo {\it Lessons learned from Contrasting BLAS Kernel Implementations} - XIII Workshop Procesamiento Distribuido y Paralelo (WPDP), 2013 \cite{lessons}.
 \end{enumerate}
 
 \section{Metodología}
@@ -112,9 +112,12 @@ La siguiente lista enumera las diferentes publicaciones realizadas durante el cu
 En base al problema y a los objetivos establecidos previamente, la metodología adoptada es la siguiente:
 
 \begin{enumerate}
+\item Analizar el estado del arte del análisis de rendimiento y las herramientas utlizadas para ello.
+\item Formular el problema específico a resolver.
 \item Dado una propuesta de procedimiento sistemático de análisis de rendimiento, automatizarlo y analizar potenciales mejoras de utilidad.
 \item Identificar que tipos de gráficos y tablas pueden resumir la información obtenida de modo de facilitar su utilización.
 \item Aplicar la infraestructura sobre núcleos de cómputo conocidos para poder focalizar los esfuerzos en la mejora del reporte.
+\item Documentación de la experiencia
 \end{enumerate}
 
 \section{Estructura}
@@ -280,7 +283,7 @@ A la hora de tomar decisiones, éstas deben estar basadas en datos concretos, ya
 \bigskip
 
 En el caso de tener problemas de desviación en los resultados medidos, es aconsejable obtener un gran número de muestras y utilizar un valor promedio para asegurarse de evitar errores de medición tanto como sea posible. También es preferible aumentar el tamaño del problema a resolver, o la definición de los resultados para ejercitar por más tiempo y tener así un resultado más estable.
-Suponiendo una distribución normal de resultados, se suelen controlar que haya menos de 3 $ \sigma $ de diferencia. Se busca que la mayoría de los resultados queden cerca de su promedio, como muestra la Figura \ref{fig:deviation}.
+Suponiendo una distribución normal de resultados, se suele controlar que haya menos de 3 $ \sigma $ de diferencia. Se busca que la mayoría de los resultados queden cerca de su promedio, como muestra la Figura \ref{fig:deviation}.
 
 \begin{figure}[H]
 \centering
@@ -742,7 +745,7 @@ Esta sección revisa como medir el tiempo de ejecución global de una aplicació
 \subsubsection{Tiempo de ejecución global}
 
 Para medir el tiempo de ejecución de un comando en consola se utiliza {\tt time(1)}. Aunque rudimentaria, esta simple herramienta no necesita de instrumentación de código y se encuentra disponible en cualquier distribución {\it GNU/Linux}.
-El intérprete de comandos tiene su propia versión embebida, sin embargo el del sistema brinda información del uso de otros recursos del sistema, usualmente localizado en {\tt /usr/bin/time}.
+El intérprete de comandos tiene su propia versión embebida, sin embargo el del sistema brinda información del uso de otros recursos del sistema, usualmente localizado en {\tt /usr/bin/time}. Un ejemplo se demuestra en el listado \ref{lst:time1}.
 
 \bigskip
 
@@ -781,7 +784,7 @@ Las más utilizadas son {\tt gettimeofday(3)} y {\tt clock(3)}, aunque éste úl
 
 \bigskip
 
-El siguiente código ejemplifica como obtener un número de segundos en una representación de punto flotante de doble precisión, permitiendo una granularidad de medición adecuada.
+El código en el listado \ref{lst:wtime} ejemplifica como obtener un número de segundos en una representación de punto flotante de doble precisión, permitiendo una granularidad de medición adecuada.
 
 \begin{lstlisting}[caption={Tiempo de Ejecución},label={lst:wtime}]
 double wtime(void)
@@ -1045,8 +1048,6 @@ Este capítulo muestra la propuesta de solución, incluyendo el diseño de la mi
 \section{Procedimiento}
 
 La Figura \ref{fig:procedure} muestra a grandes rasgos las etapas del proceso a automatizar.
-Primero se establece una línea base de rendimiento del sistema utilizando pruebas conocidas.
-Luego se procede a trabajar en etapas iterativas asegurando en cada paso la estabilidad de los resultados, una correcta utilización de recursos y utilizando un perfil de ejecución. Luego de optimizar y comprobar la mejora, se vuelve a empezar el ciclo.
 
 \begin{figure}[H]
 \label{fig:procedure}
@@ -1054,6 +1055,9 @@ Luego se procede a trabajar en etapas iterativas asegurando en cada paso la esta
 \includegraphics[width=5cm]{procedure.png}
 \caption{Procedimiento de Análisis}
 \end{figure}
+
+Primero se establece una línea base de rendimiento del sistema utilizando pruebas conocidas.
+Luego se procede a trabajar en etapas iterativas asegurando en cada paso la estabilidad de los resultados, una correcta utilización de recursos y utilizando un perfil de ejecución. Luego de optimizar y comprobar la mejora, se vuelve a empezar el ciclo.
 
 \section{Paso a Paso}
 
@@ -1078,10 +1082,11 @@ $ cat hpccoutf.txt
 \item ¿La latencia y ancho de banda de la memoria es la esperada?
 \end{enumerate}
 
-\item Comprobar variación de resultados para conocer la estabilidad de los mismos. La desviación estándar debe ser menor a 3 sigmas. Establecer cual es el promedio geométrico a usar como referencia para comparaciones futuras.
+\item Comprobar variación de resultados para conocer la estabilidad de los mismos. La desviación estándar debe ser menor a 3 sigmas. 
+\item Establecer cual es el promedio geométrico a usar como referencia para comparaciones futuras.
 
 \begin{lstlisting}[caption={Estabilidad de Resultados},label={lst:time}]
-$ for i in `seq 1 32`; do /usr/bin/time -v ./app >> time.csv; done
+$ for i in `seq 1 32`; do /usr/bin/time -v ./program >> time.csv; done
 \end{lstlisting}
 
 \begin{enumerate}
@@ -1095,7 +1100,7 @@ $ for i in `seq 1 32`; do /usr/bin/time -v ./app >> time.csv; done
 \item Escalar el problema para dimensionar la cantidad de trabajo según el tamaño del problema.
 
 \begin{lstlisting}[caption={Escalamiento de Problema},label={lst:size}]
-$ for size in `seq 1024 1024 10240`; do /usr/bin/time -v ./app $size >> size.log; done
+$ for size in `seq 1024 1024 10240`; do /usr/bin/time -v ./program $size >> size.log; done
 \end{lstlisting}
 
 \begin{enumerate}
@@ -1106,7 +1111,7 @@ $ for size in `seq 1024 1024 10240`; do /usr/bin/time -v ./app $size >> size.log
 \item Escalar cómputo para luego calcular límite de mejoras con {\it Amdalah} y {\it Gustafson}.
 
 \begin{lstlisting}[caption={Escalamiento de Cómputo},label={lst:proc}]
-$ for threads in `grep -c proc /proc/cpuinfo | xargs seq 1`; do OMP_NUM_THREADS=$threads ./app >> threads.log; done
+$ for threads in `grep -c proc /proc/cpuinfo | xargs seq 1`; do OMP_NUM_THREADS=$threads ./program >> threads.log; done
 \end{lstlisting}
 
 \begin{enumerate}
@@ -1119,8 +1124,8 @@ $ for threads in `grep -c proc /proc/cpuinfo | xargs seq 1`; do OMP_NUM_THREADS=
 \item Generar el perfil de llamadas a funciones dentro de la aplicación para revisar el diseño de la misma y los posibles cuellos de botella a resolver.
 
 \begin{lstlisting}[caption={Generación de Perfil de Rendimiento},label={lst:gprofall}]
-$ gcc -g -pg app.c -o app
-$ ./app
+$ gcc -g -pg program.c -o program
+$ ./program
 ...
 $ gprof --flat-profile --graph --annotated-source app
 ...
@@ -1136,8 +1141,8 @@ $ gprof --flat-profile --graph --annotated-source app
 \item Utilizar el profiler a nivel de sistema
 
 \begin{lstlisting}[caption={Generación de Perfil de Sistema},label={lst:profall}]
-$ prof stat ./app
-$ prof record ./app
+$ prof stat ./program
+$ prof record ./program
 $ prof report
 \end{lstlisting}
 
@@ -1156,6 +1161,7 @@ $ gcc -Wall -Wextra -O3 --report-loop
 
 \begin{enumerate}
 \item ¿Hay ciclos que no pueden ser automáticamente vectorizados?
+\item ¿Pueden los ciclos no optimizados ser modificados?
 \end{enumerate}
 
 \end{enumerate}
@@ -1163,26 +1169,31 @@ $ gcc -Wall -Wextra -O3 --report-loop
 \section{Infraestructura}
 
 El procedimiento anterior se implementó como una infrastructura automática de generacion de reportes de rendimiento denominada 
-{\tt hotspot}. \footnote{El proyecto {\tt hotspot} está disponible en \href{https://github.com/moreandres/hotspot}{https://github.com/moreandres/hotspot}}.
-{\it Latex} se utiliza para la generación del reporte final.
-Se depende de utilidades como GCC, GNU Make, prof, gprof, pidstat para obtener la información relevante.
+{\tt hotspot} \footnote{El proyecto {\tt hotspot} está disponible en \href{https://github.com/moreandres/hotspot}{https://github.com/moreandres/hotspot}}.
 
 \bigskip
 
-Las limitaciones {\it a-priori} que posee la infrastructura son en materia de portabilidad y aplicación. Por el lado de la portabilidad, solo se soportan sistemas GNU/Linux recientes, siendo necesarias un conjunto de utilidades de soporte específicas. Por el lado de la aplicación, solo se soportan programan utilizando tecnología OpenMP multi-hilo.
+La automatización se comporta del mismo modo que un usuario realizando un procedimiento sistemático de analisis de rendimiento.
+{\it Latex} se utiliza para la generación del reporte final. Es decir que ejecuta utilizades del sistema como {\tt gcc}, {\tt make}, {\tt prof}, {\tt gprof}, {\tt pidstat} para obtener la información relevante.
+
+\bigskip
+
+Las limitaciones {\it a-priori} que posee la infrastructura son en materia de portabilidad y aplicación. Por el lado de la portabilidad, solo se soportan sistemas GNU/Linux recientes, siendo necesarias el conjunto de utilidades de soporte especificadas anteriormente. Por el lado de la aplicación, solo se soportan programan utilizando tecnología OpenMP multi-hilo.
 
 \section{Teoría de Operación}
 
 Esta sección detalla el funcionamiento de la infraestructura relacionando los componentes.
 
-\bigskip
+\subsection{Configuración}
 
-La herramienta de linea de comando toma como parámetro principal el binario de la aplicación a analizar. Asume por defecto que la aplicación esta construida utilizando Makefile de la forma usual, ya que para algunos pasos de análisis se necesita recompilar la aplicación con información extra de depuración.
+La herramienta de línea de comando toma como parámetro principal el binario de la aplicación a analizar. Asume por defecto que la aplicación esta construida utilizando {\it Makefile} de la forma usual, ya que para algunos pasos de análisis se necesita recompilar la aplicación con información extra de depuración.
 En el caso de que no sea así, el archivo de configuración permite la definición de tareas como configuración, compilacion y ejecución del programa.
 
-Otros parámetros necesarios son los datos del rango de tamaños de problema a utilizar, asumidos como {\tt seq(1)}.
+\bigskip
 
-\begin{lstlisting}[language=bash, caption={ayuda hotspot}, label={lst:hotspot-help}]
+El listado \ref{lst:hotspot-help} muestra la pantalla de ayuda de la infrastructura.
+
+\begin{lstlisting}[language=bash, caption={Ayuda de {\tt hotspot}}, label={lst:hotspot-help}]
 $ hotspot --help
 usage: hotspot [-h] [-v] [--config CONFIG] [--debug]
 
@@ -1201,11 +1212,13 @@ $ hotspot
 
 \bigskip
 
-\begin{lstlisting}[language=bash, caption={configuración hotspot}, label={lst:hotspot-config}]
+El archivo de configuración requerido se muestra en el listado \ref{lst:hotspot-config}.
+Un parámetro necesario es el rango de tamaños de problema a utilizar durante las ejecuciones, definidos como una secuencia de formato compatible con {\tt seq(1)}.
+
+\begin{lstlisting}[language=bash, caption={Configuración de {\tt hotspot}}, label={lst:hotspot-config}]
 # hotspot configuration file
 
 [hotspot]
-
 # python format method is used to pass parameters
 
 # range is a seq-like definition for problem size
@@ -1227,8 +1240,24 @@ run=OMP_NUM_THREADS={0} N={1} ./{2}
 count=16
 \end{lstlisting}
 
+\subsection{Arquitectura}
+
+A grandes rasgos el usuario utiliza la infrastructura para analizar un programa.
+La infrastructura ejercita el programa multiples veces hasta obtener la información necesaria para generar un reporte.
 
 \bigskip
+
+Esto se detalla en la Figura \ref{fig:hotspot-seq}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{hotspot-seq.png}
+\caption{Diagrama de Secuencia}
+\label{fig:hotspot-seq}
+\end{center}
+\end{figure}
+
+\subsection{Funcionamiento Interno}
 
 Se utiliza un directorio escondido dentro de la carpeta que contiene la aplicación y se guardan en sub-directorios por fecha y hora las diferentes ejecuciones. Esta información es luego usada para comparación histórica de resultados.
 
@@ -1253,21 +1282,13 @@ Utilizando la información anterior, se calcula porcentaje de ejecución en seri
 
 \bigskip
 
-Se recompila la aplicación con información extra de depuración y se obtiene información del perfil de ejecución. Se detallan las funciones, las líneas de código y el {assembler} implementado por las mismas.
-
-\bigskip
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=\textwidth]{hotspot-seq.png}
-\caption{Diagrama de Secuencia}
-\label{fig:hotspot-seq}
-\end{center}
-\end{figure}
+Se recompila la aplicación con información extra de depuración y se obtiene información del perfil de ejecución. Se detallan las funciones, las líneas de código y el {\it assembler} implementado por las mismas.
 
 \section{Diseño de Alto Nivel}
 
-El diseño de la infrastructura refleja la interacción manual con el programa a analizar.
+El diseño de la infrastructura refleja la interacción manual con el sistema. 
+Se depende de la presencia de herramientas de línea de comando, del programa a analizar en particular, y de \LaTeX.
+Esto se resume en la Figura \ref{fig:hotspot-hld}
 
 \begin{figure}[H]
 \begin{center}
@@ -1278,13 +1299,15 @@ El diseño de la infrastructura refleja la interacción manual con el programa a
 \end{figure}
 
 \begin{enumerate}
-\item Configuración, RFC 822
-\item componente3
+\item{\bf Configuración}: el componente lee información de configuración y la deja disponible para los demás componentes.
+\item{\bf Reporte}: el componente guarda valores de variables que luego utiliza para generar el reporte final. 
+\item{\bf Infrastructura}: este componente utiliza información de configuración para generar un reporte.
 \end{enumerate}
 
 \section{Diseño de Bajo Nivel}
 
 La infrastructura se implementa mediante una jerarquía de clases simple, fácil de extender de ser necesario.
+Las clases se muestran en la Figura \ref{fig:hotspot-lld}.
 
 \begin{figure}[H]
 \begin{center}
@@ -1294,48 +1317,64 @@ La infrastructura se implementa mediante una jerarquía de clases simple, fácil
 \end{center}
 \end{figure}
 
+Aunque solo se incluye {\it HardwareSection} como ejemplo, existe un objeto sección por cada sección dentro del reporte.
+
 \begin{enumerate}
-\item Singleton, Patrón de Instancia Única, Es utilizado por otras clases para garantizar que solo existe una instancia única.
-\item Tags, Almacenamiento de Palabras Clave, Es utilizado para guardar palabras clave que son utilizadas para generar el reporte.
-\item Log, Generador de Mensajes, Es utilizado para estructurar los mensajes durante la ejecución.
-\item Config, Administración de la Configuracion, Es utilizado para consultar la configuración de cada programación.
-\item Section, Sección de Reporte, Es utilizado como base de otras secciones.
-\item HardwareSection, Sección sobre {\it Hardware}, Es utilizado para obtener información del {\it hardware} disponible.
-\item ProgramSection, Sección sobre el Programa, Es utilizado para obtener información del programa a analizar.
-\item SoftwareSection, Sección sobre {\it Software}, Es utilizado para obtener información del {\it software} disponible.
-\item SanitySection, Chequeo Base, Es utilizado para comprobaciones básicas del programa.
-\item BenchmarkSection, Pruebas de Rendimiento, Es utilizada para obtener información de rendimiento.
-\item WorkloadSection, Caso de Prueba, Es utilizada para obtener información del caso de prueba.
-\item ScalingSection, Escalamiento de Problema, Es utilizada para entender como escala el tamaño del problema.
-\item ThreadsSection, Seccion sobre Hilos, Es utilizada para entender como escalan los hilos.
-\item OptimizationSection, Seccion sobre Optimización, Es utilizada para entender como responde el programa antes los diferentes niveles de optimización del compilador.
-\item ProfileSection, Sección sobre el Perfil de Rendimiento, Permite entender en que partes del programa se invierte el tiempo de ejecución.
-\item ResourcesSection, Uso de Recursos, Permite entender como se utilizan los recursos del sistema.
-\item AnnotatedSection, Código Anotado, 
-\item VectorizationSection, Información de Vectorización.
-\item CountersSection, Información de Contador de {\it Hardware}.
-\item ConfigSection, Configuración.
+\item {\it Singleton}: Patrón de Instancia Única. Es utilizado por otras clases para garantizar que solo existe una instancia única.
+\item {\it Tags}: Almacenamiento de Palabras Clave. Es utilizado para guardar palabras clave que son utilizadas para generar el reporte.
+\item {\it Log}: Generador de Mensajes. Es utilizado para estructurar los mensajes durante la ejecución.
+\item {\it Config}: Administración de la Configuracion. Es utilizado para leer y consultar la configuración de cada programación.
+\item {\it Section}: Sección del Reporte. Es utilizado como base de otras secciones.
+\item {\it HardwareSection}: Descripción del {\it Hardware}. Es utilizado para obtener información del {\it hardware} disponible.
+\item {\it ProgramSection}: Detalles sobre el Programa. Es utilizado para obtener información del programa a analizar.
+\item {\it SoftwareSection}: Descripción del {\it Software}, Es utilizado para obtener información del {\it software} disponible.
+\item {\it SanitySection}: Chequeo Base. Es utilizado para comprobaciones básicas del programa.
+\item {\it BenchmarkSection}: Pruebas de Rendimiento, Es utilizada para obtener información de rendimiento.
+\item {\it WorkloadSection}: Caso de Prueba. Es utilizada para obtener información del caso de prueba.
+\item {\it ScalingSection}: Escalamiento de Problema. Es utilizada para entender como escala el tamaño del problema.
+\item {\it ThreadsSection}: Hilos. Es utilizada para entender como escalan los hilos.
+\item {\it OptimizationSection}: Optimización. Es utilizada para entender los diferentes niveles de optimización del compilador.
+\item {\it ProfileSection}: Sección sobre el Perfil de Rendimiento. Permite entender en que partes del programa se invierte el tiempo de ejecución.
+\item {\it ResourcesSection}: Utilización de Recursos. Permite entender como se utilizan los recursos del sistema.
+\item {\it AnnotatedSection}: Código Anotado. Incluye código ensamblador. 
+\item {\it VectorizationSection}: Vectorización de Ciclos. Es utilizado para entender cuales ciclos fueron vectorizados o no.
+\item {\it CountersSection}, Información de Contadores de {\it Hardware}. Es utilizado para resumir la información de los contadores de {\it hardware}.
+\item {\it ConfigSection}, Configuración. Es utilizado para revisar la configuración del análisis.
 \end{enumerate}
+
+\subsection{Implementación}
+
+La implementación se desarrollo sobre una plataforma {\it GNU/Linux}, utilizando la distribución {\tt Ubuntu 14.04.1 LTS}.
+El lenguaje utilizado Python 2.7.6, publicado en {\it Python Software Foundation Package Index} como hotspot versión 0.3.
+El repositorio de código se encuetra en \href{https://github.com/moreandres/hotspot}{https://github.com/moreandres/hotspot}.
+La licencia del código fuente es GPLv2.
+Se reutilizan librerías como {\tt matplotlib.pyplot} \cite{matplotlib} y {\tt numpy} \cite{numpy} para gráficar las estadísticas obtenidas durante las pruebas de rendimiento.
 
 \section{Reporte Generado}
 
-Secciones dentro del reporte, que datos incluyen y para qué son útiles.
+A continuación se explica el contenido de cada sección en particular.
+En el apéndice se muestran tres ejemplos utilizando núcleos de cómputo conocidos.
 
 \subsection{Consideraciones Generales}
 
 Las consideraciones generales tenidas en cuenta en todas las secciones fueron las siguientes:
 
 \begin{enumerate}
+\item Formato portable similar a un artículo de investigación.
 \item Hipervínculos a archivos con la información pura.
-\item Inclusión de una explicación breve de para que sirve la sección y los gráficos incluídos.
-\item Inclusión de {\it trendlines} y comportamiento ideal.
+\item Inclusión de una explicación breve del objetivo de la sección y los gráficos incluídos.
+\item Inclusión de líneas de tendencía y comportamiento ideal en gráficos.
 \item Referencias a material de consulta.
-\item Utilización del inglés
+\item Utilización del inglés.
 \end{enumerate}
 
 \subsection{Resumen}
 
 El resumen incluído en la primer página introduce el reporte junto con información sobre la infrastructura utilizada y la ubicación de la información de ejecución.
+
+\subsection{Contenido}
+
+Contiene un índice de secciones en formato de dos columnas con hipervinculos para facilitar la búsqueda rápida de la información.
 
 \subsection{Programa}
 
@@ -1343,44 +1382,53 @@ Se incluyen detalles sobre el programa bajo análisis.
 
 \subsection{Capacidad del Sistema}
 
-Se incluyen detalles sobre la configuración de hardware y software del sistema.
-Además se incluye información de rendimiento de referencia obtenida de la prueba de rendimiento HPCC.
+Se incluyen detalles sobre la configuración de {\it hardware} y {\it software} del sistema.
+Además se incluye información de referencia obtenida de la prueba de rendimiento {\it HPCC}.
 
 \subsection{Carga de Trabajo}
 
-Información sobre realizada.
-
-\subsection{Estabilidad de Resultados}
-
-Histograma.
-
-\subsection{Escalabilidad}
-
-Tamaño y Procesadores.
-
-\subsection{Mejoras}
-
-Speedup.
-
-\subsection{Profiling}
-
-Funciones más usadas. Cuellos de botella. Líneas de código assembler.
-
-\subsection{Cuellos de Botella}
-
-Cuellos de botella.
-
-\subsection{Bajo Nivel}
-
-Registros de hardware. Contadores.
-
-\subsection{Referencias}
-
-Lista de publicaciones referenciadas anteriormente.
+Se incluye información sobre el caso de prueba ejecutado. El tamaño del mismo en memoria y la composición de sus estructuras.
 
 \bigskip
 
-Un ejemplo de salida completo se encuentra adjuntado en el apéndice.
+Se incluye un resumen estadistico de los tiempos de ejecución luego de repetir el caso de pruebas varias veces.
+Un histograma muestra la distribución de los resultados.
+
+\bigskip
+
+Se incluye un gráfico demostrando los tiempos de ejecución del caso de prueba bajo diferentes niveles de optimización en el compilador.
+
+\subsection{Escalabilidad}
+
+Se incluyen gráficos resumiendo la escalabilidad del programa al aumento el tamaño del problema y también por separado la cantidad de unidades de cómputo.  
+
+\bigskip
+
+Se estima la proporción paralelo/lineal del programa, y junto con ellas se calculan mejoras teóricas máximas bajo las leyes de {\it Amdalah} y {\it Gustafson}.
+
+\subsection{Perfil de Ejecución}
+
+Se incluye información sobre las funciones y líneas de código más usadas. 
+
+\bigskip
+
+Se incluyen gráficos sobre el uso de los recursos del sistema durante una ejecución del programa. Incluyendo utilización de CPU, memoria y lectura/escritura de disco.
+
+\bigskip
+
+Se listan cuellos de botella, junto con el código de ensamblador respectivo.
+
+\subsection{Bajo Nivel}
+
+Se incluye el reporte de vectorización emitido por el compilador.
+
+\bigskip
+
+Se incluye el reporte de contadores de {\it hardware} relacionados con el rendimiento.
+
+\subsection{Referencias}
+
+Se incluye una lista de publicaciones relacionadas, las cuales son referenciadas en las secciones anteriores.
 
 \chapter{Casos de Aplicación} \label{Casos de Aplicacion}
 
@@ -1407,28 +1455,14 @@ Se utiliza una grilla donde cada celda transfiere calor a sus vecinos en una ser
 
 El reporte generado en bruto puede consultarse en el apéndice \ref{examples}.
 
-\subsection{8 Queens}
+\subsection{Ocho Reinas}
 
-El dilema trata en el problema de posicionar en un tablero de ajedrez ocho
-reinas sin que alguna amenace a las demás. Una reina amenaza a cualquier otra
-pieza en el tablero que este en la mismo diagonal, fila o columna.
-
-El problema de encontrar todas las soluciones para un tamaño de tablero dado suele resolverse utilizando recursión \footnote{\href{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}.}.
+El programa resuelve el problema de posicionar en un tablero de ajedrez ocho reinas sin que alguna amenace a las demás. Una reina amenaza a cualquier otra
+pieza en el tablero que este en la misma diagonal, fila o columna.
 
 \bigskip
 
-Ejemplos de los reportes generados pueden consultarse en el apéndice \ref{examples}.
-
-\section{Código del Mundo Real}
-
-\subsection{NEC OpenMP}
-
-Mario Trangoni realizó una paralelizacion del código original.
-Es utilizado por estudiantes de ingeniería electrónica para el cálculo de distribución de radiación de una antena.
-
-\href{bla}{https://code.google.com/p/nec2c/}
-
-Partes relevantes del reporte.
+El problema de encontrar todas las soluciones para un tamaño de tablero dado suele resolverse utilizando recursión \footnote{\href{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}.}.
 
 \chapter{Conclusiones y Trabajo Futuro} \label{Conclusiones y Trabajo Futuro}
 
