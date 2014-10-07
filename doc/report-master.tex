@@ -43,7 +43,7 @@ En el área del cómputo de altas prestaciones las aplicaciones son construidas 
 
 \bigskip
 
-Este trabajo revisa la construcción de una infraestructura que simplifica el análisis de rendimiento; incluyendo casos de estudio como etapa de validación. El objetivo es facilitar la tarea evitando la tediosa recolección de datos relevantes de modo manual, permitiendo más tiempo de experimentación y análisis.
+Este trabajo revisa la construcción de una infraestructura que simplifica el análisis de rendimiento; incluyendo su aplicación mediante casos de estudio como etapa de validación. El objetivo es facilitar la tarea evitando la tediosa recolección de datos relevantes de modo manual, permitiendo más tiempo de experimentación para la optimización propiamente dicha.
 
 \bigskip
 
@@ -59,7 +59,7 @@ Este capítulo introduce el tema bajo estudio, definiendo los objetivos principa
 
 \section{Motivación}
 
-En el área de cómputo de altas prestaciones los desarrolladores son los mismos
+En el área de cómputo de altas prestaciones (o {\it HPC}, por las siglas en inglés de {\it High Performance Computing}) los desarrolladores son los mismos
 especialistas del dominio del problema a resolver. Las rutinas
 más demandantes de cálculo son en su mayoría científicas y su
 gran complejidad hace posible su correcta implementación sólo por los mismos investigadores.
@@ -87,7 +87,7 @@ profundamente y con correctitud comprobada.
 
 \section{Objetivos}
 
-La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de cómputo de altas prestaciones ({\it HPC}, por las siglas en inglés de {\it High Performance Computing}). Este trabajo se realiza como extensión al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
+La propuesta principal consiste en el desarrollo de una infraestructura de soporte para el análisis de aplicaciones de cómputo de altas prestaciones. Este trabajo se realiza como extensión al trabajo final {\it Herramientas para el Soporte de Análisis de Rendimiento} de la Especialización en Cómputo de Altas Prestaciones y Tecnología Grid.
 
 \bigskip
 
@@ -100,11 +100,11 @@ La siguiente lista enumera las diferentes publicaciones realizadas durante el cu
 
 \begin{enumerate}
 \item Estudio de Multiplicación de Matrices. Reporte Técnico. Realizado como parte del curso {\it Programación en Clusters} dictado por el Dr {\it Fernando Tinetti} \cite{mm-tool}.
-\item Articulo {\it Optimizing Latency in Beowulf Clusters}. HPC Latam 2012 \cite{latency}.
-\item Comparación de Implementaciones de una Operación BLAS. Reporte Técnico. Realizado como parte del curso {\it Programación GPU de Propósito General} dictado por la Dra {\it Margarita Amor}.
+\item Artículo {\it Optimizing Latency in Beowulf Clusters}. HPC Latam 2012 \cite{latency}.
+\item Comparación de Implementaciones de una Operación BLAS. Reporte técnico realizado como parte del curso {\it Programación GPU de Propósito General} dictado por la Dra {\it Margarita Amor}.
 \item Sección {\it Intel Cluster Ready} e {\it Intel Cluster Checker} en el libro {\it Programming Intel Xeon Phi}. Intel Press. 2013 \cite{xeonphi}.
 \item Reseña del Libro {\it Intel Xeon Phi Coprocessor High Performance Programming} - JCS\&T Vol 13 N 2 Octubre 2013 \footnote{\href{http://journal.info.unlp.edu.ar/journal/journal36/papers/JCST-Oct13-BR1.pdf}{JCS\&T Vol. 13 No. 2}}.
-\item Articulo {\it Lessons learned from Contrasting BLAS Kernel Implementations} - XIII Workshop Procesamiento Distribuido y Paralelo (WPDP), 2013 \cite{lessons}.
+\item Articulo {\it Lessons Learned from Contrasting BLAS Kernel Implementations} - XIII Workshop Procesamiento Distribuido y Paralelo (WPDP), 2013 \cite{lessons}.
 \end{enumerate}
 
 \section{Metodología}
@@ -112,10 +112,10 @@ La siguiente lista enumera las diferentes publicaciones realizadas durante el cu
 En base al problema y a los objetivos establecidos previamente, la metodología adoptada es la siguiente:
 
 \begin{enumerate}
-\item Analizar el estado del arte del análisis de rendimiento y las herramientas utlizadas para ello.
+\item Analizar el estado del arte del análisis de rendimiento y las herramientas utilizadas para ello.
 \item Formular el problema específico a resolver.
-\item Dado una propuesta de procedimiento sistemático de análisis de rendimiento, automatizarlo y analizar potenciales mejoras de utilidad.
 \item Identificar que tipos de gráficos y tablas pueden resumir la información obtenida de modo de facilitar su utilización.
+\item Dada una propuesta de procedimiento sistemático de análisis de rendimiento, automatizarlo y analizar potenciales mejoras de utilidad.
 \item Aplicar la infraestructura sobre núcleos de cómputo conocidos para poder focalizar los esfuerzos en la mejora del reporte.
 \item Documentación de la experiencia
 \end{enumerate}
@@ -138,7 +138,7 @@ Este capítulo revisa el estado del arte de los temas relevantes a este trabajo.
 
 \section{Análisis de Rendimiento}\label{chapter:analysis}
 
-Este capítulo introduce el concepto de rendimiento y teoría básica sobre su análisis.
+Esta sección introduce el concepto de rendimiento y teoría básica sobre su análisis.
 Además revisa las herramientas disponibles.
 
 \subsection{Definición}
@@ -177,7 +177,7 @@ Donde $ P $ es el porcentaje de trabajo hecho en paralelo, ($ 1-P $) es entonces
 S = \frac{1}{(1 - P) + \frac{P}{N}}
 \end{eqnarray}
 
-Esta ley nos establece que incluso teniendo infinitas unidades de cómputo la ganancia está limitada.
+Esta ley establece que incluso teniendo infinitas unidades de cómputo la ganancia está limitada.
 La Tabla \ref{fig:amdahl} muestra que no importa la cantidad de unidades de
 procesamiento que sean utilizadas existe un límite en la práctica.
 
@@ -190,8 +190,8 @@ procesamiento que sean utilizadas existe un límite en la práctica.
 \end{table}
 
 Por ejemplo, en el caso de tener sólo un $ 10\% $ de paralelismo
-en una aplicación, la mejora nunca va a superar $ 1.10x $ la original.
-En el caso de tener un $ 95\% $ de paralelismo, la mejora no puede ser mayor a $ 20x $ la original.
+en una aplicación, la mejora nunca va a superar $ 1.1 $ veces la original.
+En el caso de tener un $ 95\% $ de paralelismo, la mejora no puede ser mayor a $ 20 $ veces la original.
 
 \bigskip
 
@@ -209,7 +209,7 @@ decir asume un tamaño de problema fijo.
 
 \begin{eqnarray}
 \label{eq:gustafson}
-speedup(P) = P - \alpha \times ( P - 1)
+Speedup(P) = P - \alpha \times ( P - 1)
 \end{eqnarray}
 
 donde $ P $ es el número de unidades de cómputo y $ \alpha $ el porcentaje de trabajo paralelizable.
@@ -225,7 +225,7 @@ Al aplicar esta ley obtenemos que un problema con datos grandes o repetitivos en
 \label{fig:gustafson}
 \end{table}
 
-Similarmente al cuadro anterior, podemos deducir de la Tabla \ref{fig:gustafson} que en el caso de un programa con sólo $ 10\% $ de paralelismo, al incrementar los recursos $ 64x $ sólo podemos incrementar el tamaño del problema $ 7x $. En el otro extremo, nos estima un incremento de $ 61x $ en el caso de tener $ 95\% $ de paralelismo.
+Similarmente al cuadro anterior, podemos deducir de la Tabla \ref{fig:gustafson} que en el caso de un programa con sólo $ 10\% $ de paralelismo, al incrementar los recursos $ 64 $ veces sólo podemos incrementar el tamaño del problema $ 7 $ veces. En el otro extremo, nos estima un incremento de $ 61 $ veces en el caso de tener $ 95\% $ de paralelismo.
 
 \subsubsection{Métrica de {\it Karp-Flatt}}
 
@@ -245,11 +245,11 @@ Para un problema de tamaño fijo, la eficiencia típicamente disminuye cuando el
 
 \subsection{Métricas}
 
-Algunos ejemplos de medida de rendimiento son:
+Algunos ejemplos de métricas de rendimiento son:
 
 \begin{enumerate}
 \item El ancho de banda y la latencia mínima de un canal de comunicación,
-  una jerarquía de memorias o de la unidad de almacenamiento.
+  una jerarquía de memorias o de una unidad de almacenamiento.
 \item La cantidad de instrucciones, operaciones, datos o trabajo procesado
   por cierta unidad de tiempo.
 \item El rendimiento asociado al costo del equipamiento, incluyendo mantenimiento
@@ -283,7 +283,7 @@ A la hora de tomar decisiones, éstas deben estar basadas en datos concretos, ya
 \bigskip
 
 En el caso de tener problemas de desviación en los resultados medidos, es aconsejable obtener un gran número de muestras y utilizar un valor promedio para asegurarse de evitar errores de medición tanto como sea posible. También es preferible aumentar el tamaño del problema a resolver, o la definición de los resultados para ejercitar por más tiempo y tener así un resultado más estable.
-Suponiendo una distribución normal de resultados, se suele controlar que haya menos de 3 $ \sigma $ de diferencia. Se busca que la mayoría de los resultados queden cerca de su promedio, como muestra la Figura \ref{fig:deviation}.
+Suponiendo una distribución normal de resultados, se suele controlar que haya menos de 3 desviaciones estandar de diferencia. Se busca que la mayoría de los resultados queden cerca de su promedio, como muestra la Figura \ref{fig:deviation}.
 
 \begin{figure}[H]
 \centering
@@ -317,29 +317,7 @@ G = 10 ^{( log _{10} (x_{1}) + \ldots + log _{10} (x_{n}) ) / n}
 
 \section{Herramientas}
 
-Actualmente existen numerosas y diversas herramientas para el análisis de rendimiento \cite{gregg}. Estas funcionan a diferentes niveles de abstracción: desde contadores de eventos a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo, instrumentación de código, y hasta la simple utilización del tiempo de ejecución de una aplicación o la comparación contra un trabajo similar de referencia. Para poder analizar del rendimiento un desarrollador aplica las herramientas listadas en la Tabla \ref{table:tools}.
-
-\begin{table}[H]
-    \caption{Herramientas de Soporte para Optimización}
-    \centering
-    \begin{tabular}{|l|l|}\hline
-      {\bf Ejemplo} & {\bf Descripción} \\ \hline
-      Software {\tt gprof} & Muestra información de perfil de llamadas a funciones \\ \hline
-      Hardware {\tt perf} & Muestra información de perfil de sistema \\ \hline
-      {\it STREAM} & Benchmark de jerarquía de memoria \\ \hline
-      HPL & Benchmark de capacidad de cómputo \\ \hline
-      IMB Ping Pong & Benchmark de latencia y ancho de banda de red \\ \hline
-      HPCC & Paquete de benchmarks \\ \hline
-    \end{tabular}
-    \label{table:tools}
-\end{table}
-
-Las pruebas de rendimiento como STREAM, HPL, IMB Ping Pong y HPCC permiten conocer el estado del sistema y los límites de rendimiento en la práctica.
-Los perfiles de ejecución de aplicaciones y sistema permiten conocer como se utilizan los recursos del sistema para llevar a cabo las instrucciones de cada programa.
-
-\bigskip
-
-En este trabajo se ha limitado el alcance a herramientas de código abierto.
+Actualmente existen numerosas y diversas herramientas para el análisis de rendimiento \cite{gregg}. Estas funcionan a diferentes niveles de abstracción: desde contadores de eventos a nivel de {\it hardware}, pasando por monitores de recursos dentro del núcleo del sistema operativo, instrumentación de código, y hasta la simple utilización del tiempo de ejecución de una aplicación o la comparación contra un trabajo similar de referencia. 
 
 \subsection{Pruebas de Rendimiento}
 
@@ -709,7 +687,7 @@ Se recomienda un proceso de aplicación gradual empezando por herramientas gener
 {\bf Característica} & {\bf Herramientas} \\ \hline
 Capacidad del sistema & Benchmark HPCC \\ \hline
 Medición de ejecución & {\tt time}, {\tt gettimeofday()}, {\tt MPI\_WTIME()} \\ \hline
-Perfil de ejecución & profilers: {\tt gprof, perf} \\ \hline
+Perfil de ejecución & profilers: {\tt gprof}, {\tt perf} \\ \hline
 Comportamiento de la aplicación & profilers: {\tt gprof, perf} \\ \hline
 Comportamiento de librerías & profilers: valgrind, MPI vampir. \\ \hline
 Comportamiento del sistema & profilers: oprofile, perf \\ \hline
@@ -1003,19 +981,38 @@ Este capítulo introduce el problema a resolver.
 
 \section{Análisis de Rendimiento}
 
-Este trabajo entonces trata de simplificar la tarea de análisis de rendimiento. 
-
-\bigskip
-
-Aunque es una tarea difícil de sistematizar y que muchas veces depende fuertemente de la aplicación bajo análisis, se propone un procedimiento general para ciertas aplicaciones. El análisis de rendimiento requiere la utilización de diversas herramientas, las cuales implican un tiempo no trivial de aprendizaje de su correcta aplicación.
+Este trabajo trata de simplificar la tarea de análisis de rendimiento. 
 
 \bigskip
 
 El problema concreto sobre el que se trabaja es poseer automatización para ahorrar esfuerzo y minimizar el nivel de conocimiento requerido durante el desarrollo de aplicaciones de cómputo de altas prestaciones.
 
+\subsection{Problemas Usuales}
+
+\subsubsection{Interacción Humana}
+
+La interacción humana siempre es fuente de errores involuntarios, además de malgastar el tiempo de un investigador o desarrollador en tareas factibles de ser automatizadas. Usualmente una persona es requerida para ejecutar los programas, tabular los resultados y generar gráficos para su resumen.
+
+\bigskip
+
+El análisis de rendimiento requiere de una disciplina absoluta. Una de las tareas más demandantes de tiempo es la ejecución de un programa bajo distintas configuraciones para entender su comportamiento.
+
+\subsubsection{Manejo de Herramientas}
+
+El aprendizaje del correcto uso y aplicación de las herramientas demanda valioso tiempo.
+Sin embargo las herramientas adecuadas permiten extraer información de rendimiento de mayor granularidad y calidad de la información, posibilitando tomar una mejor decisión a la hora de focalizar los esfuerzos de optimización.
+
+\bigskip
+
+El análisis requiere el correcto uso de matemática estadística para promediar resultados, descartar ejecuciones problemáticas y establecer límites en las mejoras. Es frecuente la utilización de una hoja de cálculo para centralizar los cálculos una vez tabulados los tiempos de ejecución y demás métricas de rendimiento.
+
+\subsubsection{Optimización Temprana}
+
+La optimización temprana sin tener en cuenta datos cuantitativos puede implicar que un esfuerzo importante no tenga impacto alguno en el resultado global del tiempo de ejecución de un programa.
+
 \section{Infrastructura de Soporte}
 
-Los siguientes requerimientos son los necesarios para una infrastructura:
+Los siguientes requerimientos son los necesarios para una infrastructura de análisis de rendimiento.
 
 \subsection{Reusabilidad}
 
@@ -1024,16 +1021,16 @@ Su instalación solo debe depender de la existencia previa de las mismas herrami
 
 \subsection{Configurabilidad}
 
-La aplicación de las herramientas debe ser configurable en su totalidad mediante un archivo de configuración, evitando tareas manuales y repetitivas donde usualmente se comenten errores que causan pérdidas de tiempo valiosas.
+La aplicación de las herramientas debe ser configurable en su totalidad mediante un archivo de configuración.
 Los parámetros a configurar deberían incluir entre otros: la forma de compilar y ejecutar un programa, el rango de valores de entrada, el número de repeticiones de las diferentes ejecuciones del programa.
 
 \subsection{Portabilidad}
 
-La infrastructura debe ser implementada con un lenguaje portable, de ser posible basado en scripts de código abierto de forma que puedan ser revisado fácilmente por los usuarios para incluir nuevas fuentes de información o cambiar la forma en que las herramientas base son utilizadas.
+La infrastructura debe ser implementada con un lenguaje portable, de ser posible basado en código abierto de forma que pueda ser revisada fácilmente por los usuarios para incluir nuevas fuentes de información o cambiar la forma en que las herramientas base son utilizadas.
 
 \subsection{Extensibilidad}
 
-La infrastructura debe poseer un diseño de fácil extensión, la incorporación de nuevas herramientas, gráficos o secciones dentro de un reporte debe ser una tarea trivial asumiendo que ya se conoce la forma de obtener la información requerida para ello.
+La infrastructura debe poseer un diseño de fácil extensión, la incorporación de nuevas herramientas, gráficos o secciones dentro de un reporte debe ser una tarea trivial asumiendo que ya se conoce la forma manual de obtener la información requerida para ello.
 
 \subsection{Simplicidad}
 
@@ -1043,7 +1040,7 @@ Debe ser posible completar un reporte entre un día de trabajo y otro sin la int
 
 \chapter{Propuesta de Solución} \label{Propuesta de Solucion}
 
-Este capítulo muestra la propuesta de solución, incluyendo el diseño de la misma a diferentes niveles, un ejemplo de su reporte de salida y realizando casos de aplicación con aplicaciones del mundo real.
+Este capítulo muestra la propuesta de solución, incluyendo el diseño de la misma a diferentes niveles.
 
 \section{Procedimiento}
 
@@ -1056,8 +1053,8 @@ La Figura \ref{fig:procedure} muestra a grandes rasgos las etapas del proceso a 
 \caption{Procedimiento de Análisis}
 \end{figure}
 
-Primero se establece una línea base de rendimiento del sistema utilizando pruebas conocidas.
-Luego se procede a trabajar en etapas iterativas asegurando en cada paso la estabilidad de los resultados, una correcta utilización de recursos y utilizando un perfil de ejecución. Luego de optimizar y comprobar la mejora, se vuelve a empezar el ciclo.
+Primero se establece una línea base de rendimiento del sistema utilizando pruebas de rendimiento conocidas.
+Luego se procede a trabajar en etapas iterativas asegurando en cada paso la estabilidad de los resultados, revisando la utilización de recursos y utilizando un perfil de ejecución para encontrar un punto de enfoque. Luego de optimizar y comprobar la mejora, se vuelve a empezar el ciclo.
 
 \section{Paso a Paso}
 
@@ -1105,7 +1102,7 @@ $ for size in `seq 1024 1024 10240`; do /usr/bin/time -v ./program $size >> size
 
 \begin{enumerate}
 \item ¿Cuál es la relación entre el tiempo de las diferentes ejecuciones?
-\item ¿Es la relación lineal o constante?
+\item ¿Es la incremento del tiempo de ejecución lineal o constante?
 \end{enumerate}
 
 \item Escalar cómputo para luego calcular límite de mejoras con {\it Amdalah} y {\it Gustafson}.
@@ -1150,7 +1147,7 @@ $ prof report
 \item ¿Cómo se comporta el sistema durante la ejecución de la aplicación?
 \item ¿Son las métricas de contadores de {\it hardware} las esperadas?
 \item ¿Es la aplicación la gran concentradora de los recursos disponibles?
-\item ¿Qué instrucciones de {\it hardware} son las utilizadas en el cuello de botella?
+\item ¿Qué instrucciones de {\it hardware} son las mayormente utilizadas?
 \end{enumerate}
 
 \item Comprobar vectorizaciones
@@ -1178,67 +1175,11 @@ La automatización se comporta del mismo modo que un usuario realizando un proce
 
 \bigskip
 
-Las limitaciones {\it a-priori} que posee la infrastructura son en materia de portabilidad y aplicación. Por el lado de la portabilidad, solo se soportan sistemas GNU/Linux recientes, siendo necesarias el conjunto de utilidades de soporte especificadas anteriormente. Por el lado de la aplicación, solo se soportan programan utilizando tecnología OpenMP multi-hilo.
+Las limitaciones {\it a-priori} que posee la infrastructura son en materia de portabilidad y aplicación. Por el lado de la portabilidad, solo se soportan sistemas {\it GNU/Linux recientes}, siendo necesarias el conjunto de utilidades de soporte especificadas anteriormente. Por el lado de la aplicación, solo se soportan programan utilizando tecnología {\it OpenMP}.
 
 \section{Teoría de Operación}
 
 Esta sección detalla el funcionamiento de la infraestructura relacionando los componentes.
-
-\subsection{Configuración}
-
-La herramienta de línea de comando toma como parámetro principal el binario de la aplicación a analizar. Asume por defecto que la aplicación esta construida utilizando {\it Makefile} de la forma usual, ya que para algunos pasos de análisis se necesita recompilar la aplicación con información extra de depuración.
-En el caso de que no sea así, el archivo de configuración permite la definición de tareas como configuración, compilacion y ejecución del programa.
-
-\bigskip
-
-El listado \ref{lst:hotspot-help} muestra la pantalla de ayuda de la infrastructura.
-
-\begin{lstlisting}[language=bash, caption={Ayuda de {\tt hotspot}}, label={lst:hotspot-help}]
-$ hotspot --help
-usage: hotspot [-h] [-v] [--config CONFIG] [--debug]
-
-Generate performance report for OpenMP programs.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -v, --version         show program's version number and exit
-  --config CONFIG, -c CONFIG
-                        path to configuration
-  --debug, -d           enable verbose logging
-
-Check https://github.com/moreandres/hotspot for details.
-$ hotspot
-\end{lstlisting}
-
-\bigskip
-
-El archivo de configuración requerido se muestra en el listado \ref{lst:hotspot-config}.
-Un parámetro necesario es el rango de tamaños de problema a utilizar durante las ejecuciones, definidos como una secuencia de formato compatible con {\tt seq(1)}.
-
-\begin{lstlisting}[language=bash, caption={Configuración de {\tt hotspot}}, label={lst:hotspot-config}]
-# hotspot configuration file
-
-[hotspot]
-# python format method is used to pass parameters
-
-# range is a seq-like definition for problem size
-range=1024,2048,256
-
-# cflags are the compiler flags to use when building
-cflags=-O3 -Wall -Wextra
-
-# build is the command used to build the program
-build=CFLAGS='{0}' make
-
-# clean is the cleanup command to execute
-clean=make clean
-
-# run is the program execution command
-run=OMP_NUM_THREADS={0} N={1} ./{2}
-
-# count is the number of runs to check workload stabilization
-count=16
-\end{lstlisting}
 
 \subsection{Arquitectura}
 
@@ -1350,6 +1291,62 @@ El repositorio de código se encuetra en \href{https://github.com/moreandres/hot
 La licencia del código fuente es GPLv2.
 Se reutilizan librerías como {\tt matplotlib.pyplot} \cite{matplotlib} y {\tt numpy} \cite{numpy} para gráficar las estadísticas obtenidas durante las pruebas de rendimiento.
 
+\subsection{Configuración}
+
+La herramienta de línea de comando toma como parámetro principal el binario de la aplicación a analizar. Asume por defecto que la aplicación esta construida utilizando {\it Makefile} de la forma usual, ya que para algunos pasos de análisis se necesita recompilar la aplicación con información extra de depuración.
+En el caso de que no sea así, el archivo de configuración permite la definición de tareas como configuración, compilacion y ejecución del programa.
+
+\bigskip
+
+El listado \ref{lst:hotspot-help} muestra la pantalla de ayuda de la infrastructura.
+
+\begin{lstlisting}[language=bash, caption={Ayuda de {\tt hotspot}}, label={lst:hotspot-help}]
+$ hotspot --help
+usage: hotspot [-h] [-v] [--config CONFIG] [--debug]
+
+Generate performance report for OpenMP programs.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  --config CONFIG, -c CONFIG
+                        path to configuration
+  --debug, -d           enable verbose logging
+
+Check https://github.com/moreandres/hotspot for details.
+$ hotspot
+\end{lstlisting}
+
+\bigskip
+
+El archivo de configuración requerido se muestra en el listado \ref{lst:hotspot-config}.
+Un parámetro necesario es el rango de tamaños de problema a utilizar durante las ejecuciones, definidos como una secuencia de formato compatible con {\tt seq(1)}.
+
+\begin{lstlisting}[language=bash, caption={Configuración de {\tt hotspot}}, label={lst:hotspot-config}]
+# hotspot configuration file
+
+[hotspot]
+# python format method is used to pass parameters
+
+# range is a seq-like definition for problem size
+range=1024,2048,256
+
+# cflags are the compiler flags to use when building
+cflags=-O3 -Wall -Wextra
+
+# build is the command used to build the program
+build=CFLAGS='{0}' make
+
+# clean is the cleanup command to execute
+clean=make clean
+
+# run is the program execution command
+run=OMP_NUM_THREADS={0} N={1} ./{2}
+
+# count is the number of runs to check workload stabilization
+count=16
+\end{lstlisting}
+
 \section{Reporte Generado}
 
 A continuación se explica el contenido de cada sección en particular.
@@ -1362,53 +1359,61 @@ Las consideraciones generales tenidas en cuenta en todas las secciones fueron la
 \begin{enumerate}
 \item Formato portable similar a un artículo de investigación.
 \item Hipervínculos a archivos con la información pura.
-\item Inclusión de una explicación breve del objetivo de la sección y los gráficos incluídos.
+\item Inclusión de una explicación breve del objetivo de la sección y/o gráficos.
 \item Inclusión de líneas de tendencía y comportamiento ideal en gráficos.
 \item Referencias a material de consulta.
 \item Utilización del inglés.
 \end{enumerate}
 
-\subsection{Resumen}
+\subsection{Consideraciones Particulares}
+
+\subsubsection{Resumen}
 
 El resumen incluído en la primer página introduce el reporte junto con información sobre la infrastructura utilizada y la ubicación de la información de ejecución.
 
-\subsection{Contenido}
+\subsubsection{Contenido}
 
-Contiene un índice de secciones en formato de dos columnas con hipervinculos para facilitar la búsqueda rápida de la información.
+Contiene un índice de secciones en formato reducido de dos columnas con hipervínculos, de modo de facilitar la búsqueda rápida de la información.
 
-\subsection{Programa}
+\subsubsection{Programa}
 
-Se incluyen detalles sobre el programa bajo análisis.
+Se incluyen detalles sobre el programa bajo análisis. Esto permite recordar la versión del programa, la fecha y hora exacta del análisis, y los parámetros de entrada utilizados.
 
-\subsection{Capacidad del Sistema}
+\subsubsection{Capacidad del Sistema}
 
 Se incluyen detalles sobre la configuración de {\it hardware} y {\it software} del sistema.
-Además se incluye información de referencia obtenida de la prueba de rendimiento {\it HPCC}.
-
-\subsection{Carga de Trabajo}
-
-Se incluye información sobre el caso de prueba ejecutado. El tamaño del mismo en memoria y la composición de sus estructuras.
+Esto permite comparar los resultados contra sistemas similares, o validar que una distinta configuración impacta o no en la ejecución del programa.
 
 \bigskip
 
-Se incluye un resumen estadistico de los tiempos de ejecución luego de repetir el caso de pruebas varias veces.
-Un histograma muestra la distribución de los resultados.
+Además se incluye información de referencia obtenida de la prueba de rendimiento {\it HPCC}. Esto permite rápidamente entender las capacidades del sistema en núcleos de cómputo conocidos.
+
+\subsubsection{Carga de Trabajo}
+
+Se incluye información sobre el caso de prueba ejecutado. Se detalla el tamaño del mismo en memoria y la composición de sus estructuras ya que esto impacta directamente sobre la utilización de la jerarquía de memoria del sistema.
 
 \bigskip
 
-Se incluye un gráfico demostrando los tiempos de ejecución del caso de prueba bajo diferentes niveles de optimización en el compilador.
+Se incluye también un resumen estadístico de la estabilidad del caso de pruebo luego de repetir el caso de pruebas varias veces.
+Un histograma muestra la distribución de los resultados y el promedio geométrico resultante.
 
-\subsection{Escalabilidad}
+\bigskip
 
-Se incluyen gráficos resumiendo la escalabilidad del programa al aumento el tamaño del problema y también por separado la cantidad de unidades de cómputo.  
+También se incluye un gráfico demostrando los tiempos de ejecución del caso de prueba bajo diferentes niveles de optimización en el compilador.
+Esto permite entender el grado de optimización que ya posee un programa en materia de vectorización.
+
+\subsubsection{Escalabilidad}
+
+Se incluyen gráficos resumiendo la escalabilidad del programa al aumento el tamaño del problema y también por separado la cantidad de unidades de cómputo. Esto permite entender el grado de optimización del programa.
 
 \bigskip
 
 Se estima la proporción paralelo/lineal del programa, y junto con ellas se calculan mejoras teóricas máximas bajo las leyes de {\it Amdalah} y {\it Gustafson}.
+Este dato es importante para entender el tope de mejora posible.
 
-\subsection{Perfil de Ejecución}
+\subsubsection{Perfil de Ejecución}
 
-Se incluye información sobre las funciones y líneas de código más usadas. 
+Se incluye información sobre las funciones y líneas de código más usadas del programa durante su ejecución. Esto nos focaliza explicitamente los futuros esfuerzos de optimización, ya que garantiza un alto impacto global.
 
 \bigskip
 
@@ -1416,19 +1421,20 @@ Se incluyen gráficos sobre el uso de los recursos del sistema durante una ejecu
 
 \bigskip
 
-Se listan cuellos de botella, junto con el código de ensamblador respectivo.
+Se listan también cuellos de botella, junto con el código de ensamblador respectivo. Esta valiosa información nos permite entender que tipo de instrucciones se están utilizando para llevar a cabo el trabajo del programa.
 
-\subsection{Bajo Nivel}
+\subsubsection{Bajo Nivel}
 
-Se incluye el reporte de vectorización emitido por el compilador.
+Se incluye el reporte de vectorización emitido por el compilador. Nos permite comprobar si todos los ciclos dentro del código fuente están siendo vectorizados. En caso negativo, se muestra información relevante de la razón.
 
 \bigskip
 
-Se incluye el reporte de contadores de {\it hardware} relacionados con el rendimiento.
+Se incluye además el reporte de contadores de {\it hardware} relacionados con el rendimiento de la unidad de procesamiento. Aunque requiere un entendimiento avanzado de la arquitectura del sistema, muchos problemas pueden ser identificados con esta información.
 
-\subsection{Referencias}
+\subsubsection{Referencias}
 
 Se incluye una lista de publicaciones relacionadas, las cuales son referenciadas en las secciones anteriores.
+Esto permite a los usuarios del reporte conocer más de los puntos relevantes de cada sección si así lo desean.
 
 \chapter{Casos de Aplicación} \label{Casos de Aplicacion}
 
@@ -1438,31 +1444,69 @@ Este capítulo contiene casos de estudio mostrando los resultados de aplicar la 
 
 Esta sección incluye los resultados obtenidos al aplicar la infrastructura a núcleos de cómputo de prueba.
 
-\subsection{Matrix}
+\subsection{Multiplicación de Matrices}
 
 La multiplicación de matrices es una operación fundamental en múltiples campos de aplicación científica como la resolución de ecuaciones lineales y la representación de grafos y espacios dimensionales. Por ello existe abundante material sobre el tema. Tomando como ejemplo una implementación utilizando OpenMP \footnote{\href{http://blog.speedgocomputing.com/2010/08/parallelizing-matrix-multiplication.html}{http://blog.speedgocomputing.com/2010/08/parallelizing-matrix-multiplication.html}.}
 
 \bigskip
 
-El reporte generado en bruto puede consultarse en el apéndice \ref{examples}.
+El reporte de rendimiento nos demuestra lo siguiente:
 
-\subsection{Heat2d}
+\begin{enumerate}
+\item El caso de prueba es muy estable, con una desviación estandar mucho menor a 1.
+\item Las optimizaciones que realiza el compilador demuestran un impacto importante en el tiempo de ejecución.
+\item Los tiempos de ejecución al escalar el problema descubren un pico que posiblemente implique un error de implementación de algoritmo.
+\item Los tiempos de ejecución al incrementar las unidades de cómputo revelan un problema ya que no muestra mejoras constantes.
+\item Se estima un 75\% de paralelismo, con una mejora teórica máxima de 3.5 veces sin escalar el tamaño del problema si utilizamos el mismo algoritmo.
+\item El cuello de botella es alrededor de la línea donde se obtiene el valor parcial de un elemento de la matriz resultante.
+\item No hay lecturas ni escrituras al disco, por lo que no se está utilizando memoria virtual.
+\item El cuello de botella principal utiliza la instrucción {\tt add}, la cual no es vectorial.
+\item Las vectorizaciones no son realizadas exitosamente por el compilador en ningún ciclo dentro del código.
+\end{enumerate}
+
+Esta valiosa información nos permite comprobar asumpciones sobre el comportamiento del programa y nos provee de valiosa infromación para empezar a optimizar el código. Una discusión sobre las posibles optimizaciones a este código van más alla del alcance de este trabajo.
+
+\bigskip
+
+El reporte generado por la infrastructura puede consultarse en el apéndice \ref{example-matrix}.
+
+\subsection{Transmisión de Calor en 2 Dimensiones}
 
 Otro problema interesante es la simulación de transferencia de calor en un plano.
 Se utiliza una grilla donde cada celda transfiere calor a sus vecinos en una serie de ciclos finitas simulando el paso del tiempo \footnote{\href{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}{http://www.rblasch.org/studies/cs580/pa5/\#Source+Code-N100AC}.}.
 
 \bigskip
 
-El reporte generado en bruto puede consultarse en el apéndice \ref{examples}.
-
-\subsection{Ocho Reinas}
-
-El programa resuelve el problema de posicionar en un tablero de ajedrez ocho reinas sin que alguna amenace a las demás. Una reina amenaza a cualquier otra
-pieza en el tablero que este en la misma diagonal, fila o columna.
+\begin{enumerate}
+\item El caso de prueba es estable.
+\item Las optimizaciones del compilador tienen impacto acotado.
+\item El tiempo de ejecución al incrementar el tamaño del problema no crece monotónicamente.
+\item El tiempo de ejecución al sumar más unidades de cómputo no decrece sistematicamente.
+\item El paralelismo en el programa solo alcanza el 50\%, por lo tanto el límite máximo de mejora es de 2 veces.
+\item Hay dos cuellos de botella con un 25\% y un 15\% del tiempo de ejecución.
+\item El 35\% del tiempo de ejecución lo ocupa la instrucción {\tt mov}.
+\item Los ciclos no están siendo vectorizados.
+\end{enumerate}
 
 \bigskip
 
-El problema de encontrar todas las soluciones para un tamaño de tablero dado suele resolverse utilizando recursión \footnote{\href{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}{http://www.stevenpigeon.org/blogs/hbfs/super-reines-openmp.cpp}.}.
+El reporte generado por la infrastructura puede consultarse en el apéndice \ref{example-heat2d}.
+
+\subsection{Conjunto de Mandelbrot}
+
+TBD
+
+\bigskip
+
+\begin{enumerate}
+\item La estructura utilizada para representar números complejos está alineada y no posee huecos.
+\item El caso de prueba es muy estable.
+\item E
+\end{enumerate}
+
+\bigskip
+
+El reporte generado en bruto puede consultarse en el apéndice \ref{example-mandel}.
 
 \chapter{Conclusiones y Trabajo Futuro} \label{Conclusiones y Trabajo Futuro}
 
@@ -1518,13 +1562,13 @@ Por último, aunque la generación de un documento portable en formate PDF es si
 
 \chapter{Reporte de Ejemplo} \label{examples}
 
-\section{Multiplicación de Matrices}
+\section{Multiplicación de Matrices}  \label{example-matrix}
 \includepdf[frame=true, pages=-, scale=0.75, pagecommand={}]{matrix.pdf}
 
-\section{Propagación de Calor en 2 Dimensiones}
+\section{Propagación de Calor en 2 Dimensiones} \label{example-heat2d}
 \includepdf[frame=true, pages=-, scale=0.75, pagecommand={}]{heat2d.pdf}
 
-\section{Mandel}
+\section{Mandel} \label{example-mandel}
 \includepdf[frame=true, pages=-, scale=0.75, pagecommand={}]{mandel.pdf}
 
 \end{document}
