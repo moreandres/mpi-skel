@@ -1285,19 +1285,14 @@ Aunque solo se incluye {\it HardwareSection} como ejemplo, existe un objeto secc
 
 \subsection{Implementación}
 
-La implementación se desarrollo sobre una plataforma {\it GNU/Linux}, utilizando la distribución {\tt Ubuntu 14.04.1 LTS}.
-El lenguaje utilizado Python 2.7.6, publicado en {\it Python Software Foundation Package Index} como hotspot versión 0.3.
-El repositorio de código se encuetra en \href{https://github.com/moreandres/hotspot}{https://github.com/moreandres/hotspot}.
-La licencia del código fuente es GPLv2.
-Se reutilizan librerías como {\tt matplotlib.pyplot} \cite{matplotlib} y {\tt numpy} \cite{numpy} para gráficar las estadísticas obtenidas durante las pruebas de rendimiento.
+La implementación se desarrolla sobre una plataforma {\it GNU/Linux}, utilizando la distribución {\tt Ubuntu 14.04.1 LTS}.
+El lenguaje utilizado {\tt Python 2.7.6}, publicado en {\it Python Software Foundation Package Index} como {\tt hotspot} versión 0.3.
+El repositorio de código también se encuentra disponible \footnote{\href{https://github.com/moreandres/hotspot}{https://github.com/moreandres/hotspot}}.
+La licencia del código fuente es GPLv2. Se reutilizan librerías como {\tt matplotlib.pyplot} \cite{matplotlib} y {\tt numpy} \cite{numpy} para gráficar los resultados obtenidos durante las pruebas de rendimiento.
 
 \subsection{Configuración}
 
-La herramienta de línea de comando toma como parámetro principal el binario de la aplicación a analizar. Asume por defecto que la aplicación esta construida utilizando {\it Makefile} de la forma usual, ya que para algunos pasos de análisis se necesita recompilar la aplicación con información extra de depuración.
-En el caso de que no sea así, el archivo de configuración permite la definición de tareas como configuración, compilacion y ejecución del programa.
-
-\bigskip
-
+La herramienta de línea de comando toma como parámetro principal un archvo de configuración donde se describe las características del programa a analizar. 
 El listado \ref{lst:hotspot-help} muestra la pantalla de ayuda de la infrastructura.
 
 \begin{lstlisting}[language=bash, caption={Ayuda de {\tt hotspot}}, label={lst:hotspot-help}]
@@ -1319,8 +1314,11 @@ $ hotspot
 
 \bigskip
 
+Entre las características necesarias se incluye la forma de compilar la aplicación, ya que para algunos pasos de análisis se necesita incorporar información extra de depuración. El archivo de configuración también permite la definición de tareas como configuración y ejecución del programa con parámetros específicos de tamaño o resolución del problema de entrada. Otro parámetro necesario es el rango de tamaños de problema a utilizar durante las ejecuciones, definidos como una secuencia de formato compatible con la herramienta {\it Unix} {\tt seq} \footnote{\href{http://man.cat-v.org/unix\_8th/1/seq}{http://man.cat-v.org/unix\_8th/1/seq}}.
+
+\bigskip
+
 El archivo de configuración requerido se muestra en el listado \ref{lst:hotspot-config}.
-Un parámetro necesario es el rango de tamaños de problema a utilizar durante las ejecuciones, definidos como una secuencia de formato compatible con {\tt seq(1)}.
 
 \begin{lstlisting}[language=bash, caption={Configuración de {\tt hotspot}}, label={lst:hotspot-config}]
 # hotspot configuration file
@@ -1350,11 +1348,13 @@ count=16
 \section{Reporte Generado}
 
 A continuación se explica el contenido de cada sección en particular.
-En el apéndice se muestran tres ejemplos utilizando núcleos de cómputo conocidos.
+En el Apéndice \ref{examples} se adjuntan ejemplos utilizando núcleos de cómputo conocidos.
 
 \subsection{Consideraciones Generales}
 
 Las consideraciones generales tenidas en cuenta en todas las secciones fueron las siguientes:
+
+% TODO: add why?
 
 \begin{enumerate}
 \item Formato portable similar a un artículo de investigación.
@@ -1477,6 +1477,8 @@ Se utiliza una grilla donde cada celda transfiere calor a sus vecinos en una ser
 
 \bigskip
 
+Algunas conclusiones que pueden obtenerse son:
+
 \begin{enumerate}
 \item El caso de prueba es estable.
 \item Las optimizaciones del compilador tienen impacto acotado.
@@ -1488,8 +1490,6 @@ Se utiliza una grilla donde cada celda transfiere calor a sus vecinos en una ser
 \item Los ciclos no están siendo vectorizados.
 \end{enumerate}
 
-\bigskip
-
 El reporte generado por la infrastructura puede consultarse en el apéndice \ref{example-heat2d}.
 
 \subsection{Conjunto de Mandelbrot}
@@ -1497,6 +1497,8 @@ El reporte generado por la infrastructura puede consultarse en el apéndice \ref
 TBD
 
 \bigskip
+
+Algunas conclusiones que pueden obtenerse son:
 
 \begin{enumerate}
 \item La estructura utilizada para representar números complejos está alineada y no posee huecos.
@@ -1539,7 +1541,6 @@ pendiente, otra posibilidad es re-implementar desde cero alguna aplicación
 científica en colaboración con algún grupo de investigación y realizar
 varios ciclos de optimización para validar su utilidad.
 
-
 \section{Trabajo Futuro}
 
 Las posibilidades de extensión de esta infrastructura son muchas, cada sección del reporte final puede incluir información más detallada o utilizar otras herramientas. En particular la sección de contadores de {\it hardware} solo contiene una lista de contadores generalizada para cualquier arquitectura; si se supone una arquitectura dada se puede proveer información más especifica y por lo tanto más útil.
@@ -1555,6 +1556,8 @@ Las herramientas y procedimientos ya integrados solo utilizan el programa ya com
 \bigskip
 
 Por último, aunque la generación de un documento portable en formate PDF es simple y útil, se puede pensar en utilizar una tecnología que permita la generacion de reportes dinámicos que permitan a los expertos extraer información. Una implementación en HTML5 utilizando tablas filtrables y gráficos configurables puede ser interesante y causar gran impacto.
+
+% TODO: double reference list
 
 \bibliography{report}
 
