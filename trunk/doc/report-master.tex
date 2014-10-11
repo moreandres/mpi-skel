@@ -18,6 +18,7 @@
 \bibliographystyle{unsrt}
 
 \renewcommand{\lstlistingname}{Listado}
+\renewcommand*{\lstlistlistingname}{Índice de Listados}
 
 \begin{document}
 
@@ -52,6 +53,10 @@ En particular, este trabajo contribuye con un generador automático de reporte d
 \end{abstract}
 
 \tableofcontents
+
+\listoffigures
+\listoftables
+\lstlistoflistings
 
 \chapter{Introducción}
 
@@ -1184,11 +1189,11 @@ Esta sección detalla el funcionamiento de la infraestructura relacionando los c
 \subsection{Arquitectura}
 
 A grandes rasgos el usuario utiliza la infrastructura para analizar un programa.
-La infrastructura ejercita el programa multiples veces hasta obtener la información necesaria para generar un reporte.
+La infrastructura ejercita el programa múltiples veces hasta obtener la información necesaria para generar un reporte resumiendo los resultados.
 
 \bigskip
 
-Esto se detalla en la Figura \ref{fig:hotspot-seq}.
+La interacción con la infrastructura se detalla en la Figura \ref{fig:hotspot-seq} a continuación.
 
 \begin{figure}[H]
 \begin{center}
