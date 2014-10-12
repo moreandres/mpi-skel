@@ -79,7 +79,7 @@ optimizado correctamente puede ejecutarse órdenes de magnitud mejor que una imp
 directa \cite{mm-tool}. Además, se utiliza
 programación en paralelo para obtener una mejor utilización de la
 capacidad de cómputo disponible; aumentando por lo tanto la complejidad de
-implementación, depuración y optimización \cite{is-parallel-programming-hard}.
+implementación, depuración y optimización \cite{is-parallel-programming-hard} \cite{intro} \cite{overview} \cite{future} \cite{patterns} \cite{capturing} \cite{automatic} \cite{hybrid}.
 
 \bigskip
 
@@ -187,7 +187,7 @@ La Tabla \ref{fig:amdahl} muestra que no importa la cantidad de unidades de
 procesamiento que sean utilizadas existe un límite en la práctica.
 
 \begin{table}[H]
-\caption{Mejora Máxima}
+\caption{Mejora Máxima según {\it Amdahl}}
 \centering
 \includegraphics[width=7cm]{amdahl.png}
 
@@ -224,7 +224,7 @@ donde $ P $ es el número de unidades de cómputo y $ \alpha $ el porcentaje de 
 Al aplicar esta ley obtenemos que un problema con datos grandes o repetitivos en cantidades grandes puede ser computado en paralelo muy eficientemente. Nos es útil para determinar el tamaño de problema a utilizar cuando los recursos de cómputo son incrementados. En el mismo tiempo de ejecución, el programa resuelve entonces problemas más grandes.
 
 \begin{table}[H]
-\caption{Tamaño de Datos de Entrada}
+\caption{Mejora Máxima según {\it Gustafson}}
 \centering
 \includegraphics[width=7cm]{gustafson.png}
 \label{fig:gustafson}
@@ -411,6 +411,10 @@ Como último paso, el programa valida también la solución computada.
 \end{verbatim}
 }
 
+\bigskip
+
+La correcta utilización de la jerarquía de la memoria de un sistema de cómputo es una tarea no trivial \cite{memory}.
+
 \subsubsection{Linpack}
 
 Linpack \cite{linpack} es un conjunto de subrutinas {\it FORTRAN} que resuelven
@@ -498,7 +502,7 @@ sobre la jerarquía local de memoria.
 Es un conjunto de {\it benchmarks} cuyo objetivo es ejercitar las funciones
 más importantes del estándar para librerías de paso de mensajes (MPI, por sus siglas en inglés) \cite{mpi-standard}.
 El más conocido es el popular ping-pong, el cual ejercita la transmisión de mensajes ida y vuelta entre dos nodos de
-cómputo con diferentes tamaños de mensajes. \cite{latency}.
+cómputo con diferentes tamaños de mensajes \cite{latency}.
 
 \bigskip
 
@@ -1434,7 +1438,7 @@ Se incluye el reporte de vectorización emitido por el compilador. Nos permite c
 
 \bigskip
 
-Se incluye además el reporte de contadores de {\it hardware} relacionados con el rendimiento de la unidad de procesamiento. Aunque requiere un entendimiento avanzado de la arquitectura del sistema, muchos problemas pueden ser identificados con esta información.
+Se incluye además el reporte de contadores de {\it hardware} relacionados con el rendimiento de la unidad de procesamiento. Aunque requiere un entendimiento avanzado de la arquitectura del sistema \ref{hennessy}, muchos problemas pueden ser identificados con esta información.
 
 \subsubsection{Referencias}
 
@@ -1552,7 +1556,7 @@ Las posibilidades de extensión de esta infrastructura son muchas, cada sección
 
 \bigskip
 
-Otra posibilidad consiste en incorporar soporte para programas basados sobre la libreria de comunicacion MPI. Una vez que los programas son optimizados para ejecutarse eficientemente sobre una arquitectura multicore, el siguiente paso consiste en utilizar varios sistemas multicore al unísono.
+Otra posibilidad consiste en incorporar soporte para programas basados sobre la librería de comunicación MPI. Una vez que los programas son optimizados para ejecutarse eficientemente sobre una arquitectura multicore, el siguiente paso consiste en utilizar varios sistemas multicore al unísono \cite{beowulf-parallel-workstation} \cite{tinetti}.
 
 \bigskip
 
