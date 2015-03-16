@@ -1,0 +1,18 @@
+# Introduction #
+
+This page details how to use the framework.
+
+# Details #
+
+The framework works using a data struct as an application methods template.
+To incorporate a new application in the framework, only a new struct pointing which callbacks should be used needs to be passed.
+
+The main() function handling all the usual tags on input parsing, logging and MPI handling are already provided by the framework.
+
+# Command Line Options #
+
+--help
+--log FILE
+--verbose
+--input FILE
+--output FILE

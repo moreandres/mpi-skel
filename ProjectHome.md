@@ -1,0 +1,12 @@
+mpi-skel is a framework to write High Performance Computing (HPC) applications using the Message Passing Interface (MPI). It is suitable to be used by domain experts, as it is only required to implement several callbacks.
+
+The framework supports commonly used tools for portability, installation and self test.
+
+The framework also provides most features expected on a generic MPI application, including: logging/debugging, process scalability, performance analysis tools and automatic report generation.
+
+The framework provides one application skeleton which must be used to implement the general design of the computational tasks to perform. This skeleton simulates a pipeline
+of stages which work an specific task. Each stage may perform its work using a serial or parallel approach.
+
+The skeleton requires the implementation of the general description of the pipeline each pipeline stage task using callbacks. The callbacks approach tries to follow the implementation found on most Linux kernel subsystems, where adding a new driver only requires to implement a couple of structures and callbacks to update them.
+
+The features of the framework are detailed in FrameworkFeatures.

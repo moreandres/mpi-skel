@@ -1,0 +1,28 @@
+# Development Environment #
+
+This page describe the development environment provided by the framework.
+
+# Details #
+
+  * autotools: configure.ac, Makefile.am, config.h
+
+The usage of autotools make the package portable for free. It allows compilation using different compilers and MPI compiling wrappers. It also allows easy generation of source
+code packages to be distributed. It also allows the package to be source compatible among Linux distributions and other compatible systems. It allows to easily select different library implementations on scientific computation.
+
+  * docbook: makefile target plus examples
+
+The usage of doc book allows easy extraction of inline documentation to support development
+and usage of the framework callbacks.
+
+  * man pages: framework manual plus application examples
+
+Several reference manual pages are included, even application examples ones for potential reuse.
+
+  * test suite: framework regression test suite plus application examples
+
+A test suite is integrated to verify framework consistency at any time, also several application example tests are included for reuse.
+
+  * valgrind: makefile target plus specific test in the test suite
+
+A memory check is integrated into the test suite to verify that neither the framework nor
+the example applications have memory leaks.
